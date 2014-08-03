@@ -46,6 +46,43 @@ troop.postpone(shoeshine, 'HtmlAttributes', function () {
             },
 
             /**
+             * @param {string} cssClass
+             * @returns {shoeshine.HtmlAttributes}
+             */
+            addCssClass: function (cssClass) {
+                this.cssClasses.addCssClass(cssClass);
+                return this;
+            },
+
+            /**
+             * @param {string} cssClass
+             * @returns {shoeshine.HtmlAttributes}
+             */
+            removeCssClass: function (cssClass) {
+                this.cssClasses.removeCssClass(cssClass);
+                return this;
+            },
+
+            /**
+             * @param {string} styleName
+             * @param {string} styleValue
+             * @returns {shoeshine.HtmlAttributes}
+             */
+            addInlineStyle: function (styleName, styleValue) {
+                this.inlineStyles.setItem(styleName, styleValue);
+                return this;
+            },
+
+            /**
+             * @param {string} styleName
+             * @returns {shoeshine.HtmlAttributes}
+             */
+            removeInlineStyle: function (styleName) {
+                this.inlineStyles.deleteItem(styleName);
+                return this;
+            },
+
+            /**
              * @returns {shoeshine.HtmlAttributes}
              */
             getFinalAttributes: function () {

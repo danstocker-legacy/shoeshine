@@ -30,6 +30,63 @@
         equal(htmlAttributes.idAttribute, 'foo', "should set ID attribute");
     });
 
+    test("Adding CSS class", function () {
+        expect(2);
+
+        s$.CssClasses.addMocks({
+            addCssClass: function (cssClass) {
+                equal(cssClass, 'foo', "should add class to collection");
+            }
+        });
+
+        strictEqual(htmlAttributes.addCssClass('foo'), htmlAttributes, "should be chainable");
+
+        s$.CssClasses.removeMocks();
+    });
+
+    test("Removing CSS class", function () {
+        expect(2);
+
+        s$.CssClasses.addMocks({
+            removeCssClass: function (cssClass) {
+                equal(cssClass, 'foo', "should remove class from collection");
+            }
+        });
+
+        strictEqual(htmlAttributes.removeCssClass('foo'), htmlAttributes, "should be chainable");
+
+        s$.CssClasses.removeMocks();
+    });
+
+    test("Adding inline style", function () {
+        expect(3);
+
+        s$.InlineStyles.addMocks({
+            setItem: function (styleName, styleValue) {
+                equal(styleName, 'foo', "should pass style name to addition");
+                equal(styleValue, 'bar', "should pass style value to addition");
+            }
+        });
+
+        strictEqual(htmlAttributes.addInlineStyle('foo', 'bar'), htmlAttributes, "should be chainable");
+
+        s$.InlineStyles.removeMocks();
+    });
+
+    test("Removing inline style", function () {
+        expect(2);
+
+        s$.InlineStyles.addMocks({
+            deleteItem: function (styleName) {
+                equal(styleName, 'foo', "should pass style name to removal");
+            }
+        });
+
+        strictEqual(htmlAttributes.removeInlineStyle('foo'), htmlAttributes, "should be chainable");
+
+        s$.InlineStyles.removeMocks();
+    });
+
     test("Final attribute list getter", function () {
         htmlAttributes
             .setItem('id', "fakeId")
