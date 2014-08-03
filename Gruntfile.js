@@ -7,6 +7,9 @@ module.exports = function (grunt) {
             'js/namespace.js',
             'js/WidgetUtils.js',
             'js/Template.js',
+            'js/CssClasses.js',
+            'js/InlineClasses.js',
+            'js/HtmlAttributes.js',
             'js/exports.js'
         ],
 
