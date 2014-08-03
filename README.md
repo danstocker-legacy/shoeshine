@@ -1,0 +1,4 @@
+Shoeshine
+=========
+
+*Widget framework*
