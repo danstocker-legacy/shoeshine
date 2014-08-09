@@ -118,6 +118,35 @@ troop.postpone(shoeshine, 'Progenitor', function (ns, className) {
             },
 
             /**
+             * Changes child name for current instance.
+             * Has no effect when specified child name is same as the current child name.
+             * @param {string} childName
+             * @returns {shoeshine.Progenitor}
+             */
+            setChildName: function (childName) {
+                dessert.isString(childName, "Invalid child name");
+
+                var parent = this.parent;
+
+                if (childName !== this.childName) {
+                    if (parent) {
+                        // temporarily removing instance from parent
+                        this.removeFromParent();
+                    }
+
+                    // changing name
+                    this.childName = childName;
+
+                    if (parent) {
+                        // adding instance back to parent
+                        this.addToParent(parent);
+                    }
+                }
+
+                return this;
+            },
+
+            /**
              * Retrieves child instance matching the specified child name.
              * @param {string} childName
              * @returns {shoeshine.Progenitor}
