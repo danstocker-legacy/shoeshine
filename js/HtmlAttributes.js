@@ -129,3 +129,18 @@ troop.postpone(shoeshine, 'HtmlAttributes', function () {
             }
         });
 });
+
+(function () {
+    "use strict";
+
+    dessert.addTypes(/** @lends dessert */{
+        isHtmlAttributes: function (expr) {
+            return shoeshine.HtmlAttributes.isBaseOf(expr);
+        },
+
+        isHtmlAttributesOptional: function (expr) {
+            return typeof expr === 'undefined' ||
+                   shoeshine.HtmlAttributes.isBaseOf(expr);
+        }
+    });
+}());
