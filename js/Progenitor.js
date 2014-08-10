@@ -13,7 +13,7 @@ troop.postpone(shoeshine, 'Progenitor', function (ns, className) {
      */
     shoeshine.Progenitor = self
         .addMethods(/** @lends shoeshine.Progenitor# */{
-            /** @ignore */
+            /** Call from host's .init */
             init: function () {
                 base.init.call(this);
 
