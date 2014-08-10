@@ -87,26 +87,18 @@ troop.postpone(shoeshine, 'Renderable', function () {
         .addMethods(/** @lends shoeshine.Renderable# */{
             /**
              * Call from host's .init.
-             * @param {string} elementId
              * @param {shoeshine.HtmlAttributes} htmlAttributes
              */
-            init: function (elementId, htmlAttributes) {
+            init: function (htmlAttributes) {
                 /**
                  * @type {string}
                  */
                 this.htmlTag = 'div';
 
                 /**
-                 * @type {string}
-                 */
-                this.elementId = elementId;
-
-                /**
                  * @type {shoeshine.HtmlAttributes}
                  */
-                this.htmlAttributes = htmlAttributes ?
-                    htmlAttributes.clone() :
-                    shoeshine.HtmlAttributes.create();
+                this.htmlAttributes = htmlAttributes || shoeshine.HtmlAttributes.create();
             },
 
             /**
@@ -150,7 +142,7 @@ troop.postpone(shoeshine, 'Renderable', function () {
              * @returns {HTMLElement}
              */
             getElement: function () {
-                return this._getElementByIdProxy(this.elementId);
+                return this._getElementByIdProxy(this.htmlAttributes.idAttribute);
             },
 
             /**

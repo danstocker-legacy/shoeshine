@@ -20,19 +20,15 @@
 
     test("Instantiation", function () {
         var htmlAttributes = s$.HtmlAttributes.create({foo: 'bar'}),
-            instance = Renderable.create('hello', htmlAttributes);
+            instance = Renderable.create(htmlAttributes);
 
         equal(instance.htmlTag, 'div', "should set HTML tag to 'div'");
-        equal(instance.elementId, 'hello', "should set element ID property");
         ok(instance.htmlAttributes.isA(s$.HtmlAttributes), "should add HTML attribute collection");
-        notStrictEqual(instance.htmlAttributes, htmlAttributes,
-            "should not store HTML attribute collection argument");
-        equal(instance.htmlAttributes.getItem('foo'), 'bar',
-            "should clone HTML attribute collection argument");
+        strictEqual(instance.htmlAttributes, htmlAttributes, "should set HTML attribute");
     });
 
     test("Html tag setter", function () {
-        var instance = Renderable.create('hello');
+        var instance = Renderable.create();
 
         strictEqual(instance.setHtmlTag('foo'), instance, "should be chainable");
         equal(instance.htmlTag, 'foo', "should set HTML tag");
@@ -41,7 +37,7 @@
     test("Element creation", function () {
         expect(8);
 
-        var instance = Renderable.create('hello')
+        var instance = Renderable.create()
                 .setHtmlTag('customTag'),
             instanceElement = {};
 
@@ -81,7 +77,7 @@
     test("Element getter", function () {
         expect(2);
 
-        var instance = Renderable.create('hello'),
+        var instance = Renderable.create(s$.HtmlAttributes.create().setIdAttribute('hello')),
             instanceElement = {};
 
         instance.addMocks({
@@ -97,7 +93,7 @@
     test("Rendering into element", function () {
         expect(4);
 
-        var instance = Renderable.create('hello'),
+        var instance = Renderable.create(),
             instanceElement = {},
             targetElement = {};
 
@@ -119,7 +115,7 @@
     test("Rendering before element", function () {
         expect(5);
 
-        var instance = Renderable.create('hello'),
+        var instance = Renderable.create(),
             instanceElement = {},
             targetElement = {
                 parentNode: {}
@@ -144,7 +140,7 @@
     test("Re-rendering", function () {
         expect(7);
 
-        var instance = Renderable.create('hello'),
+        var instance = Renderable.create(),
             currentElement = {
                 parentNode: {}
             },
