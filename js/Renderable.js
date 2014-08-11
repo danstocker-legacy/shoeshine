@@ -82,6 +82,37 @@ troop.postpone(shoeshine, 'Renderable', function () {
              */
             _replaceChildProxy: function (parentElement, afterElement, beforeElement) {
                 parentElement.replaceChild(afterElement, beforeElement);
+            },
+
+            /**
+             * Proxy for setting attribute on DOM element.
+             * @param {HTMLElement} element
+             * @param {string} attributeName
+             * @param {string} attributeValue
+             * @private
+             */
+            _setAttributeProxy: function (element, attributeName, attributeValue) {
+                element.setAttribute(attributeName, attributeValue);
+            },
+
+            /**
+             * Proxy for removing attribute from DOM element.
+             * @param {HTMLElement} element
+             * @param {string} attributeName
+             * @private
+             */
+            _removeAttributeProxy: function (element, attributeName) {
+                element.removeAttribute(attributeName);
+            },
+
+            /**
+             * Proxy for setting style attribute of a DOM element.
+             * @param {HTMLElement} element
+             * @param {string} styleAttribute
+             * @private
+             */
+            _setStyleProxy: function (element, styleAttribute) {
+                element.style.cssText = styleAttribute;
             }
         })
         .addMethods(/** @lends shoeshine.Renderable# */{
@@ -109,6 +140,104 @@ troop.postpone(shoeshine, 'Renderable', function () {
             setHtmlTag: function (htmlTag) {
                 dessert.isString(htmlTag, "Invalid HTML tag");
                 this.htmlTag = htmlTag;
+                return this;
+            },
+
+            /**
+             * Adds CSS class to the instance, modifying both buffer and DOM element.
+             * @param {string} cssClass
+             * @returns {shoeshine.Renderable}
+             */
+            addCssClass: function (cssClass) {
+                var htmlAttributes = this.htmlAttributes,
+                    element = this.getElement();
+
+                htmlAttributes.addCssClass(cssClass);
+
+                if (element) {
+                    this._setAttributeProxy(element, 'class', htmlAttributes.cssClasses.toString());
+                }
+
+                return this;
+            },
+
+            /**
+             * Removes a CSS class from the instance, modifying both buffer and DOM element.
+             * @param {string} cssClass
+             * @returns {shoeshine.Renderable}
+             */
+            removeCssClass: function (cssClass) {
+                var htmlAttributes = this.htmlAttributes,
+                    element = this.getElement();
+
+                htmlAttributes.removeCssClass(cssClass);
+
+                if (element) {
+                    this._setAttributeProxy(element, 'class', htmlAttributes.cssClasses.toString());
+                }
+
+                return this;
+            },
+
+            /**
+             * Tells whether the current instance has the specified CSS class.
+             * @param {string} cssClass
+             * @returns {boolean}
+             */
+            hasCssClass: function (cssClass) {
+                return !!this.htmlAttributes.cssClasses.getItem(cssClass);
+            },
+
+            /**
+             * Sets inline style on instance, modifying both buffer and DOM element.
+             * @param {string} styleName
+             * @param {string} styleValue
+             * @returns {shoeshine.Renderable}
+             */
+            setInlineStyle: function (styleName, styleValue) {
+                var htmlAttributes = this.htmlAttributes,
+                    element = this.getElement();
+
+                htmlAttributes.addInlineStyle(styleName, styleValue);
+
+                if (element) {
+                    this._setStyleProxy(element, htmlAttributes.inlineStyles.toString());
+                }
+
+                return this;
+            },
+
+            /**
+             * Adds attribute to instance, modifying both buffer and DOM element.
+             * TODO: Handle 'id' and 'class' attributes.
+             * @param {string} attributeName
+             * @param {string} attributeValue
+             * @returns {shoeshine.Renderable}
+             */
+            addAttribute: function (attributeName, attributeValue) {
+                this.htmlAttributes.setItem(attributeName, attributeValue);
+
+                var element = this.getElement();
+                if (element) {
+                    this._setAttributeProxy(element, attributeName, attributeValue);
+                }
+
+                return this;
+            },
+
+            /**
+             * Removes attribute from instance, modifying both buffer and DOM element.
+             * @param {string} attributeName
+             * @returns {shoeshine.Renderable}
+             */
+            removeAttribute: function (attributeName) {
+                this.htmlAttributes.deleteItem(attributeName);
+
+                var element = this.getElement();
+                if (element) {
+                    this._removeAttributeProxy(element, attributeName);
+                }
+
                 return this;
             },
 

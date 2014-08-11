@@ -34,6 +34,188 @@
         equal(instance.htmlTag, 'foo', "should set HTML tag");
     });
 
+    test("CSS class addition", function () {
+        expect(7);
+
+        var instance = Renderable.create(),
+            instanceElement = {};
+
+        instance.htmlAttributes.addMocks({
+            addCssClass: function (cssClass) {
+                equal(cssClass, 'foo', "should add CSS class to htmlAttributes");
+                return this;
+            }
+        });
+
+        instance.htmlAttributes.cssClasses.addMocks({
+            toString: function () {
+                ok(true, "should fetch serialized CSS class list");
+                return 'FOO';
+            }
+        });
+
+        instance.addMocks({
+            getElement: function () {
+                ok(true, "should fetch DOM element");
+                return instanceElement;
+            },
+
+            _setAttributeProxy: function (element, attributeName, attributeValue) {
+                strictEqual(element, instanceElement, "should pass instance element to attribute setter");
+                equal(attributeName, 'class', "should pass 'class' as attribute name");
+                equal(attributeValue, 'FOO', "should pass serialized CSS class list as attribute value");
+            }
+        });
+
+        strictEqual(instance.addCssClass('foo'), instance, "should be chainable");
+    });
+
+    test("CSS class removal", function () {
+        expect(7);
+
+        var instance = Renderable.create(),
+            instanceElement = {};
+
+        instance.htmlAttributes.addMocks({
+            removeCssClass: function (cssClass) {
+                equal(cssClass, 'foo', "should remove CSS class from htmlAttributes");
+                return this;
+            }
+        });
+
+        instance.htmlAttributes.cssClasses.addMocks({
+            toString: function () {
+                ok(true, "should fetch serialized CSS class list");
+                return 'FOO';
+            }
+        });
+
+        instance.addMocks({
+            getElement: function () {
+                ok(true, "should fetch DOM element");
+                return instanceElement;
+            },
+
+            _setAttributeProxy: function (element, attributeName, attributeValue) {
+                strictEqual(element, instanceElement, "should pass instance element to attribute setter");
+                equal(attributeName, 'class', "should pass 'class' as attribute name");
+                equal(attributeValue, 'FOO', "should pass serialized CSS class list as attribute value");
+            }
+        });
+
+        strictEqual(instance.removeCssClass('foo'), instance, "should be chainable");
+    });
+
+    test("CSS class tester", function () {
+        expect(2);
+
+        var instance = Renderable.create();
+
+        instance.htmlAttributes.cssClasses.addMocks({
+            getItem: function (itemName) {
+                equal(itemName, 'foo', "should get item from CSS class collection");
+                return 'FOO';
+            }
+        });
+
+        equal(instance.hasCssClass('foo'), true,
+            "should return item value returned from CSS class list");
+    });
+
+    test("Inline style setter", function () {
+        expect(7);
+
+        var instance = Renderable.create(),
+            instanceElement = {};
+
+        instance.htmlAttributes.addMocks({
+            addInlineStyle: function (styleName, styleValue) {
+                equal(styleName, 'foo', "should pass style name to htmlAttribute's style setter");
+                equal(styleValue, 'bar', "should pass style value to htmlAttribute's style setter");
+                return this;
+            }
+        });
+
+        instance.htmlAttributes.inlineStyles.addMocks({
+            toString: function () {
+                ok(true, "should fetch serialized inline styles");
+                return 'FOO';
+            }
+        });
+
+        instance.addMocks({
+            getElement: function () {
+                ok(true, "should fetch DOM element");
+                return instanceElement;
+            },
+
+            _setStyleProxy: function (element, styleAttribute) {
+                strictEqual(element, instanceElement, "should pass instance element to style setter");
+                equal(styleAttribute, 'FOO', "should pass serialized styles to style setter");
+            }
+        });
+
+        strictEqual(instance.setInlineStyle('foo', 'bar'), instance, "should be chainable");
+    });
+
+    test("Attribute addition", function () {
+        expect(7);
+
+        var instance = Renderable.create(),
+            instanceElement = {};
+
+        instance.htmlAttributes.addMocks({
+            setItem: function (attributeName, attributeValue) {
+                equal(attributeName, 'foo', "should pass attribute name to htmlAttribute item setter");
+                equal(attributeValue, 'bar', "should pass attribute value to htmlAttribute item setter");
+                return this;
+            }
+        });
+
+        instance.addMocks({
+            getElement: function () {
+                ok(true, "should fetch DOM element");
+                return instanceElement;
+            },
+
+            _setAttributeProxy: function (element, attributeName, attributeValue) {
+                strictEqual(element, instanceElement, "should pass instance element to attribute setter");
+                equal(attributeName, 'foo', "should pass attribute name to DOM attribute setter");
+                equal(attributeValue, 'bar', "should pass attribute value to DOM attribute setter");
+            }
+        });
+
+        strictEqual(instance.addAttribute('foo', 'bar'), instance, "should be chainable");
+    });
+
+    test("Attribute removal", function () {
+        expect(5);
+
+        var instance = Renderable.create(),
+            instanceElement = {};
+
+        instance.htmlAttributes.addMocks({
+            deleteItem: function (attributeName) {
+                equal(attributeName, 'foo', "should pass attribute name to htmlAttribute item removal");
+                return this;
+            }
+        });
+
+        instance.addMocks({
+            getElement: function () {
+                ok(true, "should fetch DOM element");
+                return instanceElement;
+            },
+
+            _removeAttributeProxy: function (element, attributeName) {
+                strictEqual(element, instanceElement, "should pass instance element to attribute removal");
+                equal(attributeName, 'foo', "should pass attribute name to DOM attribute removal");
+            }
+        });
+
+        strictEqual(instance.removeAttribute('foo'), instance, "should be chainable");
+    });
+
     test("Element creation", function () {
         expect(8);
 
