@@ -124,7 +124,7 @@ troop.postpone(shoeshine, 'Renderable', function () {
                 /**
                  * @type {string}
                  */
-                this.htmlTag = 'div';
+                this.tagName = 'div';
 
                 /**
                  * @type {shoeshine.HtmlAttributes}
@@ -133,13 +133,13 @@ troop.postpone(shoeshine, 'Renderable', function () {
             },
 
             /**
-             * Sets HTML tag property.
-             * @param {string} htmlTag
+             * Sets tag name property.
+             * @param {string} tagName
              * @returns {shoeshine.Renderable}
              */
-            setHtmlTag: function (htmlTag) {
-                dessert.isString(htmlTag, "Invalid HTML tag");
-                this.htmlTag = htmlTag;
+            setTagName: function (tagName) {
+                dessert.isString(tagName, "Invalid tag name");
+                this.tagName = tagName;
                 return this;
             },
 
@@ -247,7 +247,7 @@ troop.postpone(shoeshine, 'Renderable', function () {
              * @returns {HTMLElement}
              */
             createElement: function () {
-                var element = this._createElementProxy(this.htmlTag),
+                var element = this._createElementProxy(this.tagName),
                     attributeSetterProxy = this._attributeSetterProxy,
                     innerHtml = this.contentMarkup()
                         .toTemplate()
@@ -321,14 +321,14 @@ troop.postpone(shoeshine, 'Renderable', function () {
              * @returns {string}
              */
             toString: function () {
-                var htmlTag = this.htmlTag;
+                var tagName = this.tagName;
 
                 return [
-                    '<' + htmlTag + ' ' + this.htmlAttributes.getFinalAttributes() + '>',
+                    '<' + tagName + ' ' + this.htmlAttributes.getFinalAttributes() + '>',
                     this.contentMarkup()
                         .toTemplate()
                         .clearPlaceholders(),
-                    '</' + htmlTag + '>'
+                    '</' + tagName + '>'
                 ].join('');
             }
         });

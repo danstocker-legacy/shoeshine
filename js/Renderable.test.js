@@ -22,16 +22,16 @@
         var htmlAttributes = s$.HtmlAttributes.create({foo: 'bar'}),
             instance = Renderable.create(htmlAttributes);
 
-        equal(instance.htmlTag, 'div', "should set HTML tag to 'div'");
+        equal(instance.tagName, 'div', "should set tag name to 'div'");
         ok(instance.htmlAttributes.isA(s$.HtmlAttributes), "should add HTML attribute collection");
         strictEqual(instance.htmlAttributes, htmlAttributes, "should set HTML attribute");
     });
 
-    test("Html tag setter", function () {
+    test("Tag name setter", function () {
         var instance = Renderable.create();
 
-        strictEqual(instance.setHtmlTag('foo'), instance, "should be chainable");
-        equal(instance.htmlTag, 'foo', "should set HTML tag");
+        strictEqual(instance.setTagName('foo'), instance, "should be chainable");
+        equal(instance.tagName, 'foo', "should set tag name property");
     });
 
     test("CSS class addition", function () {
@@ -220,7 +220,7 @@
         expect(8);
 
         var instance = Renderable.create()
-                .setHtmlTag('customTag'),
+                .setTagName('customTag'),
             instanceElement = {};
 
         instance.addMocks({
@@ -355,7 +355,7 @@
         expect(3);
 
         var instance = Renderable.create()
-            .setHtmlTag('span');
+            .setTagName('span');
 
         instance.addMocks({
             contentMarkup: function () {
