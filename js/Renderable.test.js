@@ -350,4 +350,30 @@
 
         strictEqual(instance.reRender(), instance, "should be chainable");
     });
+
+    test("Serialization", function () {
+        expect(3);
+
+        var instance = Renderable.create()
+            .setHtmlTag('span');
+
+        instance.addMocks({
+            contentMarkup: function () {
+                ok(true, "should fetch contentMarkup");
+                return 'FOO{{placeholder}}';
+            }
+        });
+
+        instance.htmlAttributes.addMocks({
+            getFinalAttributes: function () {
+                ok(true, "should fetch final attribute list");
+                return 'ATTRIBUTES';
+            }
+        });
+
+        equal(
+            instance.toString(),
+            '<span ATTRIBUTES>FOO</span>',
+            "should return markup with tag, attributes, and custom markup");
+    });
 }());

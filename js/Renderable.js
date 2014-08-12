@@ -309,10 +309,27 @@ troop.postpone(shoeshine, 'Renderable', function () {
             },
 
             /**
+             * Override method defining the contents of the Renderable instance.
              * @returns {string}
              */
             contentMarkup: function () {
                 return '';
+            },
+
+            /**
+             * Generates markup for the current instance.
+             * @returns {string}
+             */
+            toString: function () {
+                var htmlTag = this.htmlTag;
+
+                return [
+                    '<' + htmlTag + ' ' + this.htmlAttributes.getFinalAttributes() + '>',
+                    this.contentMarkup()
+                        .toTemplate()
+                        .clearPlaceholders(),
+                    '</' + htmlTag + '>'
+                ].join('');
             }
         });
 });
