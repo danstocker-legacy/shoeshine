@@ -324,7 +324,7 @@ troop.postpone(shoeshine, 'Renderable', function () {
                 var tagName = this.tagName;
 
                 return [
-                    '<' + tagName + ' ' + this.htmlAttributes.getFinalAttributes() + '>',
+                    '<' + tagName + ' ' + this.htmlAttributes + '>',
                     this.contentMarkup()
                         .toTemplate()
                         .clearPlaceholders(),

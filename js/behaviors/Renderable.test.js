@@ -365,8 +365,8 @@
         });
 
         instance.htmlAttributes.addMocks({
-            getFinalAttributes: function () {
-                ok(true, "should fetch final attribute list");
+            toString: function () {
+                ok(true, "should serialize attribute list");
                 return 'ATTRIBUTES';
             }
         });
