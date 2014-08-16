@@ -42,7 +42,7 @@ troop.postpone(shoeshine, 'JqueryWidget', function (ns, className, /**jQuery*/$)
              * @private
              */
             _getGlobalSelector: function (selector) {
-                var classSelector = '.w' + this.className;
+                var classSelector = '.' + this.className;
 
                 return selector.indexOf(classSelector) === -1 ?
                     classSelector + ' ' + selector :
@@ -59,8 +59,8 @@ troop.postpone(shoeshine, 'JqueryWidget', function (ns, className, /**jQuery*/$)
             on: function (eventName, selector, methodName) {
                 var globalSelector = this._getGlobalSelector(selector);
 
-                this._jqueryOnProxy(eventName, globalSelector, function (/**UIEvent*/event) {
-                    var widget = event.toWidget();
+                this._jqueryOnProxy(eventName, globalSelector, function (/**jQuery.Event*/event) {
+                    var widget = event.originalEvent.toWidget();
                     return widget ?
                         widget[methodName].apply(widget, arguments) :
                         undefined;
