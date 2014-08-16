@@ -74,6 +74,34 @@
         sntls.Managed.removeMocks();
     });
 
+    test("Conversion from UIEvent", function () {
+        expect(3);
+
+        var uiEvent = new MouseEvent('click'),
+            widget = {};
+
+        s$.WidgetUtils.addMocks({
+            getParentNodeByClassName: function (childElement, cssClassName) {
+                equal(cssClassName, 'Widget', "should fetch nearest widget parent element");
+                return {
+                    id: 'foo'
+                };
+            }
+        });
+
+        sntls.Managed.addMocks({
+            getInstanceById: function (widgetId) {
+                equal(widgetId, 'foo', "should fetch instance from registry");
+                return widget;
+            }
+        });
+
+        strictEqual(uiEvent.toWidget(), widget, "should return instance fetched by getInstanceId");
+
+        s$.WidgetUtils.removeMocks();
+        sntls.Managed.removeMocks();
+    });
+
     test("Container setter", function () {
         var widget = s$.Widget.create();
 
@@ -370,15 +398,16 @@
         sntls.Collection.addMocks({
             getItem: function (itemName) {
                 return {
-                    1: widgets.foo,
-                    10: widgets.bar,
+                    1  : widgets.foo,
+                    10 : widgets.bar,
                     100: widgets.baz
                 }[itemName];
             }
         });
 
         strictEqual(widget.getAdjacentWidget('bau', targetParentElement), widgets.bar, "should return widget adjacent to specified widget name");
-        deepEqual(widgetIds.sort(), ['foo', 'bar', 'baz'].sort(), "should fetch IDs of widgets under specified element");
+        deepEqual(widgetIds.sort(), ['foo', 'bar', 'baz'
+        ].sort(), "should fetch IDs of widgets under specified element");
 
         s$.Widget.removeMocks();
         sntls.Managed.removeMocks();

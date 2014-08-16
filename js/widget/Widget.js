@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, evan, shoeshine */
+/*global dessert, troop, sntls, evan, shoeshine, UIEvent */
 troop.postpone(shoeshine, 'Widget', function (ns, className) {
     "use strict";
 
@@ -423,6 +423,25 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
              */
             toWidget: function () {
                 return sntls.Managed.getInstanceById(this.valueOf());
+            }
+        },
+        false, false, false
+    );
+
+    troop.Properties.addProperties.call(
+        UIEvent.prototype,
+        /** @lends UIEvent# */{
+            /**
+             * @returns {shoeshine.Widget}
+             */
+            toWidget: function () {
+                var cssClassName = shoeshine.Widget.className,
+                    childElement = this.target,
+                    widgetElement = shoeshine.WidgetUtils.getParentNodeByClassName(childElement, cssClassName);
+
+                return widgetElement ?
+                    sntls.Managed.getInstanceById(widgetElement.id) :
+                    undefined;
             }
         },
         false, false, false
