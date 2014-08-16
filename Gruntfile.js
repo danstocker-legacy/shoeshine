@@ -5,20 +5,24 @@ module.exports = function (grunt) {
     var params = {
         files: [
             'js/namespace.js',
-            'js/widgetEventSpace.js',
-            'js/WidgetUtils.js',
-            'js/Template.js',
-            'js/CssClasses.js',
-            'js/InlineClasses.js',
-            'js/HtmlAttributes.js',
-            'js/Progenitor.js',
-            'js/Widget.js',
-            'js/WidgetCollection.js',
+            'js/utils/WidgetUtils.js',
+            'js/utils/Template.js',
+            'js/utils/CssClasses.js',
+            'js/utils/InlineStyles.js',
+            'js/utils/HtmlAttributes.js',
+            'js/behaviors/Progenitor.js',
+            'js/behaviors/Renderable.js',
+            'js/widget/widgetEventSpace.js',
+            'js/widget/WidgetEvent.js',
+            'js/widget/Widget.js',
+            'js/widget/WidgetCollection.js',
             'js/exports.js'
         ],
 
         test: [
-            'js/jsTestDriver.conf'
+            'js/utils/jsTestDriver.conf',
+            'js/behaviors/jsTestDriver.conf',
+            'js/widget/jsTestDriver.conf'
         ],
 
         globals: {
