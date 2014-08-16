@@ -18,6 +18,7 @@
     },
     "devDependencies": {
         "phil"                : "~0.2.3",
+        "jquery"              : "~2.1.0",
         "grunt"               : "~0.4.1",
         "grunt-jstestdriver"  : "git://github.com/danstocker/grunt-jstestdriver.git",
         "grunt-contrib-concat": "~0.3.0",

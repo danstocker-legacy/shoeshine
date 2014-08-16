@@ -12,6 +12,7 @@ module.exports = function (grunt) {
             'js/utils/HtmlAttributes.js',
             'js/behaviors/Progenitor.js',
             'js/behaviors/Renderable.js',
+            'js/behaviors/JqueryWidget.js',
             'js/widget/widgetEventSpace.js',
             'js/widget/WidgetEvent.js',
             'js/widget/Widget.js',
