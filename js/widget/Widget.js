@@ -126,7 +126,7 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
                 shoeshine.Progenitor.init.call(this);
                 shoeshine.Renderable.init.call(this,
                     this.htmlAttributes.clone()
-                        .setIdAttribute('w' + this.instanceId));
+                        .setIdAttribute(this.instanceId.toWidgetId()));
 
                 /** @type {string} */
                 this.containerCssClass = undefined;
@@ -422,11 +422,25 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
     troop.Properties.addProperties.call(
         String.prototype,
         /** @lends String# */{
-            /**
-             * @returns {shoeshine.Widget}
-             */
+            /** @returns {shoeshine.Widget} */
             toWidget: function () {
-                return sntls.Managed.getInstanceById(this.valueOf());
+                return sntls.Managed.getInstanceById(this.toInstanceIdFromWidgetId());
+            },
+
+            /** @returns {number} */
+            toInstanceIdFromWidgetId: function () {
+                return parseInt(this.slice(1), 10);
+            }
+        },
+        false, false, false
+    );
+
+    troop.Properties.addProperties.call(
+        Number.prototype,
+        /** @lends Number# */{
+            /** @returns {string} */
+            toWidgetId: function () {
+                return 'w' + this;
             }
         },
         false, false, false
@@ -444,7 +458,7 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
                     widgetElement = shoeshine.WidgetUtils.getParentNodeByClassName(childElement, cssClassName);
 
                 return widgetElement ?
-                    sntls.Managed.getInstanceById(widgetElement.id) :
+                    sntls.Managed.getInstanceById(widgetElement.id.toInstanceIdFromWidgetId()) :
                     undefined;
             }
         },

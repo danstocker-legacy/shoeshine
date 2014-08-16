@@ -63,13 +63,13 @@
         var widget = {};
 
         sntls.Managed.addMocks({
-            getInstanceById: function (widgetId) {
-                equal(widgetId, 'foo', "should fetch instance from registry");
+            getInstanceById: function (instanceId) {
+                equal(instanceId, 14, "should fetch instance from registry");
                 return widget;
             }
         });
 
-        strictEqual('foo'.toWidget(), widget, "should return instance fetched by getInstanceId");
+        strictEqual('w14'.toWidget(), widget, "should return instance fetched by getInstanceId");
 
         sntls.Managed.removeMocks();
     });
@@ -84,14 +84,14 @@
             getParentNodeByClassName: function (childElement, cssClassName) {
                 equal(cssClassName, 'Widget', "should fetch nearest widget parent element");
                 return {
-                    id: 'foo'
+                    id: 'w100'
                 };
             }
         });
 
         sntls.Managed.addMocks({
-            getInstanceById: function (widgetId) {
-                equal(widgetId, 'foo', "should fetch instance from registry");
+            getInstanceById: function (instanceId) {
+                equal(instanceId, 100, "should fetch instance from registry");
                 return widget;
             }
         });
@@ -361,15 +361,15 @@
 
         var widget = s$.Widget.create(),
             targetParentElement = document.createElement('div'),
-            widgetIds = [],
+            instanceIds = [],
             widgets = {
-                foo: {
+                1  : {
                     childName: 'foo'
                 },
-                bar: {
+                10 : {
                     childName: 'bar'
                 },
-                baz: {
+                100: {
                     childName: 'baz'
                 }
             };
@@ -377,37 +377,39 @@
         widget.addMocks({
             _getWidgetIdsInDom: function (parentElement) {
                 strictEqual(parentElement, targetParentElement, "should get widget IDs under parent element");
-                return ['foo', 'bar', 'baz'];
+                return ['w1', 'w10', 'w100'];
             }
         });
 
         sntls.Managed.addMocks({
-            getInstanceById: function (widgetId) {
-                widgetIds.push(widgetId);
-                return widgets[widgetId];
+            getInstanceById: function (instanceId) {
+                instanceIds.push(instanceId);
+                return widgets[instanceId];
             }
         });
 
         sntls.OrderedStringList.addMocks({
             spliceIndexOf: function (widgetName) {
-                equal(widgetName, 'bau', "should fetch splice index for specified widget name");
-                return 10;
+                equal(widgetName, 'w11', "should fetch splice index for specified widget name");
+                return 100;
             }
         });
 
         sntls.Collection.addMocks({
             getItem: function (itemName) {
                 return {
-                    1  : widgets.foo,
-                    10 : widgets.bar,
-                    100: widgets.baz
+                    1  : widgets[1],
+                    10 : widgets[10],
+                    100: widgets[100]
                 }[itemName];
             }
         });
 
-        strictEqual(widget.getAdjacentWidget('bau', targetParentElement), widgets.bar, "should return widget adjacent to specified widget name");
-        deepEqual(widgetIds.sort(), ['foo', 'bar', 'baz'
-        ].sort(), "should fetch IDs of widgets under specified element");
+        strictEqual(widget.getAdjacentWidget('w11', targetParentElement), widgets[100], "should return widget adjacent to specified widget name");
+        deepEqual(
+            instanceIds.sort(),
+            [1, 10, 100].sort(),
+            "should fetch IDs of widgets under specified element");
 
         s$.Widget.removeMocks();
         sntls.Managed.removeMocks();
