@@ -12,6 +12,8 @@ module.exports = function (grunt) {
             'js/InlineClasses.js',
             'js/HtmlAttributes.js',
             'js/Progenitor.js',
+            'js/Widget.js',
+            'js/WidgetCollection.js',
             'js/exports.js'
         ],
 
