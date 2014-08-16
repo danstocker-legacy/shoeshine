@@ -135,7 +135,8 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
                 this.children = this.children.toWidgetCollection();
 
                 // initializing Evented trait
-                this.setEventPath(this.getLineage());
+                // TODO: Use .setEventPath() as soon as it's fixed in evan
+                this.eventPath = this.getLineage();
             },
 
             /**
@@ -250,7 +251,7 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
 
             /**
              * @param {string} childName
-             * @returns {*}
+             * @returns {shoeshine.Widget}
              */
             setChildName: function (childName) {
                 shoeshine.Progenitor.setChildName.call(this, childName);
@@ -342,11 +343,12 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
             afterAdd: function () {
                 this.children.afterAdd();
 
-                this
-                    // setting event path for triggering widget events
-                    .setEventPath(this.getLineage())
-                    // adding widget to lookup registry
-                    .addToRegistry();
+                // setting event path for triggering widget events
+                // TODO: Use .setEventPath() as soon as it's fixed in evan
+                this.eventPath = this.getLineage();
+
+                // adding widget to lookup registry
+                this.addToRegistry();
             },
 
             /**
@@ -355,13 +357,15 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
             afterRemove: function () {
                 this.children.afterRemove();
 
-                this
-                    // unsubscribing from all widget events
-                    .unsubscribeFrom()
-                    // (re-)setting event path to new lineage
-                    .setEventPath(this.getLineage())
-                    // removing widget from lookup registry
-                    .removeFromRegistry();
+                // unsubscribing from all widget events
+                this.unsubscribeFrom();
+
+                // (re-)setting event path to new lineage
+                // TODO: Use .setEventPath() as soon as it's fixed in evan
+                this.eventPath = this.getLineage();
+
+                // removing widget from lookup registry
+                this.removeFromRegistry();
             },
 
             /**

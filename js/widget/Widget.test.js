@@ -567,10 +567,11 @@
                 return lineage;
             },
 
-            setEventPath: function (eventPath) {
-                strictEqual(eventPath, lineage, "should set event path to lineage");
-                return this;
-            },
+            // TODO: Uncomment as soon as .setEventPath() is fixed in evan
+            //            setEventPath: function (eventPath) {
+            //                strictEqual(eventPath, lineage, "should set event path to lineage");
+            //                return this;
+            //            },
 
             addToRegistry: function () {
                 ok(true, "should add widget to registry");
@@ -578,6 +579,8 @@
         });
 
         widget.afterAdd();
+
+        strictEqual(widget.eventPath, lineage, "should set event path to lineage");
     });
 
     test("After removal handler", function () {
@@ -603,10 +606,11 @@
                 return lineage;
             },
 
-            setEventPath: function (eventPath) {
-                strictEqual(eventPath, lineage, "should set event path to lineage");
-                return this;
-            },
+            // TODO: Uncomment as soon as .setEventPath() is fixed in evan
+            //            setEventPath: function (eventPath) {
+            //                strictEqual(eventPath, lineage, "should set event path to lineage");
+            //                return this;
+            //            },
 
             removeFromRegistry: function () {
                 ok(true, "should remove widget from registry");
@@ -614,6 +618,8 @@
         });
 
         widget.afterRemove();
+
+        strictEqual(widget.eventPath, lineage, "should set event path to lineage");
     });
 
     test("After render handler", function () {

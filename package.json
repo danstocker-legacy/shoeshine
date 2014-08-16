@@ -11,10 +11,10 @@
     "copyright"      : "Copyright (c) 2014 Dan Stocker",
     "license"        : "MIT",
     "dependencies"   : {
-        "dessert": "~0.3.2",
-        "troop"  : "~0.7.2",
-        "sntls"  : "~0.17.0",
-        "evan"   : "~0.4.1"
+        "dessert" : "~0.3.2",
+        "troop"   : "~0.7.2",
+        "sntls"   : "~0.17.0",
+        "evan"    : "~0.4.1"
     },
     "devDependencies": {
         "phil"                : "~0.2.3",
