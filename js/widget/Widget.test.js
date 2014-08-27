@@ -25,7 +25,7 @@
     });
 
     test("Instantiation", function () {
-        expect(9);
+        expect(10);
 
         s$.Progenitor.addMocks({
             init: function () {
@@ -43,10 +43,17 @@
             }
         });
 
+        s$.Widget.addMocks({
+            setChildName: function (childName) {
+                equal(childName, this.instanceId.toWidgetId(), "should set widget ID as child name");
+            }
+        });
+
         var widget = s$.Widget.create();
 
         s$.Progenitor.removeMocks();
         s$.Renderable.removeMocks();
+        s$.Widget.removeMocks();
 
         ok(widget.hasOwnProperty('containerCssClass'), "should add containerCssClass property");
         equal(typeof widget.containerCssClass, 'undefined', "should set containerCssClass to undefined");
@@ -329,11 +336,12 @@
     test("Child widget name setter", function () {
         expect(5);
 
-        var widget = s$.Widget.create();
+        var widget = s$.Widget.create(),
+            oldChildName = widget.childName;
 
         widget.htmlAttributes.addMocks({
             removeCssClass: function (className) {
-                equal(className, widget.childName, "should remove current widget name from CSS classes");
+                equal(className, oldChildName, "should remove current widget name from CSS classes");
                 return this;
             },
 

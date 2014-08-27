@@ -124,9 +124,12 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
              */
             init: function () {
                 shoeshine.Progenitor.init.call(this);
+
+                var widgetId = this.instanceId.toWidgetId();
+
                 shoeshine.Renderable.init.call(this,
                     this.htmlAttributes.clone()
-                        .setIdAttribute(this.instanceId.toWidgetId()));
+                        .setIdAttribute(widgetId));
 
                 /** @type {string} */
                 this.containerCssClass = undefined;
@@ -137,6 +140,8 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
                 // initializing Evented trait
                 // TODO: Use .setEventPath() as soon as it's fixed in evan
                 this.eventPath = this.getLineage();
+
+                this.setChildName(widgetId);
             },
 
             /**
@@ -254,11 +259,13 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
              * @returns {shoeshine.Widget}
              */
             setChildName: function (childName) {
+                var oldChildName = this.childName;
+
                 shoeshine.Progenitor.setChildName.call(this, childName);
 
-                if (childName !== this.childName) {
+                if (childName !== oldChildName) {
                     this.htmlAttributes
-                        .removeCssClass(this.childName)
+                        .removeCssClass(oldChildName)
                         .addCssClass(childName);
                 }
 
