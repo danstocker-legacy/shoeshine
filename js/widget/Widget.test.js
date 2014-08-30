@@ -81,33 +81,35 @@
         sntls.Managed.removeMocks();
     });
 
-    test("Conversion from UIEvent", function () {
-        expect(3);
+    if (UIEvent) {
+        test("Conversion from UIEvent", function () {
+            expect(3);
 
-        var uiEvent = new MouseEvent('click'),
-            widget = {};
+            var uiEvent = new MouseEvent('click'),
+                widget = {};
 
-        s$.WidgetUtils.addMocks({
-            getParentNodeByClassName: function (childElement, cssClassName) {
-                equal(cssClassName, 'Widget', "should fetch nearest widget parent element");
-                return {
-                    id: 'w100'
-                };
-            }
+            s$.WidgetUtils.addMocks({
+                getParentNodeByClassName: function (childElement, cssClassName) {
+                    equal(cssClassName, 'Widget', "should fetch nearest widget parent element");
+                    return {
+                        id: 'w100'
+                    };
+                }
+            });
+
+            sntls.Managed.addMocks({
+                getInstanceById: function (instanceId) {
+                    equal(instanceId, 100, "should fetch instance from registry");
+                    return widget;
+                }
+            });
+
+            strictEqual(uiEvent.toWidget(), widget, "should return instance fetched by getInstanceId");
+
+            s$.WidgetUtils.removeMocks();
+            sntls.Managed.removeMocks();
         });
-
-        sntls.Managed.addMocks({
-            getInstanceById: function (instanceId) {
-                equal(instanceId, 100, "should fetch instance from registry");
-                return widget;
-            }
-        });
-
-        strictEqual(uiEvent.toWidget(), widget, "should return instance fetched by getInstanceId");
-
-        s$.WidgetUtils.removeMocks();
-        sntls.Managed.removeMocks();
-    });
+    }
 
     test("Container setter", function () {
         var widget = s$.Widget.create();

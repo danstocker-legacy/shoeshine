@@ -453,22 +453,24 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
         false, false, false
     );
 
-    troop.Properties.addProperties.call(
-        UIEvent.prototype,
-        /** @lends UIEvent# */{
-            /**
-             * @returns {shoeshine.Widget}
-             */
-            toWidget: function () {
-                var cssClassName = shoeshine.Widget.className,
-                    childElement = this.target,
-                    widgetElement = shoeshine.WidgetUtils.getParentNodeByClassName(childElement, cssClassName);
+    if (UIEvent) {
+        troop.Properties.addProperties.call(
+            UIEvent.prototype,
+            /** @lends UIEvent# */{
+                /**
+                 * @returns {shoeshine.Widget}
+                 */
+                toWidget: function () {
+                    var cssClassName = shoeshine.Widget.className,
+                        childElement = this.target,
+                        widgetElement = shoeshine.WidgetUtils.getParentNodeByClassName(childElement, cssClassName);
 
-                return widgetElement ?
-                    sntls.Managed.getInstanceById(widgetElement.id.toInstanceIdFromWidgetId()) :
-                    undefined;
-            }
-        },
-        false, false, false
-    );
+                    return widgetElement ?
+                        sntls.Managed.getInstanceById(widgetElement.id.toInstanceIdFromWidgetId()) :
+                        undefined;
+                }
+            },
+            false, false, false
+        );
+    }
 }());
