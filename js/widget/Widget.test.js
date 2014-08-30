@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, e$, s$ */
+/*global dessert, troop, sntls, e$, s$, UIEvent */
 /*global module, test, expect, ok, equal, strictEqual, notStrictEqual, deepEqual, notDeepEqual, raises */
 (function () {
     "use strict";
@@ -81,8 +81,8 @@
         sntls.Managed.removeMocks();
     });
 
-    if (UIEvent) {
-        test("Conversion from UIEvent", function () {
+    test("Conversion from UIEvent", function () {
+        if (UIEvent) {
             expect(3);
 
             var uiEvent = new MouseEvent('click'),
@@ -90,7 +90,7 @@
 
             s$.WidgetUtils.addMocks({
                 getParentNodeByClassName: function (childElement, cssClassName) {
-                    equal(cssClassName, 'Widget', "should fetch nearest widget parent element");
+                    equal(cssClassName, 'foo', "should fetch nearest widget parent element");
                     return {
                         id: 'w100'
                     };
@@ -104,12 +104,12 @@
                 }
             });
 
-            strictEqual(uiEvent.toWidget(), widget, "should return instance fetched by getInstanceId");
+            strictEqual(uiEvent.toWidget('foo'), widget, "should return instance fetched by getInstanceId");
 
             s$.WidgetUtils.removeMocks();
             sntls.Managed.removeMocks();
-        });
-    }
+        }
+    });
 
     test("Container setter", function () {
         var widget = s$.Widget.create();

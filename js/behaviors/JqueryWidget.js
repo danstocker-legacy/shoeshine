@@ -57,10 +57,11 @@ troop.postpone(shoeshine, 'JqueryWidget', function (ns, className, /**jQuery*/$)
              * @returns {shoeshine.JqueryWidget}
              */
             on: function (eventName, selector, methodName) {
-                var globalSelector = this._getGlobalSelector(selector);
+                var globalSelector = this._getGlobalSelector(selector),
+                    className = this.className;
 
                 this._jqueryOnProxy(eventName, globalSelector, function (/**jQuery.Event*/event) {
-                    var widget = event.originalEvent.toWidget();
+                    var widget = event.originalEvent.toWidget(className);
                     return widget ?
                         widget[methodName].apply(widget, arguments) :
                         undefined;

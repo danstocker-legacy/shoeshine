@@ -460,11 +460,13 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
             UIEvent.prototype,
             /** @lends UIEvent# */{
                 /**
+                 * @param {string} [cssClassName]
                  * @returns {shoeshine.Widget}
                  */
-                toWidget: function () {
-                    var cssClassName = shoeshine.Widget.className,
-                        childElement = this.target,
+                toWidget: function (cssClassName) {
+                    cssClassName = cssClassName || shoeshine.Widget.className;
+
+                    var childElement = this.target,
                         widgetElement = shoeshine.WidgetUtils.getParentNodeByClassName(childElement, cssClassName);
 
                     return widgetElement ?
