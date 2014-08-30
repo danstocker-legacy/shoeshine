@@ -188,7 +188,9 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
                         this.afterAdd();
                     }
 
-                    this._renderIntoParent();
+                    if (document) {
+                        this._renderIntoParent();
+                    }
                 }
 
                 return this;
