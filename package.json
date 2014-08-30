@@ -1,6 +1,6 @@
 {
     "name"           : "shoeshine",
-    "version"        : "0.1.1",
+    "version"        : "0.1.2",
     "description"    : "Widget framework",
     "keywords"       : [
         "widgets", "widget",
@@ -11,14 +11,14 @@
     "copyright"      : "Copyright (c) 2014 Dan Stocker",
     "license"        : "MIT",
     "dependencies"   : {
-        "dessert" : "~0.3.2",
-        "troop"   : "~0.7.2",
-        "sntls"   : "~0.17.0",
-        "evan"    : "~0.4.1"
+        "dessert": "~0.3.2",
+        "troop"  : "~0.7.2",
+        "sntls"  : "~0.17.0",
+        "evan"   : "~0.4.1",
+        "jquery" : "~2.1.0"
     },
     "devDependencies": {
         "phil"                : "~0.2.3",
-        "jquery"              : "~2.1.0",
         "grunt"               : "~0.4.1",
         "grunt-jstestdriver"  : "git://github.com/danstocker/grunt-jstestdriver.git",
         "grunt-contrib-concat": "~0.3.0",
