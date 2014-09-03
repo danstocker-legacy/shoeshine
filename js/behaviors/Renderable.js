@@ -276,21 +276,30 @@ troop.postpone(shoeshine, 'Renderable', function () {
 
             /**
              * Renders instance into the specified element by appending it to it.
-             * @param {HTMLElement} element
+             * Moves existing element to new location by default. Override by forcing rendering.
+             * @param {HTMLElement} parentElement
+             * @param {boolean} [force]
              * @returns {shoeshine.Renderable}
              */
-            renderInto: function (element) {
-                this._appendChildProxy(element, this.createElement());
+            renderInto: function (parentElement, force) {
+                var element = (!force && this.getElement()) || this.createElement();
+                this._appendChildProxy(parentElement, element);
                 return this;
             },
 
             /**
              * Renders instance before the specified element.
-             * @param {HTMLElement} element
+             * Moves existing element to new location by default. Override by forcing rendering.
+             * @param {HTMLElement} adjacentElement
+             * @param {boolean} [force]
              * @returns {shoeshine.Renderable}
              */
-            renderBefore: function (element) {
-                this._insertBeforeProxy(element.parentNode, element, this.createElement());
+            renderBefore: function (adjacentElement, force) {
+                var parentElement = adjacentElement.parentNode,
+                    element = (!force && this.getElement()) || this.createElement();
+
+                this._insertBeforeProxy(parentElement, adjacentElement, element);
+
                 return this;
             },
 

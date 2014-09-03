@@ -273,13 +273,17 @@
     });
 
     test("Rendering into element", function () {
-        expect(4);
+        expect(5);
 
         var instance = Renderable.create(),
             instanceElement = {},
             targetElement = {};
 
         instance.addMocks({
+            getElement: function () {
+                ok(true, "should attempt to fetch existing element");
+            },
+
             createElement: function () {
                 ok(true, "should create instance element");
                 return instanceElement;
@@ -294,8 +298,34 @@
         strictEqual(instance.renderInto(targetElement), instance, "should be chainable");
     });
 
+    test("Moving DOM into element", function () {
+        expect(3);
+
+        var instance = Renderable.create(),
+            instanceElement = {},
+            targetElement = {};
+
+        instance.addMocks({
+            getElement: function () {
+                ok(true, "should fetch existing element");
+                return instanceElement;
+            },
+
+            createElement: function () {
+                ok(true, "should NOT create instance element");
+            },
+
+            _appendChildProxy: function (parentElement, childElement) {
+                strictEqual(parentElement, targetElement, "should append to target element");
+                strictEqual(childElement, instanceElement, "should append instance element");
+            }
+        });
+
+        instance.renderInto(targetElement);
+    });
+
     test("Rendering before element", function () {
-        expect(5);
+        expect(6);
 
         var instance = Renderable.create(),
             instanceElement = {},
@@ -304,6 +334,10 @@
             };
 
         instance.addMocks({
+            getElement: function () {
+                ok(true, "should attempt to fetch existing element");
+            },
+
             createElement: function () {
                 ok(true, "should create instance element");
                 return instanceElement;
@@ -317,6 +351,35 @@
         });
 
         strictEqual(instance.renderBefore(targetElement), instance, "should be chainable");
+    });
+
+    test("Moving DOM before element", function () {
+        expect(4);
+
+        var instance = Renderable.create(),
+            instanceElement = {},
+            targetElement = {
+                parentNode: {}
+            };
+
+        instance.addMocks({
+            getElement: function () {
+                ok(true, "should fetch existing element");
+                return instanceElement;
+            },
+
+            createElement: function () {
+                ok(true, "should NOT create instance element");
+            },
+
+            _insertBeforeProxy: function (parentElement, afterElement, element) {
+                strictEqual(parentElement, targetElement.parentNode, "should pass target's parent element");
+                strictEqual(afterElement, targetElement, "should pass target element");
+                strictEqual(element, instanceElement, "should insert instance element before target");
+            }
+        });
+
+        instance.renderBefore(targetElement);
     });
 
     test("Re-rendering", function () {
