@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, e$, s$, UIEvent */
+/*global dessert, troop, sntls, e$, s$, Event */
 /*global module, test, expect, ok, equal, strictEqual, notStrictEqual, deepEqual, notDeepEqual, raises */
 (function () {
     "use strict";
@@ -81,8 +81,8 @@
         sntls.Managed.removeMocks();
     });
 
-    test("Conversion from UIEvent", function () {
-        if (UIEvent) {
+    test("Conversion from Event", function () {
+        if (Event) {
             expect(3);
 
             var uiEvent = new MouseEvent('click'),

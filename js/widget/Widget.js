@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, evan, shoeshine, UIEvent */
+/*global dessert, troop, sntls, evan, shoeshine, Event */
 troop.postpone(shoeshine, 'Widget', function (ns, className) {
     "use strict";
 
@@ -455,10 +455,10 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
         false, false, false
     );
 
-    if (UIEvent) {
+    if (Event) {
         troop.Properties.addProperties.call(
-            UIEvent.prototype,
-            /** @lends UIEvent# */{
+            Event.prototype,
+            /** @lends Event# */{
                 /**
                  * @param {string} [cssClassName]
                  * @returns {shoeshine.Widget}
