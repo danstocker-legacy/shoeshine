@@ -6,6 +6,8 @@ troop.postpone(shoeshine, 'JqueryWidget', function (ns, className, /**jQuery*/$)
         self = base.extend();
 
     /**
+     * Trait that adds class-level (delegated) jQuery event subscription capability to the host.
+     * When used on other traits, call methods directly on JqueryWidget.
      * @class
      * @extends troop.Base
      * @extends shoeshine.Widget
@@ -42,10 +44,13 @@ troop.postpone(shoeshine, 'JqueryWidget', function (ns, className, /**jQuery*/$)
              * @private
              */
             _getGlobalSelector: function (selector) {
-                var classSelector = '.' + this.className;
+                var className = this.className,
+                    classSelector = '.' + className;
 
-                return selector.indexOf(classSelector) === -1 ?
-                    classSelector + ' ' + selector :
+                return className ?
+                    selector.indexOf(classSelector) === -1 ?
+                        classSelector + ' ' + selector :
+                        selector :
                     selector;
             }
         })
