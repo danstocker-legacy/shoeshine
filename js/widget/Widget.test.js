@@ -277,7 +277,7 @@
     });
 
     test("Removal from parent", function () {
-        expect(7);
+        expect(5);
 
         var parentWidget = s$.Widget.create(),
             childWidget = s$.Widget.create()
@@ -298,13 +298,6 @@
             }
         });
 
-        parentWidget.children.addMocks({
-            deleteItem: function (itemName) {
-                equal(itemName, childWidget.childName, "should remove child widget from parent's children");
-                return this;
-            }
-        });
-
         s$.Progenitor.addMocks({
             removeFromParent: function () {
                 strictEqual(this, childWidget, "should call trait's method on current widget");
@@ -313,7 +306,6 @@
         });
 
         strictEqual(childWidget.removeFromParent(), childWidget, "should be chainable");
-        equal(typeof childWidget.parent, 'undefined', "should set parent reference to undefined");
 
         s$.Progenitor.removeMocks();
     });

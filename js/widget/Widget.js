@@ -224,19 +224,13 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
              * @returns {shoeshine.Widget}
              */
             removeFromParent: function () {
-                shoeshine.Progenitor.removeFromParent.call(this);
-
-                var parent = this.parent,
-                    element = this.getElement(),
+                var element = this.getElement(),
                     wasAttachedToRoot = this.isOnRoot();
+
+                shoeshine.Progenitor.removeFromParent.call(this);
 
                 if (element && element.parentNode) {
                     element.parentNode.removeChild(element);
-                }
-
-                if (parent) {
-                    parent.children.deleteItem(this.childName);
-                    this.parent = undefined;
                 }
 
                 if (wasAttachedToRoot) {
