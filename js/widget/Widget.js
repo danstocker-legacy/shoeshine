@@ -449,6 +449,19 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
         false, false, false
     );
 
+    if (Element) {
+        troop.Properties.addProperties.call(
+            Element.prototype,
+            /** @lends Element# */{
+                /** @returns {shoeshine.Widget} */
+                toWidget: function () {
+                    return sntls.Managed.getInstanceById(this.id.toInstanceIdFromWidgetId());
+                }
+            },
+            false, false, false
+        );
+    }
+
     if (Event) {
         troop.Properties.addProperties.call(
             Event.prototype,

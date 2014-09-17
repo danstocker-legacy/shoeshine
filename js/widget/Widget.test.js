@@ -81,6 +81,28 @@
         sntls.Managed.removeMocks();
     });
 
+    test("Conversion from Element", function () {
+        if (document) {
+            expect(2);
+
+            var element = document.createElement('div'),
+                widget = {};
+
+            element.id = 'w100';
+
+            sntls.Managed.addMocks({
+                getInstanceById: function (instanceId) {
+                    equal(instanceId, 100, "should fetch instance from registry");
+                    return widget;
+                }
+            });
+
+            strictEqual(element.toWidget(), widget, "should fetch widget by instance ID");
+
+            sntls.Managed.removeMocks();
+        }
+    });
+
     test("Conversion from Event", function () {
         if (Event) {
             expect(3);
