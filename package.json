@@ -1,6 +1,6 @@
 {
     "name"           : "shoeshine",
-    "version"        : "0.1.5",
+    "version"        : "0.1.6",
     "description"    : "Widget framework",
     "keywords"       : [
         "widgets", "widget",
