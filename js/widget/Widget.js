@@ -245,8 +245,8 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
              * @returns {shoeshine.Widget}
              */
             removeRootWidget: function () {
-                self.rootWidget = undefined;
                 this.removeFromParent();
+                self.rootWidget = undefined;
                 return this;
             },
 
