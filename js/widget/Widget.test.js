@@ -340,8 +340,8 @@
         s$.Widget.rootWidget = widget;
 
         widget.addMocks({
-            afterRemove: function () {
-                ok(true, "should call afterRemove");
+            removeFromParent: function () {
+                ok(true, "should call removeFromParent");
             }
         });
 
