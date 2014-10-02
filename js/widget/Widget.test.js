@@ -107,7 +107,7 @@
         if (Event) {
             expect(3);
 
-            var uiEvent = new MouseEvent('click'),
+            var uiEvent = document.createEvent('MouseEvent'),
                 widget = {};
 
             s$.WidgetUtils.addMocks({

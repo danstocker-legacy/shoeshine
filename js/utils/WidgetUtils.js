@@ -55,9 +55,9 @@ troop.postpone(shoeshine, 'WidgetUtils', function () {
              */
             getParentNodeByClassName: function (element, className) {
                 var classList;
-                while (element) {
-                    classList = element.classList;
-                    if (classList && classList.contains(className)) {
+                while (element && element.className) {
+                    classList = element.className.split(/\s+/);
+                    if (classList && classList.indexOf(className) > -1) {
                         return element;
                     }
                     element = element.parentNode;
