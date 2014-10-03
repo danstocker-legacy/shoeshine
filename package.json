@@ -10,6 +10,10 @@
     "author"         : "Dan Stocker <dan@kwaia.com>",
     "copyright"      : "Copyright (c) 2014 Dan Stocker",
     "license"        : "MIT",
+    "repository"     : {
+        "type": "git",
+        "url" : "https://github.com/danstocker/shoeshine.git"
+    },
     "dependencies"   : {
         "dessert": "~0.3.2",
         "troop"  : "~0.7.2",
