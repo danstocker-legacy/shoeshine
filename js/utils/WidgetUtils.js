@@ -6,6 +6,7 @@ troop.postpone(shoeshine, 'WidgetUtils', function () {
         self = base.extend();
 
     /**
+     * The WidgetUtils class is a static class containing general purpose utilities used by widgets.
      * @class
      * @extends troop.Base
      */
@@ -33,6 +34,7 @@ troop.postpone(shoeshine, 'WidgetUtils', function () {
         })
         .addMethods(/** @lends shoeshine.WidgetUtils */{
             /**
+             * Replace callback function for escaping HTML entities.
              * @param {string} hit
              * @returns {string}
              */
@@ -41,6 +43,7 @@ troop.postpone(shoeshine, 'WidgetUtils', function () {
             },
 
             /**
+             * Escapes HTML entities, quotes, and placeholder markers in the specified text.
              * @param {string} text
              * @return {string} Escaped string.
              */
@@ -49,6 +52,7 @@ troop.postpone(shoeshine, 'WidgetUtils', function () {
             },
 
             /**
+             * Retrieves the closest parent node of the specified element that has the specified CSS class.
              * @param {HTMLElement} element
              * @param {string} className
              * @returns {HTMLElement}
@@ -74,7 +78,7 @@ troop.postpone(shoeshine, 'WidgetUtils', function () {
         String.prototype,
         /** @lends String# */{
             /**
-             * Returns a HTML escaped string.
+             * Converts string to HTML escaped string.
              * @returns {string}
              */
             toHtml: function () {

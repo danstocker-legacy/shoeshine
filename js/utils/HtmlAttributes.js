@@ -6,6 +6,7 @@ troop.postpone(shoeshine, 'HtmlAttributes', function () {
         self = base.extend();
 
     /**
+     * Creates a HtmlAttributes instance.
      * @name shoeshine.HtmlAttributes.create
      * @function
      * @param {object|Array} [items] Initial contents.
@@ -13,6 +14,8 @@ troop.postpone(shoeshine, 'HtmlAttributes', function () {
      */
 
     /**
+     * The HtmlAttributes class manages all aspects of an HTML element's attributes,
+     * including CSS classes and inline styles.
      * @class
      * @extends sntls.Collection
      */
@@ -25,19 +28,30 @@ troop.postpone(shoeshine, 'HtmlAttributes', function () {
             init: function (items) {
                 base.init.call(this, items);
 
-                /** @type {string} */
+                /**
+                 * ID attribute.
+                 * @type {string}
+                 */
                 this.idAttribute = undefined;
 
-                /** @type {shoeshine.CssClasses} */
+                /**
+                 * Collection of CSS classes.
+                 * @type {shoeshine.CssClasses}
+                 */
                 this.cssClasses = shoeshine.CssClasses.create();
 
-                /** @type {shoeshine.InlineStyles} */
+                /**
+                 * Collection of inline styles.
+                 * @type {shoeshine.InlineStyles}
+                 */
                 this.inlineStyles = shoeshine.InlineStyles.create();
             },
 
             /**
+             * Sets ID attribute. ID attribute set this way will override ID attribute set via `setItem`.
              * @param {string} idAttribute
              * @returns {shoeshine.HtmlAttributes}
+             * @see shoeshine.HtmlAttributes#setItem
              */
             setIdAttribute: function (idAttribute) {
                 dessert.isString(idAttribute, "Invalid ID attribute");
@@ -46,6 +60,7 @@ troop.postpone(shoeshine, 'HtmlAttributes', function () {
             },
 
             /**
+             * Adds CSS class to the 'class' attribute.
              * @param {string} cssClass
              * @returns {shoeshine.HtmlAttributes}
              */
@@ -55,6 +70,7 @@ troop.postpone(shoeshine, 'HtmlAttributes', function () {
             },
 
             /**
+             * Removes CSS class from the 'class' attribute.
              * @param {string} cssClass
              * @returns {shoeshine.HtmlAttributes}
              */
@@ -64,8 +80,9 @@ troop.postpone(shoeshine, 'HtmlAttributes', function () {
             },
 
             /**
-             * @param {string} styleName
-             * @param {string} styleValue
+             * Adds style definition to the 'style' attribute.
+             * @param {string} styleName Style name, eg. "overflow".
+             * @param {string} styleValue Style value, eg. "hidden".
              * @returns {shoeshine.HtmlAttributes}
              */
             addInlineStyle: function (styleName, styleValue) {
@@ -74,7 +91,8 @@ troop.postpone(shoeshine, 'HtmlAttributes', function () {
             },
 
             /**
-             * @param {string} styleName
+             * Adds style definition to the 'style' attribute.
+             * @param {string} styleName Style name, eg. "overflow".
              * @returns {shoeshine.HtmlAttributes}
              */
             removeInlineStyle: function (styleName) {
@@ -83,6 +101,8 @@ troop.postpone(shoeshine, 'HtmlAttributes', function () {
             },
 
             /**
+             * Generates a new HtmlAttributes instance on which the `id`, `class`, and `style` attributes are set
+             * based on the corresponding properties of the current instance.
              * @returns {shoeshine.HtmlAttributes}
              */
             getFinalAttributes: function () {
@@ -118,7 +138,17 @@ troop.postpone(shoeshine, 'HtmlAttributes', function () {
                 return result;
             },
 
-            /** @returns {string} */
+            /**
+             * Serializes HTML attributes to string so that it can be used when composing an HTML tag.
+             * The order of attributes is not determined.
+             * @example
+             * shoeshine.HtmlAttributes.create()
+             *     .setIdAttribute('foo')
+             *     .addCssClass('bar')
+             *     .addInlineStyle('overflow', 'hidden')
+             *     .toString() // 'id="foo" class="bar" style="overflow: hidden"'
+             * @returns {string}
+             */
             toString: function () {
                 return this.getFinalAttributes()
                     .mapValues(function (value, attributeName) {
@@ -134,10 +164,12 @@ troop.postpone(shoeshine, 'HtmlAttributes', function () {
     "use strict";
 
     dessert.addTypes(/** @lends dessert */{
+        /** @param {shoeshine.HtmlAttributes} expr */
         isHtmlAttributes: function (expr) {
             return shoeshine.HtmlAttributes.isBaseOf(expr);
         },
 
+        /** @param {shoeshine.HtmlAttributes} [expr] */
         isHtmlAttributesOptional: function (expr) {
             return typeof expr === 'undefined' ||
                    shoeshine.HtmlAttributes.isBaseOf(expr);

@@ -6,6 +6,7 @@ troop.postpone(shoeshine, 'CssClasses', function () {
         self = base.extend();
 
     /**
+     * Creates a CssClasses instance.
      * @name shoeshine.CssClasses.create
      * @function
      * @param {object|Array} [items] Initial contents.
@@ -13,12 +14,14 @@ troop.postpone(shoeshine, 'CssClasses', function () {
      */
 
     /**
+     * The CssClasses class is a serializable Collection of CSS class names.
      * @class
      * @extends troop.Base
      */
     shoeshine.CssClasses = self
         .addMethods(/** @lends shoeshine.CssClasses# */{
             /**
+             * Adds specified CSS class to the collection.
              * @param {string} cssClass
              * @returns {shoeshine.CssClasses}
              */
@@ -28,6 +31,7 @@ troop.postpone(shoeshine, 'CssClasses', function () {
             },
 
             /**
+             * Removes specified CSS class from the collection.
              * @param {string} cssClass
              * @returns {shoeshine.CssClasses}
              */
@@ -36,7 +40,15 @@ troop.postpone(shoeshine, 'CssClasses', function () {
                 return this;
             },
 
-            /** @returns {string} */
+            /**
+             * Serializes CSS classes into a space separated string that can be used as an HTML "class" attribute.
+             * @example
+             * shoeshine.CssClasses.create()
+             *     .addCssClass('foo')
+             *     .addCssClass('bar')
+             *     .toString() // "foo bar"
+             * @returns {string}
+             */
             toString: function () {
                 return this
                     .getSortedValues()

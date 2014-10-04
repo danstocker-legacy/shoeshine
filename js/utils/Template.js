@@ -6,21 +6,24 @@ troop.postpone(shoeshine, 'Template', function () {
         self = base.extend();
 
     /**
+     * Creates a Template instance.
+     * Template instances may also be created via conversion from string.
      * @name shoeshine.Template.create
      * @function
-     * @param {string} text
+     * @param {string} text Template string.
      * @returns {shoeshine.Template}
+     * @see String#toTemplate
      */
 
     /**
+     * The Template class implements basic string templating. Converting any string containing placeholders
+     * to a Template instance allows those placeholders to be replaced via a simple API.
      * @class
      * @extends troop.Base
      */
     shoeshine.Template = self
         .addConstants(/** @lends shoeshine.Template */{
-            /**
-             * @type {RegExp}
-             */
+            /** @type {RegExp} */
             RE_TEMPLATE_PLACEHOLDER: /{{([\w-]+)}}/g
         })
         .addMethods(/** @lends shoeshine.Template# */{
@@ -80,7 +83,7 @@ troop.postpone(shoeshine, 'Template', function () {
         String.prototype,
         /** @lends String# */{
             /**
-             * Converts current string to Template instance.
+             * Converts `String` to `Template` instance.
              * @returns {shoeshine.Template}
              */
             toTemplate: function () {
@@ -88,7 +91,7 @@ troop.postpone(shoeshine, 'Template', function () {
             },
 
             /**
-             * Converts current string to placeholder string.
+             * Converts string to placeholder string by wrapping it in double handlebars.
              * @returns {string}
              */
             toPlaceholder: function () {
