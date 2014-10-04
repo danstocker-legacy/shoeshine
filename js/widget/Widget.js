@@ -12,12 +12,20 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
             .extend(className);
 
     /**
+     * Creates a Widget instance.
+     * Widgets already inserted into the hierarchy may be retrieved via conversion from their widget IDs.
+     * @example
+     * 'w1'.toWidget()
      * @name shoeshine.Widget.create
      * @function
      * @returns {shoeshine.Widget}
      */
 
     /**
+     * The Widget class is the base class for all *shoeshine*-based widgets.
+     * As stateful view-controllers, the widgets' role is to keep the view (DOM) in sync with the model.
+     * The Widget implements the life cycle: created - added - rendered - removed, to each stage of which user-defined
+     * handlers may be added.
      * @class
      * @extends troop.Base
      * @extends evan.Evented
@@ -27,15 +35,24 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
     shoeshine.Widget = self
         .setEventSpace(shoeshine.widgetEventSpace)
         .addPublic(/** @lends shoeshine.Widget */{
-            /** @type {shoeshine.HtmlAttributes} */
+            /**
+             * Stores all HTML attributes, including CSS classes and inline styles.
+             * @type {shoeshine.HtmlAttributes}
+             */
             htmlAttributes: shoeshine.HtmlAttributes.create()
                 .addCssClass(className),
 
-            /** @type {shoeshine.Widget} */
+            /**
+             * Root widget. All other widgets descend from this.
+             * There can be only one root widget at a time, but the root widget may be replaced at any time.
+             * @type {shoeshine.Widget}
+             * @see shoeshine.Widget#setRootWidget
+             */
             rootWidget: undefined
         })
         .addPrivateMethods(/** @lends shoeshine.Widget# */{
             /**
+             * Retrieves a list of widget IDs to be found under the specified DOM element.
              * @param {HTMLElement} element
              * @return {string[]} List of widget IDs.
              * @private
@@ -78,8 +95,14 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
         })
         .addMethods(/** @lends shoeshine.Widget# */{
             /**
+             * Extends the widget class. Same as `troop.Base.extend()` in all respects except for incorporating the
+             * functionality of `Documented.extend()`, and adding the class name to the HTML attributes as CSS class.
+             * @example
+             * var MyWidget = shoeshine.Widget.extend('MyWidget');
              * @param {string} className
              * @returns {shoeshine.Widget}
+             * @see troop.Base.extend
+             * @see sntls.Documented.extend
              */
             extend: function (className) {
                 var that = sntls.Documented.extend.call(this, className);
@@ -91,9 +114,14 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
             },
 
             /**
+             * Adds trait to widget class. Same as `troop.addTrait()`, except for optionally adding the trait name
+             * to the widget's HTML attributes as CSS class.
+             * @example
+             * var MyWidget = shoeshine.Widget.extend('MyWidget')
+             *     .addTrait(TraitClass, 'TraitClass');
              * @param {object} trait
-             * @param {string} [traitName]
-             * @returns {shoeshine.Widget}
+             * @param {string} [traitName] Name of trait. Must be the same as the name of the trait object.
+             * @returns {shoeshine.Widget} Widget class the method was called on.
              */
             addTrait: function (trait, traitName) {
                 dessert.isStringOptional(traitName, "Invalid trait name");
@@ -108,10 +136,11 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
             },
 
             /**
-             * Adds trait to widget class by the specified name, then extends the class.
+             * Adds trait to widget class, and extends the class afterwards. Same as `troop.addTrait()`,
+             * except for optionally adding the trait name to the widget's HTML attributes as CSS class.
              * @param {troop.Base} trait
-             * @param {string} [traitName]
-             * @returns {shoeshine.Widget}
+             * @param {string} [traitName] Name of trait. Must be the same as the name of the trait object.
+             * @returns {shoeshine.Widget} Extended widget class.
              */
             addTraitAndExtend: function (trait, traitName) {
                 return this
@@ -131,10 +160,19 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
                     this.htmlAttributes.clone()
                         .setIdAttribute(widgetId));
 
-                /** @type {string} */
+                /**
+                 * Specifies what element to render the widget in in the context of its parents' DOM.
+                 * The first element found to be having this CSS class will be the parent DOM node
+                 * for the current widget's DOM.
+                 * @type {string}
+                 */
                 this.containerCssClass = undefined;
 
-                /** @type {shoeshine.WidgetCollection} */
+                /**
+                 * Child widgets. Modifies the `children` property delegated by `shoeshine.Progenitor`
+                 * by treating it as a `WidgetCollection` rather than a regular `sntls.Collection`.
+                 * @type {shoeshine.WidgetCollection}
+                 */
                 this.children = this.children.toWidgetCollection();
 
                 // initializing Evented trait
@@ -145,7 +183,8 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
             },
 
             /**
-             * Sets container CSS class property.
+             * Sets container CSS class property. The widget, when added to a parent, will be rendered inside the first
+             * element to be found inside the parent's DOM bearing this CSS class.
              * @param {string} containerCssClass
              * @returns {shoeshine.Widget}
              */
@@ -169,8 +208,10 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
 
             /**
              * Adds current widget to specified parent as child.
+             * Also triggers rendering the child inside the parent's DOM, according to `.containerCssClass`.
              * @param {shoeshine.Widget} parentWidget
              * @returns {shoeshine.Widget}
+             * @see shoeshine.Widget#containerCssClass
              */
             addToParent: function (parentWidget) {
                 dessert.isWidget(parentWidget, "Invalid parent widget");
@@ -197,7 +238,7 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
             },
 
             /**
-             * Replaces root widget with current widget.
+             * Sets / replaces root widget with current widget.
              * @returns {shoeshine.Widget}
              */
             setRootWidget: function () {
@@ -251,6 +292,8 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
             },
 
             /**
+             * Sets name of current widget in the context of its parent.
+             * For widgets it also determines the order in which they are rendered inside the same container element.
              * @param {string} childName
              * @returns {shoeshine.Widget}
              */
@@ -269,7 +312,7 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
             },
 
             /**
-             * Fetches child widgets and returns them in a WidgetCollection.
+             * Fetches child widgets and returns them as a WidgetCollection.
              * @returns {shoeshine.WidgetCollection}
              */
             getChildren: function () {
@@ -279,8 +322,8 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
             },
 
             /**
-             * Retrieves the widget that is adjacent to the specified widget name
-             * in the context of the specified parent DOM element.
+             * Retrieves the widget that is adjacent to the widget specified by its `childName` property
+             * in the context of the specified parent (DOM) element.
              * @param {string} childName
              * @param {HTMLElement} parentElement
              * @returns {shoeshine.Widget}
@@ -298,6 +341,7 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
             },
 
             /**
+             * Renders current widget into the specified (DOM) element.
              * @param {HTMLElement} element
              * @returns {shoeshine.Widget}
              */
@@ -318,6 +362,7 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
             },
 
             /**
+             * Renders current widget before the specified (DOM) element.
              * @param {HTMLElement} element
              * @returns {shoeshine.Widget}
              */
@@ -329,6 +374,10 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
             },
 
             /**
+             * Re-renders element in its current position in the DOM.
+             * Using `reRender` is considered an anti-pattern. Even though re-rendering an already rendered widget
+             * does update the widget's DOM, but it is proven to be slow, and risks memory leaks in case there are
+             * hard references held to the old DOM. It also makes transitions, input focus, etc. harder to manage.
              * @returns {shoeshine.Widget}
              */
             reRender: function () {
@@ -339,9 +388,9 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
 
             /**
              * Override method that is called after the widget is added to the hierarchy.
-             * TODO: Previous implementation suggests there are cases when child widgets'
-             * parent references are not set to the actual parent and need to be aligned.
-             * Need to confirm.
+             * This is the place to initialize the widget lifecycle. Eg. sync the widget's state to the model,
+             * subscribe to events, etc.
+             * Make sure the override calls the `afterAdd` method of the super and all traits that implement it.
              */
             afterAdd: function () {
                 this.children.afterAdd();
@@ -356,6 +405,9 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
 
             /**
              * Override method that is called after the widget is removed from the hierarchy.
+             * This is the place to de-initialize the widget lifecycle, usually by countering the actions taken in
+             * `afterAdd`. Eg. unsubscribing from events.
+             * Make sure the override calls the `afterRemove` method of the super and all traits that implement it.
              */
             afterRemove: function () {
                 this.children.afterRemove();
@@ -373,6 +425,9 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
 
             /**
              * Override method that is called after the widget is rendered into the DOM.
+             * This is the place to initialize the widget's DOM. Eg. by subscribing to UI events,
+             * triggering transitions, etc.
+             * Make sure the override calls the `afterRender` method of the super and all traits that implement it.
              */
             afterRender: function () {
                 if (this.getElement()) {
@@ -399,24 +454,18 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
     "use strict";
 
     dessert.addTypes(/** @lends dessert */{
-        /**
-         * @param {shoeshine.Widget} expr
-         */
+        /** @param {shoeshine.Widget} expr */
         isWidget: function (expr) {
             return shoeshine.Widget.isBaseOf(expr);
         },
 
-        /**
-         * @param {shoeshine.Widget} expr
-         */
+        /** @param {shoeshine.Widget} expr */
         isWidgetOptional: function (expr) {
             return typeof expr === 'undefined' ||
                    shoeshine.Widget.isBaseOf(expr);
         },
 
-        /**
-         * @param {Element} expr
-         */
+        /** @param {Element} expr */
         isElement: function (expr) {
             return expr instanceof Element;
         }
@@ -425,12 +474,20 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
     troop.Properties.addProperties.call(
         String.prototype,
         /** @lends String# */{
-            /** @returns {shoeshine.Widget} */
+            /**
+             * Converts `String` to `Widget` by looking up the widget corresponding to the current string
+             * as its widget ID. Conversion yields no result when the widget is not in the hierarchy.
+             * String must be in the 'w#' format (lowercase 'w' followed by digits).
+             * @returns {shoeshine.Widget}
+             */
             toWidget: function () {
                 return sntls.Managed.getInstanceById(this.toInstanceIdFromWidgetId());
             },
 
-            /** @returns {number} */
+            /**
+             * Converts string widget ID ('w###') to an instance ID (number).
+             * @returns {number}
+             */
             toInstanceIdFromWidgetId: function () {
                 return parseInt(this.slice(1), 10);
             }
@@ -441,7 +498,11 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
     troop.Properties.addProperties.call(
         Number.prototype,
         /** @lends Number# */{
-            /** @returns {string} */
+            /**
+             * Converts current number as instance ID to widget ID.
+             * The widget ID is used as the ID attribute of the rendered widget's container element.
+             * @returns {string}
+             */
             toWidgetId: function () {
                 return 'w' + this;
             }
@@ -453,7 +514,10 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
         troop.Properties.addProperties.call(
             Element.prototype,
             /** @lends Element# */{
-                /** @returns {shoeshine.Widget} */
+                /**
+                 * Converts `Element` to `Widget` using the element's ID attribute as widget ID.
+                 * @returns {shoeshine.Widget}
+                 */
                 toWidget: function () {
                     return sntls.Managed.getInstanceById(this.id.toInstanceIdFromWidgetId());
                 }
@@ -467,8 +531,12 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
             Event.prototype,
             /** @lends Event# */{
                 /**
+                 * Converts `Event` to `Widget`.
+                 * Uses the event's target to look up the nearest parent element matching the specified class name.
+                 * Then uses the element that was found as basis for conversion from `Element` to `Widget`.
                  * @param {string} [cssClassName]
                  * @returns {shoeshine.Widget}
+                 * @see Element#toWidget
                  */
                 toWidget: function (cssClassName) {
                     cssClassName = cssClassName || shoeshine.Widget.className;
