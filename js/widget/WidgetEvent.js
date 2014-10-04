@@ -6,6 +6,11 @@ troop.postpone(shoeshine, 'WidgetEvent', function () {
         self = base.extend();
 
     /**
+     * Creates a WidgetEvent instance.
+     * Do not instantiate this class directly. Spawn events on the event space `shoeshine.widgetEventSpace`,
+     * or an Evented instance, like a Widget.
+     * WidgetEvent may also be instantiated by creating an `evan.Event` with `shoeshine.WidgetEventSpace`
+     * specified as event space.
      * @name shoeshine.WidgetEvent.create
      * @function
      * @param {string} eventName Event name
@@ -14,6 +19,7 @@ troop.postpone(shoeshine, 'WidgetEvent', function () {
      */
 
     /**
+     * The WidgetEvent implements special event features for widgets.
      * @class
      * @extends evan.Event
      */
@@ -27,11 +33,15 @@ troop.postpone(shoeshine, 'WidgetEvent', function () {
             init: function (eventName, eventSpace) {
                 base.init.call(this, eventName, eventSpace);
 
-                /** @type {shoeshine.Widget} */
+                /**
+                 * Widget from which the event originated.
+                 * @type {shoeshine.Widget}
+                 */
                 this.senderWidget = undefined;
             },
 
             /**
+             * Sets `senderWidget` property.
              * @param {shoeshine.Widget} senderWidget
              * @returns {shoeshine.WidgetEvent}
              */
@@ -41,7 +51,10 @@ troop.postpone(shoeshine, 'WidgetEvent', function () {
                 return this;
             },
 
-            /** @returns {shoeshine.WidgetEvent} */
+            /**
+             * Clones Event instance. Copies `senderWidget` reference to the new event instance.
+             * @returns {shoeshine.WidgetEvent}
+             */
             clone: function () {
                 return base.clone.apply(this, arguments)
                     .setSenderWidget(this.senderWidget);

@@ -6,6 +6,7 @@ troop.postpone(shoeshine, 'WidgetCollection', function () {
         self = base.extend();
 
     /**
+     * Creates a WidgetCollection instance.
      * @name shoeshine.WidgetCollection.create
      * @function
      * @param {object} [items]
@@ -13,13 +14,18 @@ troop.postpone(shoeshine, 'WidgetCollection', function () {
      */
 
     /**
+     * The WidgetCollection is a specified collection merging the Collection API with the Widget API.
+     * Also allows serialization of all widgets in the collection into a single string.
      * @class
      * @extends sntls.Collection
      * @extends shoeshine.Widget
      */
     shoeshine.WidgetCollection = self
         .addMethods(/** @lends shoeshine.WidgetCollection# */{
-            /** @returns {string} */
+            /**
+             * Generates the markup for all widgets in the collection, in the order of their names.
+             * @returns {string}
+             */
             toString: function () {
                 return this.callOnEachItem('toString')
                     .getSortedValues()
@@ -33,7 +39,10 @@ troop.amendPostponed(sntls, 'Hash', function () {
 
     sntls.Hash
         .addMethods(/** @lends sntls.Hash# */{
-            /** @returns {shoeshine.WidgetCollection} */
+            /**
+             * Converts `Hash` to `WidgetCollection`.
+             * @returns {shoeshine.WidgetCollection}
+             */
             toWidgetCollection: function () {
                 return shoeshine.WidgetCollection.create(this.items);
             }
@@ -46,7 +55,10 @@ troop.amendPostponed(sntls, 'Hash', function () {
     troop.Properties.addProperties.call(
         Array.prototype,
         /** @lends Array# */{
-            /** @returns {shoeshine.WidgetCollection} */
+            /**
+             * Converts array of `Widget` instances to a `WidgetCollection`.
+             * @returns {shoeshine.WidgetCollection}
+             */
             toWidgetCollection: function () {
                 return shoeshine.WidgetCollection.create(this);
             }
