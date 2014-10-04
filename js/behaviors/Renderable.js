@@ -6,6 +6,8 @@ troop.postpone(shoeshine, 'Renderable', function () {
         self = base.extend();
 
     /**
+     * The Renderable trait allows the host class to be rendered into the DOM.
+     * Adds managed HTML attributes, markup, and rendering methods.
      * @class
      * @extends troop.Base
      */
@@ -326,7 +328,7 @@ troop.postpone(shoeshine, 'Renderable', function () {
             },
 
             /**
-             * Generates markup for the current instance.
+             * Generates full markup for the current instance.
              * @returns {string}
              */
             toString: function () {

@@ -7,7 +7,7 @@ troop.postpone(shoeshine, 'Progenitor', function (ns, className) {
         slice = Array.prototype.slice;
 
     /**
-     * Trait that manages parent-children relations between instances of the host class.
+     * The Progenitor trait manages parent-children relation between instances of the host class.
      * @class
      * @extends sntls.Managed
      */
