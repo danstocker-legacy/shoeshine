@@ -1,5 +1,6 @@
 /out/
 /.idea/
+/doc/
 /node_modules/
 shoeshine.js
 *.tgz
