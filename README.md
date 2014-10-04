@@ -3,6 +3,10 @@ Shoeshine
 
 *Widget framework*
 
+[Wiki](https://github.com/danstocker/shoeshine/wiki)
+
+[Reference](http://danstocker.github.io/shoeshine)
+
 Shoeshine serves as the basis of building a modular, and event-driven view-controller layer for a front end application that is based on [troop](https://github.com/production-minds/troop) for OOP, [sntls](https://github.com/danstocker/sntls) for data structures, and [evan](https://github.com/danstocker/evan) for universal events.
 
 For a set of common widgets (labels, buttons, dropdowns, forms) based on shoeshine, look into [candystore](https://github.com/danstocker/candystore).
