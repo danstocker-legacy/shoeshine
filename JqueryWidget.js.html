@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: behaviors/JqueryWidget.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: behaviors/JqueryWidget.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/*global dessert, troop, sntls, jQuery, shoeshine */
+troop.postpone(shoeshine, 'JqueryWidget', function (ns, className, /**jQuery*/$) {
+    "use strict";
+
+    var base = troop.Base,
+        self = base.extend();
+
+    /**
+     * The JqueryWidget trait adds class-level (delegated) jQuery event subscription capability to the host.
+     * When used on other traits, call methods directly on JqueryWidget.
+     * @class
+     * @extends troop.Base
+     * @extends shoeshine.Widget
+     */
+    shoeshine.JqueryWidget = self
+        .addConstants(/** @lends shoeshine.JqueryWidget */{
+            /** @type {jQuery} */
+            $document: $(document)
+        })
+        .addPrivateMethods(/** @lends shoeshine.JqueryWidget */{
+            /**
+             * @param {string} eventName
+             * @param {string} selector
+             * @param {function} handler
+             * @private
+             */
+            _jqueryOnProxy: function (eventName, selector, handler) {
+                self.$document.on(eventName, selector, handler);
+            },
+
+            /**
+             * @param {string} eventName
+             * @param {string} selector
+             * @param {function} [handler]
+             * @private
+             */
+            _jqueryOffProxy: function (eventName, selector, handler) {
+                self.$document.off(eventName, selector, handler);
+            },
+
+            /**
+             * @param {string} selector
+             * @returns {string}
+             * @private
+             */
+            _getGlobalSelector: function (selector) {
+                var className = this.className,
+                    classSelector = '.' + className;
+
+                return className ?
+                    selector.indexOf(classSelector) === -1 ?
+                        classSelector + ' ' + selector :
+                        selector :
+                    selector;
+            }
+        })
+        .addMethods(/** @lends shoeshine.JqueryWidget */{
+            /**
+             * Subscribes to DOM events, jQuery-style.
+             * @param {string} eventName
+             * @param {string} selector
+             * @param {string} methodName
+             * @returns {shoeshine.JqueryWidget}
+             */
+            on: function (eventName, selector, methodName) {
+                var globalSelector = this._getGlobalSelector(selector),
+                    className = this.className;
+
+                this._jqueryOnProxy(eventName, globalSelector, function (/**jQuery.Event*/event) {
+                    var widget = event.originalEvent.toWidget(className);
+                    return widget ?
+                        widget[methodName].apply(widget, arguments) :
+                        undefined;
+                });
+
+                return this;
+            },
+
+            /**
+             * Unsubscribes from DOM events, jQuery-style.
+             * @param {string} eventName
+             * @param {string} selector
+             * @returns {shoeshine.JqueryWidget}
+             */
+            off: function (eventName, selector) {
+                var globalSelector = this._getGlobalSelector(selector);
+
+                this._jqueryOffProxy(eventName, globalSelector);
+
+                return this;
+            }
+        });
+}, jQuery);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Array.html">Array</a></li><li><a href="dessert.html">dessert</a></li><li><a href="Element.html">Element</a></li><li><a href="Event.html">Event</a></li><li><a href="Number.html">Number</a></li><li><a href="shoeshine.CssClasses.html">CssClasses</a></li><li><a href="shoeshine.HtmlAttributes.html">HtmlAttributes</a></li><li><a href="shoeshine.InlineStyles.html">InlineStyles</a></li><li><a href="shoeshine.JqueryWidget.html">JqueryWidget</a></li><li><a href="shoeshine.Progenitor.html">Progenitor</a></li><li><a href="shoeshine.Renderable.html">Renderable</a></li><li><a href="shoeshine.Template.html">Template</a></li><li><a href="shoeshine.Widget.html">Widget</a></li><li><a href="shoeshine.WidgetCollection.html">WidgetCollection</a></li><li><a href="shoeshine.WidgetEvent.html">WidgetEvent</a></li><li><a href="shoeshine.WidgetUtils.html">WidgetUtils</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="String.html">String</a></li></ul><h3>Namespaces</h3><ul><li><a href="evan.html">evan</a></li><li><a href="shoeshine.html">shoeshine</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul><h3>Global</h3><ul><li><a href="global.html#jQuery">jQuery</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat Oct 04 2014 09:50:31 GMT+0100 (BST)
+</footer>
+
+<script> prettyPrint(); </script>
+</body>
+</html>

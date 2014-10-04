@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: utils/WidgetUtils.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: utils/WidgetUtils.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/*global dessert, troop, sntls, shoeshine */
+troop.postpone(shoeshine, 'WidgetUtils', function () {
+    "use strict";
+
+    var base = troop.Base,
+        self = base.extend();
+
+    /**
+     * The WidgetUtils class is a static class containing general purpose utilities used by widgets.
+     * @class
+     * @extends troop.Base
+     */
+    shoeshine.WidgetUtils = self
+        .addConstants(/** @lends shoeshine.WidgetUtils */{
+            /**
+             * @type {RegExp}
+             * @constant
+             */
+            RE_ESCAPE_CHARS: /[&&lt;>"'\n]|{{|}}/g,
+
+            /**
+             * @type {object}
+             * @constant
+             */
+            ENTITY_MAP: {
+                '&' : '&amp;',
+                '&lt;' : '&lt;',
+                '>' : '&gt;',
+                '"' : '&quot;',
+                '\'': '&#39;',
+                '{{': '&#123;&#123;',
+                '}}': '&#125;&#125;'
+            }
+        })
+        .addMethods(/** @lends shoeshine.WidgetUtils */{
+            /**
+             * Replace callback function for escaping HTML entities.
+             * @param {string} hit
+             * @returns {string}
+             */
+            replaceHtmlEntity: function (hit) {
+                return self.ENTITY_MAP[hit] || hit;
+            },
+
+            /**
+             * Escapes HTML entities, quotes, and placeholder markers in the specified text.
+             * @param {string} text
+             * @return {string} Escaped string.
+             */
+            htmlEscape: function (text) {
+                return text.replace(this.RE_ESCAPE_CHARS, this.replaceHtmlEntity);
+            },
+
+            /**
+             * Retrieves the closest parent node of the specified element that has the specified CSS class.
+             * @param {HTMLElement} element
+             * @param {string} className
+             * @returns {HTMLElement}
+             */
+            getParentNodeByClassName: function (element, className) {
+                var classList;
+                while (element && element.className) {
+                    classList = element.className.split(/\s+/);
+                    if (classList && classList.indexOf(className) > -1) {
+                        return element;
+                    }
+                    element = element.parentNode;
+                }
+                return undefined;
+            }
+        });
+});
+
+(function () {
+    "use strict";
+
+    troop.Properties.addProperties.call(
+        String.prototype,
+        /** @lends String# */{
+            /**
+             * Converts string to HTML escaped string.
+             * @returns {string}
+             */
+            toHtml: function () {
+                return shoeshine.WidgetUtils.htmlEscape(this);
+            }
+        },
+        false, false, false
+    );
+}());
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Array.html">Array</a></li><li><a href="dessert.html">dessert</a></li><li><a href="Element.html">Element</a></li><li><a href="Event.html">Event</a></li><li><a href="Number.html">Number</a></li><li><a href="shoeshine.CssClasses.html">CssClasses</a></li><li><a href="shoeshine.HtmlAttributes.html">HtmlAttributes</a></li><li><a href="shoeshine.InlineStyles.html">InlineStyles</a></li><li><a href="shoeshine.JqueryWidget.html">JqueryWidget</a></li><li><a href="shoeshine.Progenitor.html">Progenitor</a></li><li><a href="shoeshine.Renderable.html">Renderable</a></li><li><a href="shoeshine.Template.html">Template</a></li><li><a href="shoeshine.Widget.html">Widget</a></li><li><a href="shoeshine.WidgetCollection.html">WidgetCollection</a></li><li><a href="shoeshine.WidgetEvent.html">WidgetEvent</a></li><li><a href="shoeshine.WidgetUtils.html">WidgetUtils</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="String.html">String</a></li></ul><h3>Namespaces</h3><ul><li><a href="evan.html">evan</a></li><li><a href="shoeshine.html">shoeshine</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul><h3>Global</h3><ul><li><a href="global.html#jQuery">jQuery</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat Oct 04 2014 09:50:31 GMT+0100 (BST)
+</footer>
+
+<script> prettyPrint(); </script>
+</body>
+</html>

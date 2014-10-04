@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: behaviors/Progenitor.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: behaviors/Progenitor.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/*global dessert, troop, sntls, shoeshine */
+troop.postpone(shoeshine, 'Progenitor', function (ns, className) {
+    "use strict";
+
+    var base = sntls.Managed,
+        self = base.extend(className),
+        slice = Array.prototype.slice;
+
+    /**
+     * The Progenitor trait manages parent-children relation between instances of the host class.
+     * @class
+     * @extends sntls.Managed
+     */
+    shoeshine.Progenitor = self
+        .addMethods(/** @lends shoeshine.Progenitor# */{
+            /** Call from host's .init */
+            init: function () {
+                base.init.call(this);
+
+                /**
+                 * Parent of current instance.
+                 * When undefined, progenitor is considered a root instance.
+                 * @type {shoeshine.Progenitor}
+                 */
+                this.parent = undefined;
+
+                /**
+                 * Name of the current instance in the context of its parent.
+                 * @type {string}
+                 */
+                this.childName = this.instanceId.toString();
+
+                /**
+                 * Children: collection of other Progenitor instances.
+                 * @type {sntls.Collection}
+                 */
+                this.children = sntls.Collection.create();
+            },
+
+            /**
+             * Adds current instance to the specified parent Progenitor instance as child.
+             * @param {shoeshine.Progenitor} parent
+             * @returns {shoeshine.Progenitor}
+             */
+            addToParent: function (parent) {
+                var childName = this.childName,
+                    currentChild = parent.children.getItem(childName);
+
+                if (currentChild !== this) {
+                    // child in parent by the name of the current instance
+                    // is not the current instance
+
+                    if (currentChild) {
+                        // there is a child in parent by the current instance/s child name
+                        // removing that instance
+                        currentChild.removeFromParent();
+                    }
+
+                    // setting current instance as child in parent
+                    parent.children.setItem(childName, this);
+
+                    // updating parent reference
+                    this.parent = parent;
+                }
+
+                return this;
+            },
+
+            /**
+             * Adds the specified Progenitor instance to the current instance as child.
+             * @param {shoeshine.Progenitor} child
+             * @returns {shoeshine.Progenitor}
+             */
+            addChild: function (child) {
+                child.addToParent(this);
+                return this;
+            },
+
+            /**
+             * Removes current instance from its parent.
+             * Has no effect when current instance has no parent.
+             * @returns {shoeshine.Progenitor}
+             */
+            removeFromParent: function () {
+                var parent = this.parent;
+
+                if (parent) {
+                    // removing self from parent's children
+                    parent.children.deleteItem(this.childName);
+
+                    // clearing parent reference
+                    this.parent = undefined;
+                }
+
+                return this;
+            },
+
+            /**
+             * Removes specified Progenitor instance from current instance.
+             * Has no effect if the specified instance is not child of the current instance.
+             * @param {shoeshine.Progenitor} child
+             * @returns {shoeshine.Progenitor}
+             */
+            removeChild: function (child) {
+                if (this.children.getItem(child.childName) === child) {
+                    child.removeFromParent();
+                }
+                return this;
+            },
+
+            /**
+             * Removes all children from the current instance.
+             * @returns {shoeshine.Progenitor}
+             */
+            removeChildren: function () {
+                this.children.callOnEachItem('removeFromParent');
+                return this;
+            },
+
+            /**
+             * Changes child name for current instance.
+             * Has no effect when specified child name is same as the current child name.
+             * @param {string} childName
+             * @returns {shoeshine.Progenitor}
+             */
+            setChildName: function (childName) {
+                dessert.isString(childName, "Invalid child name");
+
+                var parent = this.parent;
+
+                if (childName !== this.childName) {
+                    if (parent) {
+                        // temporarily removing instance from parent
+                        this.removeFromParent();
+                    }
+
+                    // changing name
+                    this.childName = childName;
+
+                    if (parent) {
+                        // adding instance back to parent
+                        this.addToParent(parent);
+                    }
+                }
+
+                return this;
+            },
+
+            /**
+             * Retrieves child instance matching the specified child name.
+             * @param {string} childName
+             * @returns {shoeshine.Progenitor}
+             */
+            getChild: function (childName) {
+                return this.children.getItem(childName);
+            },
+
+            /**
+             * Retrieves a collection of child instances matching the names specified as arguments.
+             * When no argument is given, retrieves reference to the children collection.
+             * @returns {sntls.Collection}
+             */
+            getChildren: function () {
+                if (arguments.length) {
+                    return this.children.filterByKeys(slice.call(arguments));
+                } else {
+                    return this.children;
+                }
+            },
+
+            /**
+             * Retrieves a collection of all instances in the current instance's progeny.
+             * @returns {sntls.Collection}
+             */
+            getAllDescendants: function () {
+                var result = sntls.Collection.create();
+
+                (function getAllDescendants(parent) {
+                    parent.children
+                        .forEachItem(function (child) {
+                            result.setItem(child.instanceId, child);
+                            getAllDescendants(child);
+                        });
+                }(this));
+
+                return result;
+            },
+
+            /**
+             * Retrieves a Progenitor instance from the current instance's parent chain
+             * matching the specified tester function. The tester receives one argument, which
+             * is the Progenitor instance being traversed in the parent chain.
+             * @param {function} tester
+             * @returns {shoeshine.Progenitor}
+             */
+            getAncestor: function (tester) {
+                dessert.isFunction(tester, "Invalid tester function");
+
+                var parent = this.parent;
+
+                while (parent && !tester(parent)) {
+                    parent = parent.parent;
+                }
+
+                return parent;
+            },
+
+            /**
+             * Retrieves the path that identifies the position of the current instance
+             * relative to the root instance.
+             * @returns {sntls.Path}
+             */
+            getLineage: function () {
+                var asArray = [],
+                    instance = this;
+
+                while (instance) {
+                    asArray.unshift(instance.instanceId);
+                    instance = instance.parent;
+                }
+
+                return asArray.toPath();
+            }
+        });
+});
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Array.html">Array</a></li><li><a href="dessert.html">dessert</a></li><li><a href="Element.html">Element</a></li><li><a href="Event.html">Event</a></li><li><a href="Number.html">Number</a></li><li><a href="shoeshine.CssClasses.html">CssClasses</a></li><li><a href="shoeshine.HtmlAttributes.html">HtmlAttributes</a></li><li><a href="shoeshine.InlineStyles.html">InlineStyles</a></li><li><a href="shoeshine.JqueryWidget.html">JqueryWidget</a></li><li><a href="shoeshine.Progenitor.html">Progenitor</a></li><li><a href="shoeshine.Renderable.html">Renderable</a></li><li><a href="shoeshine.Template.html">Template</a></li><li><a href="shoeshine.Widget.html">Widget</a></li><li><a href="shoeshine.WidgetCollection.html">WidgetCollection</a></li><li><a href="shoeshine.WidgetEvent.html">WidgetEvent</a></li><li><a href="shoeshine.WidgetUtils.html">WidgetUtils</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="String.html">String</a></li></ul><h3>Namespaces</h3><ul><li><a href="evan.html">evan</a></li><li><a href="shoeshine.html">shoeshine</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul><h3>Global</h3><ul><li><a href="global.html#jQuery">jQuery</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat Oct 04 2014 09:50:31 GMT+0100 (BST)
+</footer>
+
+<script> prettyPrint(); </script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Index</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Index</h1>
+    
+    
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1>Shoeshine</h1>
+
+<p><em>Widget framework</em></p>
+
+<p><a href="https://github.com/danstocker/shoeshine/wiki">Wiki</a></p>
+
+<p><a href="http://danstocker.github.io/shoeshine">Reference</a></p>
+
+<p>Shoeshine serves as the basis of building a modular, and event-driven view-controller layer for a front end application that is based on <a href="https://github.com/production-minds/troop">troop</a> for OOP, <a href="https://github.com/danstocker/sntls">sntls</a> for data structures, and <a href="https://github.com/danstocker/evan">evan</a> for universal events.</p>
+
+<p>For a set of common widgets (labels, buttons, dropdowns, forms) based on shoeshine, look into <a href="https://github.com/danstocker/candystore">candystore</a>.</p>
+
+<p>The <code>Widget</code> class implements a life cycle, plus incorporates a number of traits that augment its behavior:</p>
+
+<ul><li><code>evan.Evented</code> so that widget instances may trigger and capture events on themselves</li><li><code>sntls.Documented</code> so that widget classes may have class names assigned, and instances unique instance IDs</li><li><code>sntls.Managed</code> so that widget instances may be stored in and retrieved from a global registry</li><li><code>shoeshine.Progenitor</code> so that widget instances may be arranged in a parent-children relation</li><li><code>shoeshine.Renderable</code> so that widgets may be rendered into the DOM</li></ul>
+
+<p>In order to implement your own widget classes, subclass <code>shoeshine.Widget</code>. Make sure to supply a class name to <code>.extend()</code>, as <code>Widget</code> overrides <code>troop.Base.extend()</code> to make it more widget-specific. The class name will end up on the new widget class as static property (<code>.className</code>), as well as a CSS class name on the markup generated for its instances.</p>
+
+<pre><code>var MyWidget = shoeshine.Widget.extend(&#39;MyWidget&#39;)
+    .addMethods({
+        init: function () {
+            // initialize instance
+        },
+
+        afterAdd: function () {
+            base.afterAdd.call(this);
+            // widget added to widget hierarchy
+        },
+
+        afterRemove: function () {
+            base.afterRemove.call(this);
+            // widget removed from widget hierarchy
+        },
+
+        afterRender: function () {
+            base.afterRender.call(this);
+            // widget rendered, its DOM is ready for use
+        },
+
+        contentMarkup: function () {
+            return &#39;This is the inner markup if the widget&#39;;
+        }
+    });</code></pre>
+
+<p>To use the widget, simply set it as a <em>root widget</em>, or add it as a child to a widget already existing in the hierarchy.</p>
+
+<pre><code>MyWidget.create().setRootWidget();</code></pre>
+
+<p>or,</p>
+
+<pre><code>MyWidget.create().addToParent(parentWidget);</code></pre></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Array.html">Array</a></li><li><a href="dessert.html">dessert</a></li><li><a href="Element.html">Element</a></li><li><a href="Event.html">Event</a></li><li><a href="Number.html">Number</a></li><li><a href="shoeshine.CssClasses.html">CssClasses</a></li><li><a href="shoeshine.HtmlAttributes.html">HtmlAttributes</a></li><li><a href="shoeshine.InlineStyles.html">InlineStyles</a></li><li><a href="shoeshine.JqueryWidget.html">JqueryWidget</a></li><li><a href="shoeshine.Progenitor.html">Progenitor</a></li><li><a href="shoeshine.Renderable.html">Renderable</a></li><li><a href="shoeshine.Template.html">Template</a></li><li><a href="shoeshine.Widget.html">Widget</a></li><li><a href="shoeshine.WidgetCollection.html">WidgetCollection</a></li><li><a href="shoeshine.WidgetEvent.html">WidgetEvent</a></li><li><a href="shoeshine.WidgetUtils.html">WidgetUtils</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="String.html">String</a></li></ul><h3>Namespaces</h3><ul><li><a href="evan.html">evan</a></li><li><a href="shoeshine.html">shoeshine</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul><h3>Global</h3><ul><li><a href="global.html#jQuery">jQuery</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat Oct 04 2014 09:50:31 GMT+0100 (BST)
+</footer>
+
+<script> prettyPrint(); </script>
+</body>
+</html>
