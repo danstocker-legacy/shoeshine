@@ -370,12 +370,21 @@
     });
 
     test("Child widget name setter", function () {
-        expect(7);
+        expect(9);
 
         var widget = s$.Widget.create(),
             oldChildName = widget.childName;
 
         widget.addMocks({
+            getElement: function () {
+                ok(true, "should fetch widget element");
+                return {};
+            },
+
+            _renderIntoParent: function () {
+                ok(true, "should render widget");
+            },
+
             removeCssClass: function (className) {
                 equal(className, oldChildName, "should remove current widget name from CSS classes");
                 return this;
@@ -469,11 +478,12 @@
         sntls.Collection.removeMocks();
     });
 
+    // TODO: Add test for when adjacent widget's name is smaller than current.
     test("Rendering into element", function () {
         expect(8);
 
-        var widget = s$.Widget.create(),
-            adjacentWidget = s$.Widget.create(),
+        var widget = s$.Widget.create().setChildName('A'),
+            adjacentWidget = s$.Widget.create().setChildName('B'),
             targetElement = document.createElement('div'),
             adjacentElement = {};
 

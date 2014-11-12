@@ -329,6 +329,11 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
                     this.removeCssClass(oldChildName)
                         .addCssClass(childName);
 
+                    if (this.getElement()) {
+                        // moving UI to correct place
+                        this._renderIntoParent();
+                    }
+
                     this.triggerSync(this.EVENT_CHILD_NAME_CHANGE, {
                         oldChildName: oldChildName,
                         newChildName: childName
@@ -377,7 +382,8 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
 
                 var adjacentWidget = this.getAdjacentWidget(this.childName, element);
 
-                if (adjacentWidget) {
+                if (adjacentWidget && adjacentWidget.childName >= this.childName) {
+                    // when there is an adjacent widget whose childName is bigger than that of the current widget
                     shoeshine.Renderable.renderBefore.call(this, adjacentWidget.getElement());
                 } else {
                     shoeshine.Renderable.renderInto.call(this, element);
