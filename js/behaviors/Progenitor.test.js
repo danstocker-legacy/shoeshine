@@ -158,9 +158,25 @@
     });
 
     test("Setting child name", function () {
+        expect(4);
+
         var parent1 = Progenitor.create(),
             child = Progenitor.create()
-                .addToParent(parent1);
+                .addToParent(parent1),
+            oldChild = Progenitor.create();
+
+        parent1.addMocks({
+            getChild: function (childName) {
+                equal(childName, 'foo', "should fetch child by specified name");
+                return oldChild;
+            }
+        });
+
+        oldChild.addMocks({
+            removeFromParent: function () {
+                ok(true, "should remove old child of matching name from parent");
+            }
+        });
 
         strictEqual(child.setChildName('foo'), child, "should be chainable");
         equal(child.childName, 'foo', "should set child name");

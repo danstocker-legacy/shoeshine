@@ -126,8 +126,17 @@ troop.postpone(shoeshine, 'Progenitor', function (ns, className) {
             setChildName: function (childName) {
                 dessert.isString(childName, "Invalid child name");
 
+                var parent = this.parent,
+                    oldChild = parent && parent.getChild(childName);
+
                 if (childName !== this.childName) {
+                    // setting new child name
                     this.childName = childName;
+
+                    if (oldChild) {
+                        // removing any old child widget by the same name
+                        oldChild.removeFromParent();
+                    }
                 }
 
                 return this;
