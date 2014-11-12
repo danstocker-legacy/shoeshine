@@ -39,10 +39,7 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
             EVENT_CHILD_ADD: 'child-add',
 
             /** @constant */
-            EVENT_CHILD_REMOVE: 'child-remove',
-
-            /** @constant */
-            EVENT_CHILD_NAME_CHANGE: 'child-name-change'
+            EVENT_CHILD_REMOVE: 'child-remove'
         })
         .addPublic(/** @lends shoeshine.Widget */{
             /**
@@ -328,16 +325,6 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
                 if (childName !== oldChildName) {
                     this.removeCssClass(oldChildName)
                         .addCssClass(childName);
-
-                    if (this.getElement()) {
-                        // moving UI to correct place
-                        this._renderIntoParent();
-                    }
-
-                    this.triggerSync(this.EVENT_CHILD_NAME_CHANGE, {
-                        oldChildName: oldChildName,
-                        newChildName: childName
-                    });
                 }
 
                 return this;

@@ -158,23 +158,22 @@
     });
 
     test("Setting child name", function () {
-        expect(4);
+        expect(6);
 
         var parent1 = Progenitor.create(),
             child = Progenitor.create()
                 .addToParent(parent1),
-            oldChild = Progenitor.create();
+            originalChildName = child.childName;
 
-        parent1.addMocks({
-            getChild: function (childName) {
-                equal(childName, 'foo', "should fetch child by specified name");
-                return oldChild;
-            }
-        });
-
-        oldChild.addMocks({
+        child.addMocks({
             removeFromParent: function () {
-                ok(true, "should remove old child of matching name from parent");
+                ok(true, "should remove child from parent");
+                equal(child.childName, originalChildName, "should remove child while name is still the old one");
+            },
+
+            addToParent: function (parent) {
+                strictEqual(parent, parent1, "should add child back to parent");
+                equal(child.childName, 'foo', "should add child while name is the new one");
             }
         });
 

@@ -370,21 +370,12 @@
     });
 
     test("Child widget name setter", function () {
-        expect(9);
+        expect(5);
 
         var widget = s$.Widget.create(),
             oldChildName = widget.childName;
 
         widget.addMocks({
-            getElement: function () {
-                ok(true, "should fetch widget element");
-                return {};
-            },
-
-            _renderIntoParent: function () {
-                ok(true, "should render widget");
-            },
-
             removeCssClass: function (className) {
                 equal(className, oldChildName, "should remove current widget name from CSS classes");
                 return this;
@@ -393,14 +384,6 @@
             addCssClass: function (className) {
                 equal(className, 'foo', "should add new widget name as CSS class");
                 return this;
-            },
-
-            triggerSync: function (eventName, payload) {
-                equal(eventName, widget.EVENT_CHILD_NAME_CHANGE, "should trigger event about child name change");
-                deepEqual(payload, {
-                    oldChildName: oldChildName,
-                    newChildName: 'foo'
-                }, "should pass payload to event with old and new child names");
             }
         });
 
