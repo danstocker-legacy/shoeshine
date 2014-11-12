@@ -158,24 +158,9 @@
     });
 
     test("Setting child name", function () {
-        expect(6);
-
         var parent1 = Progenitor.create(),
             child = Progenitor.create()
-                .addToParent(parent1),
-            originalChildName = child.childName;
-
-        child.addMocks({
-            removeFromParent: function () {
-                ok(true, "should remove child from parent");
-                equal(child.childName, originalChildName, "should remove child while name is still the old one");
-            },
-
-            addToParent: function (parent) {
-                strictEqual(parent, parent1, "should add child back to parent");
-                equal(child.childName, 'foo', "should add child while name is the new one");
-            }
-        });
+                .addToParent(parent1);
 
         strictEqual(child.setChildName('foo'), child, "should be chainable");
         equal(child.childName, 'foo', "should set child name");
