@@ -350,7 +350,7 @@
     });
 
     test("Child widget name setter", function () {
-        expect(5);
+        expect(7);
 
         var widget = s$.Widget.create(),
             oldChildName = widget.childName;
@@ -364,6 +364,14 @@
             addCssClass: function (className) {
                 equal(className, 'foo', "should add new widget name as CSS class");
                 return this;
+            },
+
+            triggerSync: function (eventName, payload) {
+                equal(eventName, widget.EVENT_CHILD_NAME_CHANGE, "should trigger event about child name change");
+                deepEqual(payload, {
+                    oldChildName: oldChildName,
+                    newChildName: 'foo'
+                }, "should pass payload to event with old and new child names");
             }
         });
 

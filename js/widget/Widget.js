@@ -34,6 +34,10 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
      */
     shoeshine.Widget = self
         .setEventSpace(shoeshine.widgetEventSpace)
+        .addConstants(/** @lends shoeshine.Widget */{
+            /** @constant */
+            EVENT_CHILD_NAME_CHANGE: 'child-name-change'
+        })
         .addPublic(/** @lends shoeshine.Widget */{
             /**
              * Stores all HTML attributes, including CSS classes and inline styles.
@@ -305,6 +309,11 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
                 if (childName !== oldChildName) {
                     this.removeCssClass(oldChildName)
                         .addCssClass(childName);
+
+                    this.triggerSync(this.EVENT_CHILD_NAME_CHANGE, {
+                        oldChildName: oldChildName,
+                        newChildName: childName
+                    });
                 }
 
                 return this;
