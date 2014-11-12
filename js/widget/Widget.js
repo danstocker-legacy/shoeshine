@@ -303,8 +303,7 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
                 shoeshine.Progenitor.setChildName.call(this, childName);
 
                 if (childName !== oldChildName) {
-                    this.htmlAttributes
-                        .removeCssClass(oldChildName)
+                    this.removeCssClass(oldChildName)
                         .addCssClass(childName);
                 }
 

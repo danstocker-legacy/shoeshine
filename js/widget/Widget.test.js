@@ -355,7 +355,7 @@
         var widget = s$.Widget.create(),
             oldChildName = widget.childName;
 
-        widget.htmlAttributes.addMocks({
+        widget.addMocks({
             removeCssClass: function (className) {
                 equal(className, oldChildName, "should remove current widget name from CSS classes");
                 return this;
