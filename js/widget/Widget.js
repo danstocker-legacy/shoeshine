@@ -36,6 +36,12 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
         .setEventSpace(shoeshine.widgetEventSpace)
         .addConstants(/** @lends shoeshine.Widget */{
             /** @constant */
+            EVENT_CHILD_ADD: 'child-add',
+
+            /** @constant */
+            EVENT_CHILD_REMOVE: 'child-remove',
+
+            /** @constant */
             EVENT_CHILD_NAME_CHANGE: 'child-name-change'
         })
         .addPublic(/** @lends shoeshine.Widget */{
@@ -233,6 +239,9 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
                         this.afterAdd();
                     }
 
+                    // triggering event about being added
+                    parentWidget.triggerSync(this.EVENT_CHILD_ADD);
+
                     if (document) {
                         this._renderIntoParent();
                     }
@@ -270,6 +279,7 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
              */
             removeFromParent: function () {
                 var element = this.getElement(),
+                    parent = this.parent,
                     wasAttachedToRoot = this.isOnRoot();
 
                 shoeshine.Progenitor.removeFromParent.call(this);
@@ -280,6 +290,11 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
 
                 if (wasAttachedToRoot) {
                     this.afterRemove();
+                }
+
+                if (parent) {
+                    // triggering event about removal
+                    parent.triggerSync(this.EVENT_CHILD_REMOVE);
                 }
 
                 return this;

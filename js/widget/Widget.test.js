@@ -141,7 +141,7 @@
     });
 
     test("Adding to parent", function () {
-        expect(8);
+        expect(9);
 
         var childWidget = s$.Widget.create(),
             parentWidget = s$.Widget.create();
@@ -153,6 +153,12 @@
         raises(function () {
             childWidget.addToParent('foo');
         }, "should raise exception on invalid arguments");
+
+        parentWidget.addMocks({
+            triggerSync: function (eventName) {
+                equal(eventName, this.EVENT_CHILD_ADD, "should trigger addition event");
+            }
+        });
 
         childWidget.addMocks({
             isOnRoot: function () {
@@ -204,10 +210,16 @@
     });
 
     test("Adding to detached parent", function () {
-        expect(0);
+        expect(1);
 
         var childWidget = s$.Widget.create(),
             parentWidget = s$.Widget.create();
+
+        parentWidget.addMocks({
+            triggerSync: function (eventName) {
+                equal(eventName, this.EVENT_CHILD_ADD, "should trigger addition event");
+            }
+        });
 
         childWidget.addMocks({
             isOnRoot: function () {
@@ -299,11 +311,17 @@
     });
 
     test("Removal from parent", function () {
-        expect(5);
+        expect(6);
 
         var parentWidget = s$.Widget.create(),
             childWidget = s$.Widget.create()
                 .addToParent(parentWidget);
+
+        parentWidget.addMocks({
+            triggerSync: function (eventName) {
+                equal(eventName, this.EVENT_CHILD_REMOVE, "should trigger removal event");
+            }
+        });
 
         childWidget.addMocks({
             isOnRoot: function () {
