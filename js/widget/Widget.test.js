@@ -141,7 +141,7 @@
     });
 
     test("Adding to parent", function () {
-        expect(9);
+        expect(10);
 
         var childWidget = s$.Widget.create(),
             parentWidget = s$.Widget.create();
@@ -155,8 +155,9 @@
         }, "should raise exception on invalid arguments");
 
         parentWidget.addMocks({
-            triggerSync: function (eventName) {
+            triggerSync: function (eventName, payload) {
                 equal(eventName, this.EVENT_CHILD_ADD, "should trigger addition event");
+                strictEqual(payload.childWidget, childWidget, "should pass child widget in payload");
             }
         });
 
@@ -311,15 +312,16 @@
     });
 
     test("Removal from parent", function () {
-        expect(6);
+        expect(7);
 
         var parentWidget = s$.Widget.create(),
             childWidget = s$.Widget.create()
                 .addToParent(parentWidget);
 
         parentWidget.addMocks({
-            triggerSync: function (eventName) {
+            triggerSync: function (eventName, payload) {
                 equal(eventName, this.EVENT_CHILD_REMOVE, "should trigger removal event");
+                strictEqual(payload.childWidget, childWidget, "should pass child name in payload");
             }
         });
 

@@ -240,7 +240,9 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
                     }
 
                     // triggering event about being added
-                    parentWidget.triggerSync(this.EVENT_CHILD_ADD);
+                    parentWidget.triggerSync(this.EVENT_CHILD_ADD, {
+                        childWidget: this
+                    });
 
                     if (document) {
                         this._renderIntoParent();
@@ -294,7 +296,9 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
 
                 if (parent) {
                     // triggering event about removal
-                    parent.triggerSync(this.EVENT_CHILD_REMOVE);
+                    parent.triggerSync(this.EVENT_CHILD_REMOVE, {
+                        childWidget: this
+                    });
                 }
 
                 return this;
