@@ -233,7 +233,8 @@ troop.postpone(shoeshine, 'Renderable', function () {
 
             /**
              * Removes attribute from instance, modifying both buffer and DOM element.
-             * @param {string} attributeName
+             * @param {string} attributeName Name of the HTML attribute to remove. Values 'class' and 'style' also
+             * clear the corresponding collections. Use carefully!
              * @returns {shoeshine.Renderable}
              */
             removeAttribute: function (attributeName) {

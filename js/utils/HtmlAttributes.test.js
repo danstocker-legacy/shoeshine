@@ -20,6 +20,35 @@
         equal(htmlAttributes.inlineStyles.getKeyCount(), 0, "should set inlineStyles collection to empty");
     });
 
+    test("Attribute (item) removal", function () {
+        expect(4);
+
+        sntls.Collection.addMocks({
+            deleteItem: function () {
+                strictEqual(this, htmlAttributes, "should delete specified attribute");
+            }
+        });
+
+        strictEqual(htmlAttributes.deleteItem('foo'), htmlAttributes, "should be chainable");
+
+        sntls.Collection.removeMocks();
+
+        htmlAttributes.cssClasses.addMocks({
+            clear: function () {
+                ok(true, "should clear cssClasses collection");
+            }
+        });
+
+        htmlAttributes.inlineStyles.addMocks({
+            clear: function () {
+                ok(true, "should clear inlineStyles collection");
+            }
+        });
+
+        htmlAttributes.deleteItem('class');
+        htmlAttributes.deleteItem('style');
+    });
+
     test("ID attribute setter", function () {
         raises(function () {
             htmlAttributes.setIdAttribute();
@@ -110,10 +139,10 @@
         deepEqual(
             finalAttributes.items,
             {
-                id: 'foo',
+                id   : 'foo',
                 style: htmlAttributes.inlineStyles.toString(),
                 class: htmlAttributes.cssClasses.toString(),
-                bar: 'baz'
+                bar  : 'baz'
             },
             "should set attributes according to collections and ID attribute"
         );
@@ -126,7 +155,7 @@
             getFinalAttributes: function () {
                 ok(true, "should get final attribute list");
                 return s$.HtmlAttributes.create({
-                    foo: 'bar',
+                    foo  : 'bar',
                     hello: 'world'
                 });
             }

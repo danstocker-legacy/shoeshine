@@ -48,6 +48,30 @@ troop.postpone(shoeshine, 'HtmlAttributes', function () {
             },
 
             /**
+             * Removes the specified attribute from the collection.
+             * @param {string} attributeName Name of attribute to be removed. Values 'class' and 'style' also
+             * clear the corresponding collections. Use carefully!
+             * @returns {shoeshine.HtmlAttributes}
+             */
+            deleteItem: function (attributeName) {
+                switch (attributeName) {
+                case 'style':
+                    // emptying inline styles
+                    this.inlineStyles.clear();
+                    break;
+                case 'class':
+                    // emptying class collection
+                    // removes auto-added classes, too!
+                    this.cssClasses.clear();
+                    break;
+                }
+
+                base.deleteItem.call(this, attributeName);
+
+                return this;
+            },
+
+            /**
              * Sets ID attribute. ID attribute set this way will override ID attribute set via `setItem`.
              * @param {string} idAttribute
              * @returns {shoeshine.HtmlAttributes}
