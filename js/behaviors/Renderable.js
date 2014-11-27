@@ -193,14 +193,18 @@ troop.postpone(shoeshine, 'Renderable', function () {
             /**
              * Sets inline style on instance, modifying both buffer and DOM element.
              * @param {string} styleName
-             * @param {string} styleValue
+             * @param {string} [styleValue]
              * @returns {shoeshine.Renderable}
              */
             setInlineStyle: function (styleName, styleValue) {
                 var htmlAttributes = this.htmlAttributes,
                     element = this.getElement();
 
-                htmlAttributes.addInlineStyle(styleName, styleValue);
+                if (typeof styleValue === 'undefined') {
+                    htmlAttributes.removeInlineStyle(styleName);
+                } else {
+                    htmlAttributes.addInlineStyle(styleName, styleValue);
+                }
 
                 if (element) {
                     this._setStyleProxy(element, htmlAttributes.inlineStyles.toString());
@@ -229,7 +233,8 @@ troop.postpone(shoeshine, 'Renderable', function () {
 
             /**
              * Removes attribute from instance, modifying both buffer and DOM element.
-             * @param {string} attributeName
+             * @param {string} attributeName Name of the HTML attribute to remove. Values 'class' and 'style' also
+             * clear the corresponding collections. Use carefully!
              * @returns {shoeshine.Renderable}
              */
             removeAttribute: function (attributeName) {

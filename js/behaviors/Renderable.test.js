@@ -123,7 +123,7 @@
     });
 
     test("Inline style setter", function () {
-        expect(7);
+        expect(8);
 
         var instance = Renderable.create(),
             instanceElement = {};
@@ -132,6 +132,11 @@
             addInlineStyle: function (styleName, styleValue) {
                 equal(styleName, 'foo', "should pass style name to htmlAttribute's style setter");
                 equal(styleValue, 'bar', "should pass style value to htmlAttribute's style setter");
+                return this;
+            },
+
+            removeInlineStyle: function (styleName) {
+                equal(styleName, 'foo', "should pass style name to htmlAttribute's style removal");
                 return this;
             }
         });
@@ -156,6 +161,11 @@
         });
 
         strictEqual(instance.setInlineStyle('foo', 'bar'), instance, "should be chainable");
+
+        instance.removeMocks();
+        instance.htmlAttributes.inlineStyles.removeMocks();
+
+        instance.setInlineStyle('foo', undefined);
     });
 
     test("Attribute addition", function () {
