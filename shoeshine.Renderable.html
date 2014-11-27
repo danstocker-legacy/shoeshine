@@ -1777,7 +1777,7 @@ TODO: Handle 'id' and 'class' attributes.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Renderable.js.html">behaviors/Renderable.js</a>, line 219
+        <a href="Renderable.js.html">behaviors/Renderable.js</a>, line 223
     </li></ul></dd>
     
     
@@ -1991,7 +1991,7 @@ TODO: Handle 'id' and 'class' attributes.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Renderable.js.html">behaviors/Renderable.js</a>, line 326
+        <a href="Renderable.js.html">behaviors/Renderable.js</a>, line 354
     </li></ul></dd>
     
     
@@ -2075,7 +2075,7 @@ Has no effect if the instance already has an element in the DOM associated with 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Renderable.js.html">behaviors/Renderable.js</a>, line 251
+        <a href="Renderable.js.html">behaviors/Renderable.js</a>, line 256
     </li></ul></dd>
     
     
@@ -2158,7 +2158,7 @@ Has no effect if the instance already has an element in the DOM associated with 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Renderable.js.html">behaviors/Renderable.js</a>, line 275
+        <a href="Renderable.js.html">behaviors/Renderable.js</a>, line 280
     </li></ul></dd>
     
     
@@ -2502,7 +2502,8 @@ Has no effect if the instance already has an element in the DOM associated with 
             
             
             
-            <td class="description last"></td>
+            <td class="description last">Name of the HTML attribute to remove. Values 'class' and 'style' also
+clear the corresponding collections. Use carefully!</td>
         </tr>
 	
 	
@@ -2533,7 +2534,7 @@ Has no effect if the instance already has an element in the DOM associated with 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Renderable.js.html">behaviors/Renderable.js</a>, line 235
+        <a href="Renderable.js.html">behaviors/Renderable.js</a>, line 240
     </li></ul></dd>
     
     
@@ -2839,7 +2840,7 @@ Moves existing element to new location by default. Override by forcing rendering
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Renderable.js.html">behaviors/Renderable.js</a>, line 299
+        <a href="Renderable.js.html">behaviors/Renderable.js</a>, line 304
     </li></ul></dd>
     
     
@@ -3014,7 +3015,7 @@ Moves existing element to new location by default. Override by forcing rendering
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Renderable.js.html">behaviors/Renderable.js</a>, line 286
+        <a href="Renderable.js.html">behaviors/Renderable.js</a>, line 291
     </li></ul></dd>
     
     
@@ -3066,7 +3067,7 @@ Moves existing element to new location by default. Override by forcing rendering
     <div class="description">
         Re-renders instance by replacing the current DOM element with a new one.
 Has no effect when instance has never been rendered.
-External references to the instance's DOM must be updated after re-rendering.
+External references to the instance's DOM must be invalidated afterwards.
     </div>
     
 
@@ -3099,7 +3100,7 @@ External references to the instance's DOM must be updated after re-rendering.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Renderable.js.html">behaviors/Renderable.js</a>, line 314
+        <a href="Renderable.js.html">behaviors/Renderable.js</a>, line 319
     </li></ul></dd>
     
     
@@ -3141,7 +3142,92 @@ External references to the instance's DOM must be updated after re-rendering.
         
             
 <dt>
-    <h4 class="name" id="setInlineStyle"><span class="type-signature"></span>setInlineStyle<span class="signature">(styleName, styleValue)</span><span class="type-signature"> &rarr; {<a href="shoeshine.Renderable.html">shoeshine.Renderable</a>}</span></h4>
+    <h4 class="name" id="reRenderContents"><span class="type-signature"></span>reRenderContents<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="shoeshine.Renderable.html">shoeshine.Renderable</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Re-renders the contents of the instance, leaving its main DOM element unchanged.
+Has no effect when instance has never been rendered.
+External references to the instance's internal DOM must be invalidated afterwards.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Renderable.js.html">behaviors/Renderable.js</a>, line 333
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="shoeshine.Renderable.html">shoeshine.Renderable</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="setInlineStyle"><span class="type-signature"></span>setInlineStyle<span class="signature">(styleName, <span class="optional">styleValue</span>)</span><span class="type-signature"> &rarr; {<a href="shoeshine.Renderable.html">shoeshine.Renderable</a>}</span></h4>
     
     
 </dt>
@@ -3171,6 +3257,8 @@ External references to the instance's DOM must be updated after re-rendering.
 		<th>Type</th>
 		
 		
+		<th>Argument</th>
+		
 		
 		
 		
@@ -3196,6 +3284,14 @@ External references to the instance's DOM must be updated after re-rendering.
             </td>
             
             
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
             
             
             
@@ -3218,6 +3314,16 @@ External references to the instance's DOM must be updated after re-rendering.
             
             </td>
             
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
             
             
             
@@ -3467,7 +3573,7 @@ External references to the instance's DOM must be updated after re-rendering.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Renderable.js.html">behaviors/Renderable.js</a>, line 334
+        <a href="Renderable.js.html">behaviors/Renderable.js</a>, line 362
     </li></ul></dd>
     
     
@@ -3528,7 +3634,7 @@ External references to the instance's DOM must be updated after re-rendering.
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu Nov 13 2014 09:22:00 GMT-0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu Nov 27 2014 22:12:42 GMT-0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>

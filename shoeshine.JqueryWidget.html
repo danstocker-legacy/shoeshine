@@ -3131,7 +3131,7 @@ TODO: Handle 'id' and 'class' attributes.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Renderable.js.html">behaviors/Renderable.js</a>, line 219
+        <a href="Renderable.js.html">behaviors/Renderable.js</a>, line 223
     </li></ul></dd>
     
     
@@ -4012,7 +4012,7 @@ Make sure the override calls the `afterAdd` method of the super and all traits t
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Widget.js.html">widget/Widget.js</a>, line 415
+        <a href="Widget.js.html">widget/Widget.js</a>, line 429
     </li></ul></dd>
     
     
@@ -4085,7 +4085,7 @@ Make sure the override calls the `afterRemove` method of the super and all trait
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Widget.js.html">widget/Widget.js</a>, line 432
+        <a href="Widget.js.html">widget/Widget.js</a>, line 446
     </li></ul></dd>
     
     
@@ -4158,7 +4158,7 @@ Make sure the override calls the `afterRender` method of the super and all trait
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Widget.js.html">widget/Widget.js</a>, line 452
+        <a href="Widget.js.html">widget/Widget.js</a>, line 466
     </li></ul></dd>
     
     
@@ -4228,7 +4228,7 @@ Make sure the override calls the `afterRender` method of the super and all trait
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Renderable.js.html">behaviors/Renderable.js</a>, line 326
+        <a href="Renderable.js.html">behaviors/Renderable.js</a>, line 354
     </li></ul></dd>
     
     
@@ -4317,7 +4317,7 @@ Has no effect if the instance already has an element in the DOM associated with 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Renderable.js.html">behaviors/Renderable.js</a>, line 251
+        <a href="Renderable.js.html">behaviors/Renderable.js</a>, line 256
     </li></ul></dd>
     
     
@@ -5166,7 +5166,7 @@ is the Progenitor instance being traversed in the parent chain.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Renderable.js.html">behaviors/Renderable.js</a>, line 275
+        <a href="Renderable.js.html">behaviors/Renderable.js</a>, line 280
     </li></ul></dd>
     
     
@@ -5579,7 +5579,8 @@ relative to the root instance.
             
             
             
-            <td class="description last"></td>
+            <td class="description last">Name of the HTML attribute to remove. Values 'class' and 'style' also
+clear the corresponding collections. Use carefully!</td>
         </tr>
 	
 	
@@ -5615,7 +5616,7 @@ relative to the root instance.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Renderable.js.html">behaviors/Renderable.js</a>, line 235
+        <a href="Renderable.js.html">behaviors/Renderable.js</a>, line 240
     </li></ul></dd>
     
     
@@ -6558,6 +6559,98 @@ hard references held to the old DOM. It also makes transitions, input focus, etc
         
             
 <dt>
+    <h4 class="name" id="reRenderContents"><span class="type-signature"></span>reRenderContents<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="shoeshine.Widget.html">shoeshine.Widget</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Re-renders element's contents.
+Using `reRenderContents` is considered an anti-pattern. Even though re-rendering an already rendered
+widget does update the widget's DOM, but it is proven to be slow, and risks memory leaks
+in case there are hard references held to the old DOM contents. It also makes transitions,
+input focus, etc. harder to manage.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="shoeshine.Widget.html#reRenderContents">shoeshine.Widget#reRenderContents</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Widget.js.html">widget/Widget.js</a>, line 417
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="shoeshine.Widget.html">shoeshine.Widget</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
     <h4 class="name" id="setChildName"><span class="type-signature"></span>setChildName<span class="signature">(childName)</span><span class="type-signature"> &rarr; {<a href="shoeshine.Widget.html">shoeshine.Widget</a>}</span></h4>
     
     
@@ -6832,7 +6925,7 @@ element to be found inside the parent's DOM bearing this CSS class.
         
             
 <dt>
-    <h4 class="name" id="setInlineStyle"><span class="type-signature"></span>setInlineStyle<span class="signature">(styleName, styleValue)</span><span class="type-signature"> &rarr; {<a href="shoeshine.Renderable.html">shoeshine.Renderable</a>}</span></h4>
+    <h4 class="name" id="setInlineStyle"><span class="type-signature"></span>setInlineStyle<span class="signature">(styleName, <span class="optional">styleValue</span>)</span><span class="type-signature"> &rarr; {<a href="shoeshine.Renderable.html">shoeshine.Renderable</a>}</span></h4>
     
     
 </dt>
@@ -6862,6 +6955,8 @@ element to be found inside the parent's DOM bearing this CSS class.
 		<th>Type</th>
 		
 		
+		<th>Argument</th>
+		
 		
 		
 		
@@ -6887,6 +6982,14 @@ element to be found inside the parent's DOM bearing this CSS class.
             </td>
             
             
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
             
             
             
@@ -6909,6 +7012,16 @@ element to be found inside the parent's DOM bearing this CSS class.
             
             </td>
             
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
             
             
             
@@ -7261,7 +7374,7 @@ element to be found inside the parent's DOM bearing this CSS class.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Renderable.js.html">behaviors/Renderable.js</a>, line 334
+        <a href="Renderable.js.html">behaviors/Renderable.js</a>, line 362
     </li></ul></dd>
     
     
@@ -7440,7 +7553,7 @@ element to be found inside the parent's DOM bearing this CSS class.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Widget.js.html">widget/Widget.js</a>, line 464
+        <a href="Widget.js.html">widget/Widget.js</a>, line 478
     </li></ul></dd>
     
     
@@ -7501,7 +7614,7 @@ element to be found inside the parent's DOM bearing this CSS class.
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu Nov 13 2014 09:22:00 GMT-0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu Nov 27 2014 22:12:41 GMT-0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>
