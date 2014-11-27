@@ -586,12 +586,36 @@
 
         s$.Renderable.addMocks({
             reRender: function () {
-                ok(true, "should call trait's method");
+                strictEqual(this, widget, "should call trait's method");
                 return this;
             }
         });
 
         strictEqual(widget.reRender(), widget, "should be chainable");
+
+        s$.Renderable.removeMocks();
+    });
+
+    test("Re-rendering content", function () {
+        expect(3);
+
+        var widget = s$.Widget.create();
+
+        widget.addMocks({
+            afterRender: function () {
+                ok(true, "should call afterRender");
+                return this;
+            }
+        });
+
+        s$.Renderable.addMocks({
+            reRenderContents: function () {
+                strictEqual(this, widget, "should call trait's method");
+                return this;
+            }
+        });
+
+        strictEqual(widget.reRenderContents(), widget, "should be chainable");
 
         s$.Renderable.removeMocks();
     });

@@ -407,6 +407,20 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
             },
 
             /**
+             * Re-renders element's contents.
+             * Using `reRenderContents` is considered an anti-pattern. Even though re-rendering an already rendered
+             * widget does update the widget's DOM, but it is proven to be slow, and risks memory leaks
+             * in case there are hard references held to the old DOM contents. It also makes transitions,
+             * input focus, etc. harder to manage.
+             * @returns {shoeshine.Widget}
+             */
+            reRenderContents: function () {
+                shoeshine.Renderable.reRenderContents.call(this);
+                this.afterRender();
+                return this;
+            },
+
+            /**
              * Override method that is called after the widget is added to the hierarchy.
              * This is the place to initialize the widget lifecycle. Eg. sync the widget's state to the model,
              * subscribe to events, etc.
