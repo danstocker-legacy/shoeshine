@@ -308,7 +308,7 @@ troop.postpone(shoeshine, 'Renderable', function () {
             /**
              * Re-renders instance by replacing the current DOM element with a new one.
              * Has no effect when instance has never been rendered.
-             * External references to the instance's DOM must be updated after re-rendering.
+             * External references to the instance's DOM must be invalidated afterwards.
              * @returns {shoeshine.Renderable}
              */
             reRender: function () {
@@ -316,6 +316,29 @@ troop.postpone(shoeshine, 'Renderable', function () {
                 if (element) {
                     this._replaceChildProxy(element.parentNode, this.createElement(), element);
                 }
+                return this;
+            },
+
+            /**
+             * Re-renders the contents of the instance, leaving its main DOM element unchanged.
+             * Has no effect when instance has never been rendered.
+             * External references to the instance's internal DOM must be invalidated afterwards.
+             * @returns {shoeshine.Renderable}
+             */
+            reRenderContents: function () {
+                var element = this.getElement(),
+                    innerHtml;
+
+                if (element) {
+                    // generating current markup
+                    innerHtml = this.contentMarkup()
+                        .toTemplate()
+                        .clearPlaceholders();
+
+                    // adding contents to element
+                    this._innerHtmlSetterProxy(element, innerHtml);
+                }
+
                 return this;
             },
 

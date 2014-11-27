@@ -383,7 +383,7 @@
     });
 
     test("Re-rendering", function () {
-        expect(7);
+        expect(6);
 
         var instance = Renderable.create(),
             currentElement = {
@@ -403,7 +403,6 @@
             },
 
             _replaceChildProxy: function (parentElement, afterElement, beforeElement) {
-                ok(true, "should replace current element w/ new");
                 strictEqual(parentElement, currentElement.parentNode,
                     "should pass current element's parent as parent element");
                 strictEqual(afterElement, newElement, "should pass new element parent");
@@ -412,6 +411,32 @@
         });
 
         strictEqual(instance.reRender(), instance, "should be chainable");
+    });
+
+    test("Re-rendering contents", function () {
+        expect(4);
+
+        var instance = Renderable.create(),
+            currentElement = {};
+
+        instance.addMocks({
+            getElement: function () {
+                ok(true, "should fetch current DOM element");
+                return currentElement;
+            },
+
+            contentMarkup: function () {
+                return 'foo{{bar}}';
+            },
+
+            _innerHtmlSetterProxy: function (parentElement, innerHtml) {
+                strictEqual(parentElement, currentElement,
+                    "should pass current element's parent as parent element");
+                equal(innerHtml, 'foo', "should re-generate content markup");
+            }
+        });
+
+        strictEqual(instance.reRenderContents(), instance, "should be chainable");
     });
 
     test("Serialization", function () {
