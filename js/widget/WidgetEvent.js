@@ -62,7 +62,7 @@ troop.postpone(shoeshine, 'WidgetEvent', function () {
         });
 });
 
-troop.amendPostponed(evan, 'Evan', function () {
+troop.amendPostponed(evan, 'Event', function () {
     "use strict";
 
     evan.Event
