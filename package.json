@@ -1,6 +1,6 @@
 {
     "name"           : "shoeshine",
-    "version"        : "0.1.14",
+    "version"        : "0.1.15",
     "description"    : "Widget framework",
     "keywords"       : [
         "widgets", "widget",
@@ -16,7 +16,7 @@
     },
     "dependencies"   : {
         "dessert": "~0.3.2",
-        "troop"  : "~0.7.2",
+        "troop"  : "~0.7.2 || ~0.8.0",
         "sntls"  : "~0.17.0",
         "evan"   : "~0.4.1",
         "jquery" : "~2.1.0"
