@@ -288,7 +288,7 @@
         result = child.getLineage();
 
         ok(result.isA(sntls.Path), "should return Path instance");
-        deepEqual(result.asArray, [firstId + 3, firstId + 2, firstId + 1, firstId],
+        deepEqual(result.asArray, [String(firstId + 3), String(firstId + 2), String(firstId + 1), String(firstId)],
             "should return path containing lineage");
     });
 }());
