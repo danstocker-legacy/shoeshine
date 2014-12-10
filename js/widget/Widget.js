@@ -39,7 +39,19 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
             EVENT_CHILD_ADD: 'child-add',
 
             /** @constant */
-            EVENT_CHILD_REMOVE: 'child-remove'
+            EVENT_CHILD_REMOVE: 'child-remove',
+
+            /**
+             * @type {sntls.Path}
+             * @constant
+             */
+            ATTACHED_EVENT_PATH_ROOT: 'widget>attached'.toPath(),
+
+            /**
+             * @type {sntls.Path}
+             * @constant
+             */
+            DETACHED_EVENT_PATH_ROOT: 'widget>detached'.toPath()
         })
         .addPublic(/** @lends shoeshine.Widget */{
             /**
@@ -183,9 +195,9 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
                 this.children = this.children.toWidgetCollection();
 
                 // initializing Evented trait
-                // TODO: Use .setEventPath() as soon as it's fixed in evan
-                this.eventPath = this.getLineage();
+                this.setEventPath(this.getLineage().prepend(this.DETACHED_EVENT_PATH_ROOT));
 
+                // setting default child name to (unique) widget ID
                 this.setChildName(widgetId);
             },
 
@@ -430,8 +442,7 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
                 this.children.afterAdd();
 
                 // setting event path for triggering widget events
-                // TODO: Use .setEventPath() as soon as it's fixed in evan
-                this.eventPath = this.getLineage();
+                this.setEventPath(this.getLineage().prepend(this.ATTACHED_EVENT_PATH_ROOT));
 
                 // adding widget to lookup registry
                 this.addToRegistry();
@@ -450,8 +461,7 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
                 this.unsubscribeFrom();
 
                 // (re-)setting event path to new lineage
-                // TODO: Use .setEventPath() as soon as it's fixed in evan
-                this.eventPath = this.getLineage();
+                this.setEventPath(this.getLineage().prepend(this.DETACHED_EVENT_PATH_ROOT));
 
                 // removing widget from lookup registry
                 this.removeFromRegistry();

@@ -25,15 +25,7 @@
     });
 
     test("Instantiation", function () {
-        expect(10);
-
-        s$.Progenitor.addMocks({
-            init: function () {
-                ok(true, "should initialize Progenitor trait");
-                this.instanceId = 0;
-                this.children = sntls.Collection.create();
-            }
-        });
+        expect(9);
 
         s$.Renderable.addMocks({
             init: function (htmlAttributes) {
@@ -51,7 +43,6 @@
 
         var widget = s$.Widget.create();
 
-        s$.Progenitor.removeMocks();
         s$.Renderable.removeMocks();
         s$.Widget.removeMocks();
 
@@ -61,7 +52,8 @@
         ok(widget.children.isA(s$.WidgetCollection), "should convert children to WidgetCollection");
 
         ok(widget.eventPath.isA(sntls.Path), "should set eventPath property");
-        ok(widget.eventPath.equals(widget.getLineage()), "should set eventPath to lineage path");
+        ok(widget.eventPath.equals(widget.getLineage().prepend(widget.DETACHED_EVENT_PATH_ROOT)),
+            "should set eventPath to lineage path");
     });
 
     test("Conversion from string", function () {
@@ -231,7 +223,8 @@
                 ok(true, "should NOT call afterAdd");
             },
 
-            _renderIntoParent: function () {}
+            _renderIntoParent: function () {
+            }
         });
 
         childWidget.addToParent(parentWidget);
@@ -294,7 +287,8 @@
 
     test("Root tester", function () {
         s$.Widget.addMocks({
-            afterAdd: function () {}
+            afterAdd: function () {
+            }
         });
 
         var rootWidget = s$.Widget.create()
@@ -623,8 +617,7 @@
     test("After addition handler", function () {
         expect(4);
 
-        var widget = s$.Widget.create(),
-            lineage = {};
+        var widget = s$.Widget.create();
 
         widget.children.addMocks({
             afterAdd: function () {
@@ -635,14 +628,14 @@
         widget.addMocks({
             getLineage: function () {
                 ok(true, "should fetch widget's lineage");
-                return lineage;
+                return shoeshine.Progenitor.getLineage.call(this);
             },
 
-            // TODO: Uncomment as soon as .setEventPath() is fixed in evan
-            //            setEventPath: function (eventPath) {
-            //                strictEqual(eventPath, lineage, "should set event path to lineage");
-            //                return this;
-            //            },
+            setEventPath: function (eventPath) {
+                deepEqual(eventPath, [widget.instanceId].toPath().prepend(widget.ATTACHED_EVENT_PATH_ROOT),
+                    "should set event path to lineage");
+                return this;
+            },
 
             addToRegistry: function () {
                 ok(true, "should add widget to registry");
@@ -650,15 +643,13 @@
         });
 
         widget.afterAdd();
-
-        strictEqual(widget.eventPath, lineage, "should set event path to lineage");
     });
 
     test("After removal handler", function () {
         expect(5);
 
         var widget = s$.Widget.create(),
-            lineage = {};
+            lineage = [widget.instanceId].toPath();
 
         widget.children.addMocks({
             afterRemove: function () {
@@ -674,14 +665,14 @@
 
             getLineage: function () {
                 ok(true, "should fetch widget's lineage");
-                return lineage;
+                return lineage.clone();
             },
 
-            // TODO: Uncomment as soon as .setEventPath() is fixed in evan
-            //            setEventPath: function (eventPath) {
-            //                strictEqual(eventPath, lineage, "should set event path to lineage");
-            //                return this;
-            //            },
+            setEventPath: function (eventPath) {
+                deepEqual(eventPath, [widget.instanceId].toPath().prepend(widget.DETACHED_EVENT_PATH_ROOT),
+                    "should set event path to lineage");
+                return this;
+            },
 
             removeFromRegistry: function () {
                 ok(true, "should remove widget from registry");
@@ -689,8 +680,6 @@
         });
 
         widget.afterRemove();
-
-        strictEqual(widget.eventPath, lineage, "should set event path to lineage");
     });
 
     test("After render handler", function () {
