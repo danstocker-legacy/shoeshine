@@ -33,7 +33,6 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
      * @extends shoeshine.Renderable
      */
     shoeshine.Widget = self
-        .setEventSpace(shoeshine.widgetEventSpace)
         .addConstants(/** @lends shoeshine.Widget */{
             /** @constant */
             EVENT_CHILD_ADD: 'child-add',
@@ -195,7 +194,8 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
                 this.children = this.children.toWidgetCollection();
 
                 // initializing Evented trait
-                this.setEventPath(this.getLineage().prepend(this.DETACHED_EVENT_PATH_ROOT));
+                this.setEventSpace(shoeshine.widgetEventSpace)
+                    .setEventPath(this.getLineage().prepend(this.DETACHED_EVENT_PATH_ROOT));
 
                 // setting default child name to (unique) widget ID
                 this.setChildName(widgetId);
