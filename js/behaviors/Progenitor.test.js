@@ -89,6 +89,19 @@
         child1.addToParent(parent);
     });
 
+    test("Re-adding to parent", function () {
+        var parent1 = Progenitor.create(),
+            parent2 = Progenitor.create(),
+            child = Progenitor.create();
+
+        child
+            .addToParent(parent1)
+            .addToParent(parent2)
+            .addToParent(parent1);
+
+        strictEqual(child.parent, parent1, "should set parent to old parent when adding back to old parent");
+    });
+
     test("Adding child", function () {
         expect(2);
 

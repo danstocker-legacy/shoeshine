@@ -58,10 +58,10 @@ troop.postpone(shoeshine, 'Progenitor', function (ns, className) {
 
                     // setting current instance as child in parent
                     parent.children.setItem(childName, this);
-
-                    // updating parent reference
-                    this.parent = parent;
                 }
+
+                // force-updating parent reference
+                this.parent = parent;
 
                 return this;
             },
