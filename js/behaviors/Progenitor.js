@@ -43,12 +43,19 @@ troop.postpone(shoeshine, 'Progenitor', function (ns, className) {
              * @returns {shoeshine.Progenitor}
              */
             addToParent: function (parent) {
-                var childName = this.childName,
-                    currentChild = parent.children.getItem(childName);
+                var childName, currentChild;
 
-                if (currentChild !== this) {
-                    // child in parent by the name of the current instance
-                    // is not the current instance
+                if (parent !== this.parent) {
+                    // specified parent is different than current
+
+                    if (this.parent) {
+                        // current instance has a parent
+                        // removing child from current parent
+                        this.removeFromParent();
+                    }
+
+                    childName = this.childName;
+                    currentChild = parent.children.getItem(childName);
 
                     if (currentChild) {
                         // there is a child in parent by the current instance/s child name
@@ -58,10 +65,10 @@ troop.postpone(shoeshine, 'Progenitor', function (ns, className) {
 
                     // setting current instance as child in parent
                     parent.children.setItem(childName, this);
-                }
 
-                // force-updating parent reference
-                this.parent = parent;
+                    // updating parent reference
+                    this.parent = parent;
+                }
 
                 return this;
             },
