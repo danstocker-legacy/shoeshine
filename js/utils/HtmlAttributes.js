@@ -130,14 +130,16 @@ troop.postpone(shoeshine, 'HtmlAttributes', function () {
              * @returns {shoeshine.HtmlAttributes}
              */
             getFinalAttributes: function () {
-                dessert.isString(this.idAttribute, "ID attribute not set");
-
                 // not cloning on purpose so collections and properties don't carry over
                 var htmlAttributes = this.getBase().create(this.items);
 
-                htmlAttributes
-                    .setItem('id', this.idAttribute)
-                    .setItem('class', this.cssClasses.toString());
+                if (this.idAttribute) {
+                    htmlAttributes.setItem('id', this.idAttribute);
+                } else {
+                    htmlAttributes.deleteItem('id');
+                }
+
+                htmlAttributes.setItem('class', this.cssClasses.toString());
 
                 if (this.inlineStyles.getKeyCount()) {
                     htmlAttributes.setItem('style', this.inlineStyles.toString());
