@@ -30,12 +30,29 @@ var sntls = sntls || require('sntls');
  */
 var evan = evan || require('evan');
 
-
 /**
  * @function
  * @see http://api.jquery.com
  */
 var jQuery = jQuery || require('jquery');
+
+/**
+ * Built-in global document object.
+ * @type {Document}
+ */
+var document = document || undefined;
+
+/**
+ * Native DOM element class.
+ * @name Element
+ */
+var Element = Element || undefined;
+
+/**
+ * Native DOM event class.
+ * @name Event
+ */
+var Event = Event || undefined;
 
 /**
  * Native number class.
@@ -52,18 +69,6 @@ var jQuery = jQuery || require('jquery');
 /**
  * Native array class.
  * @name Array
- * @class
- */
-
-/**
- * Native DOM element class.
- * @name Element
- * @class
- */
-
-/**
- * Native DOM event class.
- * @name Event
  * @class
  */
 

@@ -20,7 +20,7 @@ troop.postpone(shoeshine, 'Renderable', function () {
              * @private
              */
             _createElementProxy: function (tagName) {
-                return document.createElement(tagName);
+                return document && document.createElement(tagName);
             },
 
             /**
@@ -30,7 +30,7 @@ troop.postpone(shoeshine, 'Renderable', function () {
              * @private
              */
             _getElementByIdProxy: function (elementId) {
-                return document.getElementById(elementId);
+                return document && document.getElementById(elementId);
             },
 
             /**

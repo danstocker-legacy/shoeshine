@@ -3,7 +3,8 @@ troop.postpone(shoeshine, 'JqueryWidget', function (ns, className, /**jQuery*/$)
     "use strict";
 
     var base = troop.Base,
-        self = base.extend();
+        self = base.extend(),
+        $document = document && $(document);
 
     /**
      * The JqueryWidget trait adds class-level (delegated) jQuery event subscription capability to the host.
@@ -13,10 +14,6 @@ troop.postpone(shoeshine, 'JqueryWidget', function (ns, className, /**jQuery*/$)
      * @extends shoeshine.Widget
      */
     shoeshine.JqueryWidget = self
-        .addConstants(/** @lends shoeshine.JqueryWidget */{
-            /** @type {jQuery} */
-            $document: $(document)
-        })
         .addPrivateMethods(/** @lends shoeshine.JqueryWidget */{
             /**
              * @param {string} eventName
@@ -25,7 +22,9 @@ troop.postpone(shoeshine, 'JqueryWidget', function (ns, className, /**jQuery*/$)
              * @private
              */
             _jqueryOnProxy: function (eventName, selector, handler) {
-                self.$document.on(eventName, selector, handler);
+                if ($document) {
+                    $document.on(eventName, selector, handler);
+                }
             },
 
             /**
@@ -35,7 +34,9 @@ troop.postpone(shoeshine, 'JqueryWidget', function (ns, className, /**jQuery*/$)
              * @private
              */
             _jqueryOffProxy: function (eventName, selector, handler) {
-                self.$document.off(eventName, selector, handler);
+                if ($document) {
+                    $document.off(eventName, selector, handler);
+                }
             },
 
             /**
