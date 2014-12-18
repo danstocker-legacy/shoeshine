@@ -277,7 +277,9 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
 
                     this.afterAdd();
 
-                    this.renderInto(document.getElementsByTagName('body')[0]);
+                    if (document) {
+                        this.renderInto(document.getElementsByTagName('body')[0]);
+                    }
                 }
 
                 return this;
