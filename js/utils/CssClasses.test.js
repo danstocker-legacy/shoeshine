@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, evan, s$ */
+/*global dessert, troop, sntls, evan, shoeshine */
 /*global module, test, expect, ok, equal, strictEqual, notStrictEqual, deepEqual, notDeepEqual, raises */
 (function () {
     "use strict";
@@ -6,7 +6,7 @@
     module("Css Classes");
 
     test("Adding CSS class", function () {
-        var cssClasses = s$.CssClasses.create();
+        var cssClasses = shoeshine.CssClasses.create();
 
         strictEqual(cssClasses.addCssClass('foo'), cssClasses, "should be chainable");
         deepEqual(
@@ -19,7 +19,7 @@
     });
 
     test("Removing CSS class", function () {
-        var cssClasses = s$.CssClasses.create()
+        var cssClasses = shoeshine.CssClasses.create()
             .addCssClass('foo');
 
         strictEqual(cssClasses.removeCssClass('foo'), cssClasses, "should be chainable");
@@ -27,7 +27,7 @@
     });
 
     test("Serialization", function () {
-        var cssClasses = s$.CssClasses.create()
+        var cssClasses = shoeshine.CssClasses.create()
             .addCssClass('foo')
             .addCssClass('bar');
 

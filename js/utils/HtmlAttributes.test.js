@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, evan, s$ */
+/*global dessert, troop, sntls, evan, shoeshine */
 /*global module, test, expect, ok, equal, strictEqual, notStrictEqual, deepEqual, notDeepEqual, raises */
 (function () {
     "use strict";
@@ -7,7 +7,7 @@
 
     module("Html Attributes", {
         setup: function () {
-            htmlAttributes = s$.HtmlAttributes.create();
+            htmlAttributes = shoeshine.HtmlAttributes.create();
         }
     });
 
@@ -62,7 +62,7 @@
     test("Adding CSS class", function () {
         expect(2);
 
-        s$.CssClasses.addMocks({
+        shoeshine.CssClasses.addMocks({
             addCssClass: function (cssClass) {
                 equal(cssClass, 'foo', "should add class to collection");
             }
@@ -70,13 +70,13 @@
 
         strictEqual(htmlAttributes.addCssClass('foo'), htmlAttributes, "should be chainable");
 
-        s$.CssClasses.removeMocks();
+        shoeshine.CssClasses.removeMocks();
     });
 
     test("Removing CSS class", function () {
         expect(2);
 
-        s$.CssClasses.addMocks({
+        shoeshine.CssClasses.addMocks({
             removeCssClass: function (cssClass) {
                 equal(cssClass, 'foo', "should remove class from collection");
             }
@@ -84,13 +84,13 @@
 
         strictEqual(htmlAttributes.removeCssClass('foo'), htmlAttributes, "should be chainable");
 
-        s$.CssClasses.removeMocks();
+        shoeshine.CssClasses.removeMocks();
     });
 
     test("Adding inline style", function () {
         expect(3);
 
-        s$.InlineStyles.addMocks({
+        shoeshine.InlineStyles.addMocks({
             setItem: function (styleName, styleValue) {
                 equal(styleName, 'foo', "should pass style name to addition");
                 equal(styleValue, 'bar', "should pass style value to addition");
@@ -99,13 +99,13 @@
 
         strictEqual(htmlAttributes.addInlineStyle('foo', 'bar'), htmlAttributes, "should be chainable");
 
-        s$.InlineStyles.removeMocks();
+        shoeshine.InlineStyles.removeMocks();
     });
 
     test("Removing inline style", function () {
         expect(2);
 
-        s$.InlineStyles.addMocks({
+        shoeshine.InlineStyles.addMocks({
             deleteItem: function (styleName) {
                 equal(styleName, 'foo', "should pass style name to removal");
             }
@@ -113,7 +113,7 @@
 
         strictEqual(htmlAttributes.removeInlineStyle('foo'), htmlAttributes, "should be chainable");
 
-        s$.InlineStyles.removeMocks();
+        shoeshine.InlineStyles.removeMocks();
     });
 
     test("Final attribute list getter", function () {
@@ -133,7 +133,7 @@
 
         var finalAttributes = htmlAttributes.getFinalAttributes();
 
-        ok(finalAttributes.isA(s$.HtmlAttributes), "should return an HtmlAttributes instance");
+        ok(finalAttributes.isA(shoeshine.HtmlAttributes), "should return an HtmlAttributes instance");
         notStrictEqual(finalAttributes, htmlAttributes, "should return a different HtmlAttributes instance");
 
         deepEqual(
@@ -154,7 +154,7 @@
         htmlAttributes.addMocks({
             getFinalAttributes: function () {
                 ok(true, "should get final attribute list");
-                return s$.HtmlAttributes.create({
+                return shoeshine.HtmlAttributes.create({
                     foo  : 'bar',
                     hello: 'world'
                 });

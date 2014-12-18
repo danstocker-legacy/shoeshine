@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, evan, s$ */
+/*global dessert, troop, sntls, evan, shoeshine */
 /*global module, test, expect, ok, equal, strictEqual, notStrictEqual, deepEqual, notDeepEqual, raises */
 (function () {
     "use strict";
@@ -6,20 +6,20 @@
     module("Widget Event");
 
     test("Instantiation", function () {
-        var widgetEvent = s$.WidgetEvent.create('foo', s$.widgetEventSpace);
+        var widgetEvent = shoeshine.WidgetEvent.create('foo', shoeshine.widgetEventSpace);
 
         ok(widgetEvent.hasOwnProperty('senderWidget'), "should add senderWidget property to event");
         equal(typeof widgetEvent.senderWidget, 'undefined', "should set senderWidget property to undefined");
     });
 
     test("Conversion from Event", function () {
-        var widgetEvent = evan.Event.create('foo', s$.widgetEventSpace);
-        ok(widgetEvent.isA(s$.WidgetEvent), "should return WidgetEvent instance");
+        var widgetEvent = evan.Event.create('foo', shoeshine.widgetEventSpace);
+        ok(widgetEvent.isA(shoeshine.WidgetEvent), "should return WidgetEvent instance");
     });
 
     test("Setting sender", function () {
-        var widget = s$.Widget.create(),
-            widgetEvent = s$.WidgetEvent.create('foo', s$.widgetEventSpace);
+        var widget = shoeshine.Widget.create(),
+            widgetEvent = shoeshine.WidgetEvent.create('foo', shoeshine.widgetEventSpace);
 
         raises(function () {
             widgetEvent.setSenderWidget("invalid");
@@ -30,12 +30,12 @@
     });
 
     test("Cloning", function () {
-        var widget = s$.Widget.create(),
-            widgetEvent = s$.WidgetEvent.create('foo', s$.widgetEventSpace)
+        var widget = shoeshine.Widget.create(),
+            widgetEvent = shoeshine.WidgetEvent.create('foo', shoeshine.widgetEventSpace)
                 .setSenderWidget(widget),
             clonedEvent = widgetEvent.clone('foo>bar'.toPath());
 
-        ok(clonedEvent.isA(s$.WidgetEvent), "should return WidgetEvent instance");
+        ok(clonedEvent.isA(shoeshine.WidgetEvent), "should return WidgetEvent instance");
         notStrictEqual(clonedEvent, widgetEvent, "should return different instance than the cloned");
         strictEqual(clonedEvent.senderWidget, widgetEvent.senderWidget, "should set sender widget to original");
     });

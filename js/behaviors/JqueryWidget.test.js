@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, e$, s$ */
+/*global dessert, troop, sntls, e$, shoeshine */
 /*global module, test, expect, ok, equal, strictEqual, notStrictEqual, deepEqual, notDeepEqual, raises */
 (function () {
     "use strict";
@@ -9,8 +9,8 @@
     test("Event subscription", function () {
         expect(5);
 
-        var JqueryWidget = s$.Widget.extend('JqueryWidget')
-            .addTrait(s$.JqueryWidget);
+        var JqueryWidget = shoeshine.Widget.extend('JqueryWidget')
+            .addTrait(shoeshine.JqueryWidget);
 
         JqueryWidget.addMocks({
             _getGlobalSelector: function (selector) {
@@ -33,8 +33,8 @@
     test("Event unsubscription", function () {
         expect(4);
 
-        var JqueryWidget = s$.Widget.extend('JqueryWidget')
-            .addTrait(s$.JqueryWidget);
+        var JqueryWidget = shoeshine.Widget.extend('JqueryWidget')
+            .addTrait(shoeshine.JqueryWidget);
 
         JqueryWidget.addMocks({
             _getGlobalSelector: function (selector) {

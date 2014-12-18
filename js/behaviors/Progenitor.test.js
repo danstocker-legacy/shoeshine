@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, s$ */
+/*global dessert, troop, sntls, shoeshine */
 /*global module, test, expect, ok, equal, strictEqual, notStrictEqual, deepEqual, notDeepEqual, raises */
 (function () {
     "use strict";
@@ -11,11 +11,11 @@
      * @extends shoeshine.Progenitor
      */
     var Progenitor = troop.Base.extend()
-        .addTrait(s$.Progenitor)
+        .addTrait(shoeshine.Progenitor)
         .extend('myClass')
         .addMethods({
             init: function () {
-                s$.Progenitor.init.call(this);
+                shoeshine.Progenitor.init.call(this);
             }
         });
 

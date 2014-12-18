@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, e$, s$ */
+/*global dessert, troop, sntls, e$, shoeshine */
 /*global module, test, expect, ok, equal, strictEqual, notStrictEqual, deepEqual, notDeepEqual, raises */
 (function () {
     "use strict";
@@ -9,7 +9,7 @@
         var items = [1, 2, 3],
             widgets = items.toWidgetCollection();
 
-        ok(widgets.isA(s$.WidgetCollection), "should return WidgetCollection instance");
+        ok(widgets.isA(shoeshine.WidgetCollection), "should return WidgetCollection instance");
         strictEqual(widgets.items, items, "should set items to widget array");
     });
 
@@ -17,7 +17,7 @@
         var items = [1, 2, 3],
             widgets = items.toWidgetCollection();
 
-        ok(widgets.isA(s$.WidgetCollection), "should return WidgetCollection instance");
+        ok(widgets.isA(shoeshine.WidgetCollection), "should return WidgetCollection instance");
         strictEqual(widgets.items, items, "should set items to widget array");
     });
 

@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, s$ */
+/*global dessert, troop, sntls, shoeshine */
 /*global module, test, expect, ok, equal, strictEqual, notStrictEqual, deepEqual, notDeepEqual, raises */
 (function () {
     "use strict";
@@ -6,14 +6,14 @@
     module("Template");
 
     test("Instantiation", function () {
-        var template = s$.Template.create('foo bar');
+        var template = shoeshine.Template.create('foo bar');
         equal(template.templateString, 'foo bar', "should set template string");
     });
 
     test("Conversion from string", function () {
         var template = 'foo bar'.toTemplate();
 
-        ok(template.isA(s$.Template), "should return a Template instance");
+        ok(template.isA(shoeshine.Template), "should return a Template instance");
         equal(template.templateString, "foo bar", "should set template string");
     });
 

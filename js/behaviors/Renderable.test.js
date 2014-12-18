@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, s$ */
+/*global dessert, troop, sntls, shoeshine */
 /*global module, test, expect, ok, equal, strictEqual, notStrictEqual, deepEqual, notDeepEqual, raises */
 (function () {
     "use strict";
@@ -11,19 +11,19 @@
      * @extends shoeshine.Renderable
      */
     var Renderable = troop.Base.extend()
-        .addTrait(s$.Renderable)
+        .addTrait(shoeshine.Renderable)
         .addMethods({
             init: function () {
-                s$.Renderable.init.apply(this, arguments);
+                shoeshine.Renderable.init.apply(this, arguments);
             }
         });
 
     test("Instantiation", function () {
-        var htmlAttributes = s$.HtmlAttributes.create({foo: 'bar'}),
+        var htmlAttributes = shoeshine.HtmlAttributes.create({foo: 'bar'}),
             instance = Renderable.create(htmlAttributes);
 
         equal(instance.tagName, 'div', "should set tag name to 'div'");
-        ok(instance.htmlAttributes.isA(s$.HtmlAttributes), "should add HTML attribute collection");
+        ok(instance.htmlAttributes.isA(shoeshine.HtmlAttributes), "should add HTML attribute collection");
         strictEqual(instance.htmlAttributes, htmlAttributes, "should set HTML attribute");
         ok(instance.placeholders.isA(sntls.Collection), "should add placeholders property as Collection");
         equal(instance.placeholders.getKeyCount(), 0, "should initialize placeholders collection as empty");
@@ -269,7 +269,7 @@
         instance.htmlAttributes.addMocks({
             getFinalAttributes: function () {
                 ok(true, "should fetch final HTML attributes");
-                return s$.HtmlAttributes.create({foo: 'bar'});
+                return shoeshine.HtmlAttributes.create({foo: 'bar'});
             }
         });
 
@@ -279,7 +279,7 @@
     test("Element getter", function () {
         expect(2);
 
-        var instance = Renderable.create(s$.HtmlAttributes.create().setIdAttribute('hello')),
+        var instance = Renderable.create(shoeshine.HtmlAttributes.create().setIdAttribute('hello')),
             instanceElement = {};
 
         instance.addMocks({

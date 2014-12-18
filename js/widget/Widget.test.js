@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, e$, s$, Event */
+/*global dessert, troop, sntls, e$, shoeshine, Event */
 /*global module, test, expect, ok, equal, strictEqual, notStrictEqual, deepEqual, notDeepEqual, raises */
 (function () {
     "use strict";
@@ -6,18 +6,18 @@
     module("Widget");
 
     test("Extension", function () {
-        var CustomWidget = s$.Widget.extend('CustomWidget');
+        var CustomWidget = shoeshine.Widget.extend('CustomWidget');
 
-        ok(CustomWidget.isA(s$.Widget), "should return Widget subclass");
-        strictEqual(CustomWidget.getBase(), s$.Widget, "should extend base class");
-        notStrictEqual(CustomWidget.htmlAttributes, s$.Widget.htmlAttributes,
+        ok(CustomWidget.isA(shoeshine.Widget), "should return Widget subclass");
+        strictEqual(CustomWidget.getBase(), shoeshine.Widget, "should extend base class");
+        notStrictEqual(CustomWidget.htmlAttributes, shoeshine.Widget.htmlAttributes,
             "should clone html attribute collection");
         ok(!!CustomWidget.htmlAttributes.cssClasses.getItem('CustomWidget'),
             "should add class name to CSS class collection");
     });
 
     test("Trait addition", function () {
-        var CustomWidget = s$.Widget.extend('CustomWidget')
+        var CustomWidget = shoeshine.Widget.extend('CustomWidget')
             .addTrait(e$.Evented, 'Evented');
 
         ok(!!CustomWidget.htmlAttributes.cssClasses.getItem('CustomWidget'),
@@ -27,29 +27,29 @@
     test("Instantiation", function () {
         expect(9);
 
-        s$.Renderable.addMocks({
+        shoeshine.Renderable.addMocks({
             init: function (htmlAttributes) {
                 ok(true, "should initialize Renderable trait");
-                ok(htmlAttributes.isA(s$.HtmlAttributes), "should pass HtmlAttributes instance");
+                ok(htmlAttributes.isA(shoeshine.HtmlAttributes), "should pass HtmlAttributes instance");
                 ok(htmlAttributes.idAttribute, 'w0', "should set ID attribute");
             }
         });
 
-        s$.Widget.addMocks({
+        shoeshine.Widget.addMocks({
             setChildName: function (childName) {
                 equal(childName, this.instanceId.toWidgetId(), "should set widget ID as child name");
             }
         });
 
-        var widget = s$.Widget.create();
+        var widget = shoeshine.Widget.create();
 
-        s$.Renderable.removeMocks();
-        s$.Widget.removeMocks();
+        shoeshine.Renderable.removeMocks();
+        shoeshine.Widget.removeMocks();
 
         ok(widget.hasOwnProperty('containerCssClass'), "should add containerCssClass property");
         equal(typeof widget.containerCssClass, 'undefined', "should set containerCssClass to undefined");
 
-        ok(widget.children.isA(s$.WidgetCollection), "should convert children to WidgetCollection");
+        ok(widget.children.isA(shoeshine.WidgetCollection), "should convert children to WidgetCollection");
 
         ok(widget.eventPath.isA(sntls.Path), "should set eventPath property");
         ok(widget.eventPath.equals(widget.getLineage().prepend(widget.DETACHED_EVENT_PATH_ROOT)),
@@ -102,7 +102,7 @@
             var uiEvent = document.createEvent('MouseEvent'),
                 widget = {};
 
-            s$.WidgetUtils.addMocks({
+            shoeshine.WidgetUtils.addMocks({
                 getParentNodeByClassName: function (childElement, cssClassName) {
                     equal(cssClassName, 'foo', "should fetch nearest widget parent element");
                     return {
@@ -120,13 +120,13 @@
 
             strictEqual(uiEvent.toWidget('foo'), widget, "should return instance fetched by getInstanceId");
 
-            s$.WidgetUtils.removeMocks();
+            shoeshine.WidgetUtils.removeMocks();
             sntls.Managed.removeMocks();
         }
     });
 
     test("Container setter", function () {
-        var widget = s$.Widget.create();
+        var widget = shoeshine.Widget.create();
 
         strictEqual(widget.setContainerCssClass('foo'), widget, "should be chainable");
         equal(widget.containerCssClass, 'foo', "should set container CSS class");
@@ -135,8 +135,8 @@
     test("Adding to parent", function () {
         expect(10);
 
-        var childWidget = s$.Widget.create(),
-            parentWidget = s$.Widget.create();
+        var childWidget = shoeshine.Widget.create(),
+            parentWidget = shoeshine.Widget.create();
 
         raises(function () {
             childWidget.addToParent();
@@ -168,7 +168,7 @@
             }
         });
 
-        s$.Progenitor.addMocks({
+        shoeshine.Progenitor.addMocks({
             addToParent: function (parent) {
                 strictEqual(this, childWidget, "should call trait's method on current widget");
                 strictEqual(parent, parentWidget, "should pass parent widget to trait");
@@ -178,14 +178,14 @@
 
         strictEqual(childWidget.addToParent(parentWidget), childWidget, "should be chainable");
 
-        s$.Progenitor.removeMocks();
+        shoeshine.Progenitor.removeMocks();
     });
 
     test("Re-adding to parent", function () {
         expect(0);
 
-        var childWidget = s$.Widget.create(),
-            parentWidget = s$.Widget.create();
+        var childWidget = shoeshine.Widget.create(),
+            parentWidget = shoeshine.Widget.create();
 
         parentWidget.children.addMocks({
             getItem: function () {
@@ -205,8 +205,8 @@
     test("Adding to detached parent", function () {
         expect(1);
 
-        var childWidget = s$.Widget.create(),
-            parentWidget = s$.Widget.create();
+        var childWidget = shoeshine.Widget.create(),
+            parentWidget = shoeshine.Widget.create();
 
         parentWidget.addMocks({
             triggerSync: function (eventName) {
@@ -233,10 +233,10 @@
     test("Adding widget as root", function () {
         expect(6);
 
-        var widget = s$.Widget.create(),
-            rootWidget = s$.Widget.create();
+        var widget = shoeshine.Widget.create(),
+            rootWidget = shoeshine.Widget.create();
 
-        s$.Widget.rootWidget = rootWidget;
+        shoeshine.Widget.rootWidget = rootWidget;
 
         rootWidget.addMocks({
             removeRootWidget: function () {
@@ -260,15 +260,15 @@
         });
 
         strictEqual(widget.setRootWidget(), widget, "should be chainable");
-        strictEqual(s$.Widget.rootWidget, widget, "should set root widget");
+        strictEqual(shoeshine.Widget.rootWidget, widget, "should set root widget");
     });
 
     test("Re-adding widget as root", function () {
         expect(0);
 
-        var widget = s$.Widget.create();
+        var widget = shoeshine.Widget.create();
 
-        s$.Widget.rootWidget = widget;
+        shoeshine.Widget.rootWidget = widget;
 
         widget.addMocks({
             afterAdd: function () {
@@ -286,20 +286,20 @@
     });
 
     test("Root tester", function () {
-        s$.Widget.addMocks({
+        shoeshine.Widget.addMocks({
             afterAdd: function () {
             }
         });
 
-        var rootWidget = s$.Widget.create()
+        var rootWidget = shoeshine.Widget.create()
                 .setRootWidget(),
-            parentWidget = s$.Widget.create(),
-            childWidget1 = s$.Widget.create()
+            parentWidget = shoeshine.Widget.create(),
+            childWidget1 = shoeshine.Widget.create()
                 .addToParent(parentWidget),
-            childWidget2 = s$.Widget.create()
+            childWidget2 = shoeshine.Widget.create()
                 .addToParent(rootWidget);
 
-        s$.Widget.removeMocks();
+        shoeshine.Widget.removeMocks();
 
         ok(!childWidget1.isOnRoot(), "should return false for widgets not connected to root widget");
         ok(childWidget2.isOnRoot(), "should return true for widgets connected to root widget");
@@ -308,8 +308,8 @@
     test("Removal from parent", function () {
         expect(7);
 
-        var parentWidget = s$.Widget.create(),
-            childWidget = s$.Widget.create()
+        var parentWidget = shoeshine.Widget.create(),
+            childWidget = shoeshine.Widget.create()
                 .addToParent(parentWidget);
 
         parentWidget.addMocks({
@@ -334,7 +334,7 @@
             }
         });
 
-        s$.Progenitor.addMocks({
+        shoeshine.Progenitor.addMocks({
             removeFromParent: function () {
                 strictEqual(this, childWidget, "should call trait's method on current widget");
                 return this;
@@ -343,15 +343,15 @@
 
         strictEqual(childWidget.removeFromParent(), childWidget, "should be chainable");
 
-        s$.Progenitor.removeMocks();
+        shoeshine.Progenitor.removeMocks();
     });
 
     test("Root widget removal", function () {
         expect(3);
 
-        var widget = s$.Widget.create();
+        var widget = shoeshine.Widget.create();
 
-        s$.Widget.rootWidget = widget;
+        shoeshine.Widget.rootWidget = widget;
 
         widget.addMocks({
             removeFromParent: function () {
@@ -360,13 +360,13 @@
         });
 
         strictEqual(widget.removeRootWidget(), widget, "should be chainable");
-        equal(typeof s$.Widget.rootWidget, 'undefined', "should root widget to undefined");
+        equal(typeof shoeshine.Widget.rootWidget, 'undefined', "should root widget to undefined");
     });
 
     test("Child widget name setter", function () {
         expect(5);
 
-        var widget = s$.Widget.create(),
+        var widget = shoeshine.Widget.create(),
             oldChildName = widget.childName;
 
         widget.addMocks({
@@ -381,7 +381,7 @@
             }
         });
 
-        s$.Progenitor.addMocks({
+        shoeshine.Progenitor.addMocks({
             setChildName: function (childName) {
                 strictEqual(this, widget, "should call trait's setChildName on current widget");
                 equal(childName, 'foo', "should pass specified child name to trait");
@@ -391,13 +391,13 @@
 
         strictEqual(widget.setChildName('foo'), widget, "should be chainable");
 
-        s$.Progenitor.removeMocks();
+        shoeshine.Progenitor.removeMocks();
     });
 
     test("Adjacent widget getter", function () {
         expect(4);
 
-        var widget = s$.Widget.create(),
+        var widget = shoeshine.Widget.create(),
             targetParentElement = document.createElement('div'),
             instanceIds = [],
             widgets = {
@@ -449,7 +449,7 @@
             [1, 10, 100].sort(),
             "should fetch IDs of widgets under specified element");
 
-        s$.Widget.removeMocks();
+        shoeshine.Widget.removeMocks();
         sntls.Managed.removeMocks();
         sntls.OrderedStringList.removeMocks();
         sntls.Collection.removeMocks();
@@ -459,8 +459,8 @@
     test("Rendering into element", function () {
         expect(8);
 
-        var widget = s$.Widget.create().setChildName('A'),
-            adjacentWidget = s$.Widget.create().setChildName('B'),
+        var widget = shoeshine.Widget.create().setChildName('A'),
+            adjacentWidget = shoeshine.Widget.create().setChildName('B'),
             targetElement = document.createElement('div'),
             adjacentElement = {};
 
@@ -490,7 +490,7 @@
             }
         });
 
-        s$.Renderable.addMocks({
+        shoeshine.Renderable.addMocks({
             renderBefore: function (element) {
                 strictEqual(this, widget, "should call trait's method");
                 strictEqual(element, adjacentElement, "should call renderBefore with adjacent element");
@@ -500,13 +500,13 @@
 
         strictEqual(widget.renderInto(targetElement), widget, "should be chainable");
 
-        s$.Renderable.removeMocks();
+        shoeshine.Renderable.removeMocks();
     });
 
     test("Rendering into element w/ no adjacent widget", function () {
         expect(3);
 
-        var widget = s$.Widget.create(),
+        var widget = shoeshine.Widget.create(),
             targetElement = document.createElement('div');
 
         widget.addMocks({
@@ -519,7 +519,7 @@
             }
         });
 
-        s$.Renderable.addMocks({
+        shoeshine.Renderable.addMocks({
             renderInto: function (element) {
                 strictEqual(this, widget, "should call trait's method");
                 strictEqual(element, targetElement, "should call renderInto with target element");
@@ -529,13 +529,13 @@
 
         widget.renderInto(targetElement);
 
-        s$.Renderable.removeMocks();
+        shoeshine.Renderable.removeMocks();
     });
 
     test("Rendering before element", function () {
         expect(6);
 
-        var widget = s$.Widget.create(),
+        var widget = shoeshine.Widget.create(),
             targetElement = document.createElement('div');
 
         raises(function () {
@@ -553,7 +553,7 @@
             }
         });
 
-        s$.Renderable.addMocks({
+        shoeshine.Renderable.addMocks({
             renderBefore: function (element) {
                 strictEqual(this, widget, "should call trait's method");
                 strictEqual(element, targetElement, "should call trait's method with target element");
@@ -563,13 +563,13 @@
 
         strictEqual(widget.renderBefore(targetElement), widget, "should be chainable");
 
-        s$.Renderable.removeMocks();
+        shoeshine.Renderable.removeMocks();
     });
 
     test("Re-rendering", function () {
         expect(3);
 
-        var widget = s$.Widget.create();
+        var widget = shoeshine.Widget.create();
 
         widget.addMocks({
             afterRender: function () {
@@ -578,7 +578,7 @@
             }
         });
 
-        s$.Renderable.addMocks({
+        shoeshine.Renderable.addMocks({
             reRender: function () {
                 strictEqual(this, widget, "should call trait's method");
                 return this;
@@ -587,13 +587,13 @@
 
         strictEqual(widget.reRender(), widget, "should be chainable");
 
-        s$.Renderable.removeMocks();
+        shoeshine.Renderable.removeMocks();
     });
 
     test("Re-rendering content", function () {
         expect(3);
 
-        var widget = s$.Widget.create();
+        var widget = shoeshine.Widget.create();
 
         widget.addMocks({
             afterRender: function () {
@@ -602,7 +602,7 @@
             }
         });
 
-        s$.Renderable.addMocks({
+        shoeshine.Renderable.addMocks({
             reRenderContents: function () {
                 strictEqual(this, widget, "should call trait's method");
                 return this;
@@ -611,13 +611,13 @@
 
         strictEqual(widget.reRenderContents(), widget, "should be chainable");
 
-        s$.Renderable.removeMocks();
+        shoeshine.Renderable.removeMocks();
     });
 
     test("After addition handler", function () {
         expect(4);
 
-        var widget = s$.Widget.create();
+        var widget = shoeshine.Widget.create();
 
         widget.children.addMocks({
             afterAdd: function () {
@@ -648,7 +648,7 @@
     test("After removal handler", function () {
         expect(5);
 
-        var widget = s$.Widget.create(),
+        var widget = shoeshine.Widget.create(),
             lineage = [widget.instanceId].toPath();
 
         widget.children.addMocks({
@@ -685,7 +685,7 @@
     test("After render handler", function () {
         expect(2);
 
-        var widget = s$.Widget.create();
+        var widget = shoeshine.Widget.create();
 
         widget.addMocks({
             getElement: function () {
@@ -706,11 +706,11 @@
     test("Triggering widget event", function () {
         expect(4);
 
-        var widget = s$.Widget.create();
+        var widget = shoeshine.Widget.create();
 
         e$.Event.addMocks({
             triggerSync: function (eventPath) {
-                ok(this.isA(s$.WidgetEvent), "should spawn a WidgetEvent");
+                ok(this.isA(shoeshine.WidgetEvent), "should spawn a WidgetEvent");
                 strictEqual(eventPath, widget.eventPath, "should trigger event on widget's event path");
                 equal(this.eventName, 'foo', "should trigger event by specified name");
             }
