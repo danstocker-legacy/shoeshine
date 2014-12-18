@@ -132,6 +132,11 @@ troop.postpone(shoeshine, 'Renderable', function () {
                  * @type {shoeshine.HtmlAttributes}
                  */
                 this.htmlAttributes = htmlAttributes || shoeshine.HtmlAttributes.create();
+
+                /**
+                 * @type {sntls.Collection}
+                 */
+                this.placeholders = sntls.Collection.create();
             },
 
             /**
@@ -249,6 +254,17 @@ troop.postpone(shoeshine, 'Renderable', function () {
             },
 
             /**
+             * Sets a placeholder to be substituted on serialization (.toString()).
+             * @param {string} placeholderName Must match a placeholder implemented by contentMarkup().
+             * @param {*} value Ends up serialized in place of placeholder.
+             * @returns {shoeshine.Renderable}
+             */
+            setPlaceholder: function (placeholderName, value) {
+                this.placeholders.setItem(placeholderName, value);
+                return this;
+            },
+
+            /**
              * Creates a new DOM element based on the current state of the instance.
              * Has no effect if the instance already has an element in the DOM associated with it.
              * @returns {HTMLElement}
@@ -360,13 +376,16 @@ troop.postpone(shoeshine, 'Renderable', function () {
              * @returns {string}
              */
             toString: function () {
-                var tagName = this.tagName;
+                var tagName = this.tagName,
+                    placeholders = this.placeholders,
+                    contentTemplate = this.contentMarkup()
+                        .toTemplate();
 
                 return [
                     '<' + tagName + ' ' + this.htmlAttributes + '>',
-                    this.contentMarkup()
-                        .toTemplate()
-                        .clearPlaceholders(),
+                    placeholders.getKeyCount() ?
+                        contentTemplate.fillPlaceholders(placeholders.items) :
+                        contentTemplate.clearPlaceholders(),
                     '</' + tagName + '>'
                 ].join('');
             }
