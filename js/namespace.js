@@ -36,12 +36,13 @@ var evan = evan || require('evan');
  */
 var jQuery = jQuery || require('jquery');
 
-/**
- * Built-in global document object.
- * @type {Document}
- */
-var document = document || undefined;
-
+if (typeof document === 'undefined') {
+    /**
+     * Built-in global document object.
+     * @type {Document}
+     */
+    document = undefined;
+}
 /**
  * Native DOM element class.
  * @name Element
