@@ -166,9 +166,7 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
                     .extend(this.className);
             },
 
-            /**
-             * @ignore
-             */
+            /** @ignore */
             init: function () {
                 shoeshine.Progenitor.init.call(this);
 
@@ -245,7 +243,8 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
                     if (this.isOnRoot()) {
                         // current widget is attached to root widget
                         // widget lifecycle method may be run
-                        this.afterAdd();
+                        this.addToHierarchy()
+                            .afterAdd();
                     }
 
                     // triggering event about being added
@@ -275,9 +274,10 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
 
                     shoeshine.Widget.rootWidget = this;
 
-                    this.afterAdd();
+                    this.addToHierarchy()
+                        .afterAdd();
 
-                    if (document) {
+                    if (document && !this.getElement()) {
                         this.renderInto(document.getElementsByTagName('body')[0]);
                     }
                 }
@@ -302,7 +302,8 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
                 }
 
                 if (wasAttachedToRoot) {
-                    this.afterRemove();
+                    this.removeFromHierarchy()
+                        .afterRemove();
                 }
 
                 if (parent) {
@@ -435,6 +436,23 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
             },
 
             /**
+             * Adds widget and its children to the hierarchy, updating their event paths and adding them to registry.
+             * Not part of the public Widget API, do not call directly.
+             * @returns {shoeshine.Widget}
+             */
+            addToHierarchy: function () {
+                // setting event path for triggering widget events
+                this.setEventPath(this.getLineage().prepend(this.ATTACHED_EVENT_PATH_ROOT));
+
+                // adding widget to lookup registry
+                this.addToRegistry();
+
+                this.children.addToHierarchy();
+
+                return this;
+            },
+
+            /**
              * Override method that is called after the widget is added to the hierarchy.
              * This is the place to initialize the widget lifecycle. Eg. sync the widget's state to the model,
              * subscribe to events, etc.
@@ -442,12 +460,27 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
              */
             afterAdd: function () {
                 this.children.afterAdd();
+            },
 
-                // setting event path for triggering widget events
-                this.setEventPath(this.getLineage().prepend(this.ATTACHED_EVENT_PATH_ROOT));
+            /**
+             * Removes widget and its children from the hierarchy, updating their event path,
+             * unsubscribing from widget events, and removing them from registry.
+             * Not part of the public Widget API, do not call directly.
+             * @returns {shoeshine.Widget}
+             */
+            removeFromHierarchy: function () {
+                this.children.removeFromHierarchy();
 
-                // adding widget to lookup registry
-                this.addToRegistry();
+                // unsubscribing from all widget events
+                this.unsubscribeFrom();
+
+                // (re-)setting event path to new lineage
+                this.setEventPath(this.getLineage().prepend(this.DETACHED_EVENT_PATH_ROOT));
+
+                // removing widget from lookup registry
+                this.removeFromRegistry();
+
+                return this;
             },
 
             /**
@@ -458,15 +491,6 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
              */
             afterRemove: function () {
                 this.children.afterRemove();
-
-                // unsubscribing from all widget events
-                this.unsubscribeFrom();
-
-                // (re-)setting event path to new lineage
-                this.setEventPath(this.getLineage().prepend(this.DETACHED_EVENT_PATH_ROOT));
-
-                // removing widget from lookup registry
-                this.removeFromRegistry();
             },
 
             /**

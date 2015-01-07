@@ -614,14 +614,14 @@
         shoeshine.Renderable.removeMocks();
     });
 
-    test("After addition handler", function () {
+    test("Adding to hierarchy", function () {
         expect(4);
 
         var widget = shoeshine.Widget.create();
 
         widget.children.addMocks({
-            afterAdd: function () {
-                ok(true, "should call children's afterAdd");
+            addToHierarchy: function () {
+                ok(true, "should call children's addToHierarchy");
             }
         });
 
@@ -642,18 +642,18 @@
             }
         });
 
-        widget.afterAdd();
+        widget.addToHierarchy();
     });
 
-    test("After removal handler", function () {
+    test("Removing from hierarchy", function () {
         expect(5);
 
         var widget = shoeshine.Widget.create(),
             lineage = [widget.instanceId].toPath();
 
         widget.children.addMocks({
-            afterRemove: function () {
-                ok(true, "should call children's afterRemove");
+            removeFromHierarchy: function () {
+                ok(true, "should call children's removeFromHierarchy");
             }
         });
 
@@ -679,7 +679,7 @@
             }
         });
 
-        widget.afterRemove();
+        widget.removeFromHierarchy();
     });
 
     test("After render handler", function () {
