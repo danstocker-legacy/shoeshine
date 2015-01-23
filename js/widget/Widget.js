@@ -436,6 +436,16 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
             },
 
             /**
+             * Default content markup definition for widgets.
+             * Renders children as DOM siblings in order of their child names.
+             * @returns {string}
+             * @ignore
+             */
+            contentMarkup: function () {
+                return this.children.toString();
+            },
+
+            /**
              * Adds widget and its children to the hierarchy, updating their event paths and adding them to registry.
              * Not part of the public Widget API, do not call directly.
              * @returns {shoeshine.Widget}
