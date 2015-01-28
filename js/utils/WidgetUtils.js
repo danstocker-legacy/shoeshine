@@ -3,7 +3,8 @@ troop.postpone(shoeshine, 'WidgetUtils', function () {
     "use strict";
 
     var base = troop.Base,
-        self = base.extend();
+        self = base.extend(),
+        slice = Array.prototype.slice;
 
     /**
      * The WidgetUtils class is a static class containing general purpose utilities used by widgets.
@@ -59,8 +60,9 @@ troop.postpone(shoeshine, 'WidgetUtils', function () {
              */
             getParentNodeByClassName: function (element, className) {
                 var classList;
-                while (element && element.className) {
-                    classList = element.className.split(/\s+/);
+                while (element && (element.classList || element.className)) {
+                    classList = element.classList && slice.call(element.classList) ||
+                                element.className.split(/\s+/);
                     if (classList && classList.indexOf(className) > -1) {
                         return element;
                     }
