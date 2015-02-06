@@ -193,9 +193,7 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
                     .extend(this.className);
             },
 
-            /**
-             * @ignore
-             */
+            /** @ignore */
             init: function () {
                 shoeshine.Progenitor.init.call(this);
 
@@ -272,7 +270,8 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
                     if (this.isOnRoot()) {
                         // current widget is attached to root widget
                         // widget lifecycle method may be run
-                        this.afterAdd();
+                        this.addToHierarchy()
+                            .afterAdd();
                     }
 
                     // triggering event about being added
@@ -302,9 +301,12 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
 
                     shoeshine.Widget.rootWidget = this;
 
-                    this.afterAdd();
+                    this.addToHierarchy()
+                        .afterAdd();
 
-                    this.renderInto(document.getElementsByTagName('body')[0]);
+                    if (document && !this.getElement()) {
+                        this.renderInto(document.getElementsByTagName('body')[0]);
+                    }
                 }
 
                 return this;
@@ -327,7 +329,8 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
                 }
 
                 if (wasAttachedToRoot) {
-                    this.afterRemove();
+                    this.removeFromHierarchy()
+                        .afterRemove();
                 }
 
                 if (parent) {
@@ -460,6 +463,33 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
             },
 
             /**
+             * Default content markup definition for widgets.
+             * Renders children as DOM siblings in order of their child names.
+             * @returns {string}
+             * @ignore
+             */
+            contentMarkup: function () {
+                return this.children.toString();
+            },
+
+            /**
+             * Adds widget and its children to the hierarchy, updating their event paths and adding them to registry.
+             * Not part of the public Widget API, do not call directly.
+             * @returns {shoeshine.Widget}
+             */
+            addToHierarchy: function () {
+                // setting event path for triggering widget events
+                this.setEventPath(this.getLineage().prepend(this.ATTACHED_EVENT_PATH_ROOT));
+
+                // adding widget to lookup registry
+                this.addToRegistry();
+
+                this.children.addToHierarchy();
+
+                return this;
+            },
+
+            /**
              * Override method that is called after the widget is added to the hierarchy.
              * This is the place to initialize the widget lifecycle. Eg. sync the widget's state to the model,
              * subscribe to events, etc.
@@ -467,12 +497,27 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
              */
             afterAdd: function () {
                 this.children.afterAdd();
+            },
 
-                // setting event path for triggering widget events
-                this.setEventPath(this.getLineage().prepend(this.ATTACHED_EVENT_PATH_ROOT));
+            /**
+             * Removes widget and its children from the hierarchy, updating their event path,
+             * unsubscribing from widget events, and removing them from registry.
+             * Not part of the public Widget API, do not call directly.
+             * @returns {shoeshine.Widget}
+             */
+            removeFromHierarchy: function () {
+                this.children.removeFromHierarchy();
 
-                // adding widget to lookup registry
-                this.addToRegistry();
+                // unsubscribing from all widget events
+                this.unsubscribeFrom();
+
+                // (re-)setting event path to new lineage
+                this.setEventPath(this.getLineage().prepend(this.DETACHED_EVENT_PATH_ROOT));
+
+                // removing widget from lookup registry
+                this.removeFromRegistry();
+
+                return this;
             },
 
             /**
@@ -483,15 +528,6 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
              */
             afterRemove: function () {
                 this.children.afterRemove();
-
-                // unsubscribing from all widget events
-                this.unsubscribeFrom();
-
-                // (re-)setting event path to new lineage
-                this.setEventPath(this.getLineage().prepend(this.DETACHED_EVENT_PATH_ROOT));
-
-                // removing widget from lookup registry
-                this.removeFromRegistry();
             },
 
             /**
@@ -634,13 +670,13 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Array.html">Array</a></li><li><a href="dessert.html">dessert</a></li><li><a href="Element.html">Element</a></li><li><a href="Event.html">Event</a></li><li><a href="Number.html">Number</a></li><li><a href="shoeshine.CssClasses.html">CssClasses</a></li><li><a href="shoeshine.HtmlAttributes.html">HtmlAttributes</a></li><li><a href="shoeshine.InlineStyles.html">InlineStyles</a></li><li><a href="shoeshine.JqueryWidget.html">JqueryWidget</a></li><li><a href="shoeshine.Progenitor.html">Progenitor</a></li><li><a href="shoeshine.Renderable.html">Renderable</a></li><li><a href="shoeshine.Template.html">Template</a></li><li><a href="shoeshine.Widget.html">Widget</a></li><li><a href="shoeshine.WidgetCollection.html">WidgetCollection</a></li><li><a href="shoeshine.WidgetEvent.html">WidgetEvent</a></li><li><a href="shoeshine.WidgetUtils.html">WidgetUtils</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="String.html">String</a></li></ul><h3>Namespaces</h3><ul><li><a href="evan.html">evan</a></li><li><a href="shoeshine.html">shoeshine</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul><h3>Global</h3><ul><li><a href="global.html#jQuery">jQuery</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Array.html">Array</a></li><li><a href="dessert.html">dessert</a></li><li><a href="Number.html">Number</a></li><li><a href="shoeshine.CssClasses.html">CssClasses</a></li><li><a href="shoeshine.HtmlAttributes.html">HtmlAttributes</a></li><li><a href="shoeshine.InlineStyles.html">InlineStyles</a></li><li><a href="shoeshine.JqueryWidget.html">JqueryWidget</a></li><li><a href="shoeshine.Progenitor.html">Progenitor</a></li><li><a href="shoeshine.Renderable.html">Renderable</a></li><li><a href="shoeshine.Template.html">Template</a></li><li><a href="shoeshine.Widget.html">Widget</a></li><li><a href="shoeshine.WidgetCollection.html">WidgetCollection</a></li><li><a href="shoeshine.WidgetEvent.html">WidgetEvent</a></li><li><a href="shoeshine.WidgetUtils.html">WidgetUtils</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="String.html">String</a></li></ul><h3>Namespaces</h3><ul><li><a href="evan.html">evan</a></li><li><a href="shoeshine.html">shoeshine</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul><h3>Global</h3><ul><li><a href="global.html#document">document</a></li><li><a href="global.html#Element">Element</a></li><li><a href="global.html#Event">Event</a></li><li><a href="global.html#jQuery">jQuery</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Dec 14 2014 10:07:45 GMT-0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Fri Feb 06 2015 23:20:11 GMT-0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>

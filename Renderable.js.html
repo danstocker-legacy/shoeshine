@@ -47,7 +47,7 @@ troop.postpone(shoeshine, 'Renderable', function () {
              * @private
              */
             _createElementProxy: function (tagName) {
-                return document.createElement(tagName);
+                return document && document.createElement(tagName);
             },
 
             /**
@@ -57,7 +57,7 @@ troop.postpone(shoeshine, 'Renderable', function () {
              * @private
              */
             _getElementByIdProxy: function (elementId) {
-                return document.getElementById(elementId);
+                return document && document.getElementById(elementId);
             },
 
             /**
@@ -159,6 +159,11 @@ troop.postpone(shoeshine, 'Renderable', function () {
                  * @type {shoeshine.HtmlAttributes}
                  */
                 this.htmlAttributes = htmlAttributes || shoeshine.HtmlAttributes.create();
+
+                /**
+                 * @type {sntls.Collection}
+                 */
+                this.placeholders = sntls.Collection.create();
             },
 
             /**
@@ -276,6 +281,17 @@ troop.postpone(shoeshine, 'Renderable', function () {
             },
 
             /**
+             * Sets a placeholder to be substituted on serialization (.toString()).
+             * @param {string} placeholderName Must match a placeholder implemented by contentMarkup().
+             * @param {*} value Ends up serialized in place of placeholder.
+             * @returns {shoeshine.Renderable}
+             */
+            setPlaceholder: function (placeholderName, value) {
+                this.placeholders.setItem(placeholderName, value);
+                return this;
+            },
+
+            /**
              * Creates a new DOM element based on the current state of the instance.
              * Has no effect if the instance already has an element in the DOM associated with it.
              * @returns {HTMLElement}
@@ -387,13 +403,16 @@ troop.postpone(shoeshine, 'Renderable', function () {
              * @returns {string}
              */
             toString: function () {
-                var tagName = this.tagName;
+                var tagName = this.tagName,
+                    placeholders = this.placeholders,
+                    contentTemplate = this.contentMarkup()
+                        .toTemplate();
 
                 return [
                     '&lt;' + tagName + ' ' + this.htmlAttributes + '>',
-                    this.contentMarkup()
-                        .toTemplate()
-                        .clearPlaceholders(),
+                    placeholders.getKeyCount() ?
+                        contentTemplate.fillPlaceholders(placeholders.items) :
+                        contentTemplate.clearPlaceholders(),
                     '&lt;/' + tagName + '>'
                 ].join('');
             }
@@ -409,13 +428,13 @@ troop.postpone(shoeshine, 'Renderable', function () {
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Array.html">Array</a></li><li><a href="dessert.html">dessert</a></li><li><a href="Element.html">Element</a></li><li><a href="Event.html">Event</a></li><li><a href="Number.html">Number</a></li><li><a href="shoeshine.CssClasses.html">CssClasses</a></li><li><a href="shoeshine.HtmlAttributes.html">HtmlAttributes</a></li><li><a href="shoeshine.InlineStyles.html">InlineStyles</a></li><li><a href="shoeshine.JqueryWidget.html">JqueryWidget</a></li><li><a href="shoeshine.Progenitor.html">Progenitor</a></li><li><a href="shoeshine.Renderable.html">Renderable</a></li><li><a href="shoeshine.Template.html">Template</a></li><li><a href="shoeshine.Widget.html">Widget</a></li><li><a href="shoeshine.WidgetCollection.html">WidgetCollection</a></li><li><a href="shoeshine.WidgetEvent.html">WidgetEvent</a></li><li><a href="shoeshine.WidgetUtils.html">WidgetUtils</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="String.html">String</a></li></ul><h3>Namespaces</h3><ul><li><a href="evan.html">evan</a></li><li><a href="shoeshine.html">shoeshine</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul><h3>Global</h3><ul><li><a href="global.html#jQuery">jQuery</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Array.html">Array</a></li><li><a href="dessert.html">dessert</a></li><li><a href="Number.html">Number</a></li><li><a href="shoeshine.CssClasses.html">CssClasses</a></li><li><a href="shoeshine.HtmlAttributes.html">HtmlAttributes</a></li><li><a href="shoeshine.InlineStyles.html">InlineStyles</a></li><li><a href="shoeshine.JqueryWidget.html">JqueryWidget</a></li><li><a href="shoeshine.Progenitor.html">Progenitor</a></li><li><a href="shoeshine.Renderable.html">Renderable</a></li><li><a href="shoeshine.Template.html">Template</a></li><li><a href="shoeshine.Widget.html">Widget</a></li><li><a href="shoeshine.WidgetCollection.html">WidgetCollection</a></li><li><a href="shoeshine.WidgetEvent.html">WidgetEvent</a></li><li><a href="shoeshine.WidgetUtils.html">WidgetUtils</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="String.html">String</a></li></ul><h3>Namespaces</h3><ul><li><a href="evan.html">evan</a></li><li><a href="shoeshine.html">shoeshine</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul><h3>Global</h3><ul><li><a href="global.html#document">document</a></li><li><a href="global.html#Element">Element</a></li><li><a href="global.html#Event">Event</a></li><li><a href="global.html#jQuery">jQuery</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Dec 14 2014 10:07:45 GMT-0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Fri Feb 06 2015 23:20:11 GMT-0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>
