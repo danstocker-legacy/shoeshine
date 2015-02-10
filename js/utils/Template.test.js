@@ -3,11 +3,56 @@
 (function () {
     "use strict";
 
-    module("Template");
+    module("Template", {
+        setup: function () {
+            shoeshine.Template.clearInstanceRegistry();
+        },
+
+        teardown: function () {
+            shoeshine.Template.clearInstanceRegistry();
+        }
+    });
 
     test("Instantiation", function () {
-        var template = shoeshine.Template.create('foo bar');
-        equal(template.templateString, 'foo bar', "should set template string");
+        var markup = [
+                //@formatter:off
+                '<foo class="hello ">',
+                    '<bar class="   hi world    ">     ',
+                        'hello',
+                        '   {{xxx}} ',
+                    '</bar> ',
+                '</foo> '
+                //@formatter:on
+            ].join(''),
+            template = shoeshine.Template.create(markup);
+
+//        console.log(template.templateString);
+//        console.log(JSON.stringify(template.preprocessedTemplate.items, null, 2));
+//        console.log(JSON.stringify(template.placeholderLookup.items, null, 2));
+
+        equal(template.templateString, markup, "should set template string");
+
+        deepEqual(template.preprocessedTemplate.items, [
+            "<foo class=\"hello \">",
+            "",
+            "<bar class=\"   hi world    \">     hello   ",
+            "{{xxx}}",
+            "",
+            " ",
+            "</bar>",
+            " ",
+            "</foo> "
+        ], "should set preprocessed template contents");
+
+        deepEqual(template.placeholderLookup.items, {
+            "hello": 0,
+            "null" : 1,
+            "hi"   : 2,
+            "world": 2,
+            "xxx"  : 3
+        }, "should set placeholderLookup contents");
+
+        strictEqual(shoeshine.Template.create(markup), template, "should be memoized");
     });
 
     test("Conversion from string", function () {
@@ -35,16 +80,14 @@
                 bar: "World"
             }),
             "Hello World",
-            "should fill in all provided placeholders"
-        );
+            "should fill in all provided placeholders");
 
         equal(
             template.fillPlaceholders({
                 foo: "Hello"
             }),
             "Hello {{bar}}",
-            "should preserve placeholders not specified"
-        );
+            "should preserve placeholders not specified");
 
         equal(
             template.fillPlaceholders({
@@ -52,8 +95,30 @@
                 bar: {}
             }),
             "Hello [object Object]",
-            "should stringify object fill values"
-        );
+            "should stringify object fill values");
+    });
+
+    test("Filling containers", function () {
+        var markup = [
+                //@formatter:off
+                '<foo class="hello">',
+                    '<bar class="hi world">',
+                        'hello',
+                        '{{xxx}}',
+                    '</bar>',
+                '</foo>'
+                //@formatter:on
+            ].join(''),
+            template = markup.toTemplate();
+
+        equal(
+            template.fillPlaceholders({
+                hi   : "<baz />",
+                world: '<span>Hello!</span>',
+                xxx  : "World"
+            }),
+            '<foo class="hello"><bar class="hi world">hello<baz /><span>Hello!</span>World</bar></foo>',
+            "should inject content into container as well as replace placeholder");
     });
 
     test("Clearing placeholders", function () {

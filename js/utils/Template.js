@@ -22,21 +22,119 @@ troop.postpone(shoeshine, 'Template', function () {
      * @extends troop.Base
      */
     shoeshine.Template = self
+        .setInstanceMapper(function (text) {
+            return text;
+        })
         .addConstants(/** @lends shoeshine.Template */{
-            /** @type {RegExp} */
-            RE_TEMPLATE_PLACEHOLDER: /{{([\w-]+)}}/g
+            /**
+             * Used for replacing placeholders in the template.
+             * @type {RegExp}
+             * @constant
+             */
+            RE_TEMPLATE_PLACEHOLDER: /{{[\w-]+}}/g,
+
+            /**
+             * Splits along template placeholders and tags.
+             * Leaves an empty slot after each tag and placeholder in the resulting array.
+             * @type {RegExp}
+             * @constant
+             */
+            RE_TEMPLATE_PREPROCESSOR: /(\s*(?=<)|{{[\w-]+}})/,
+
+            /**
+             * Splits a tag to extract class list.
+             * Extracted class list will be found in result[1].
+             * @type {RegExp}
+             * @constant
+             */
+            RE_CLASS_LIST_FROM_TAG: /class\s*=\s*"\s*([\w-]+(?:\s+[\w-]+)*)\s*"/,
+
+            /**
+             * Matches a class list.
+             * Resulting array will contain extracted classes.
+             * @type {RegExp}
+             * @constant
+             */
+            RE_CLASS_FROM_CLASS_LIST: /[\w-]+/g,
+
+            /**
+             * Matches a placeholder.
+             * Extracted string will be found in result[1].
+             * @type {RegExp}
+             * @constant
+             */
+            RE_PLACEHOLDER_NAME_FROM_PLACEHOLDER: /^{{([\w-]+)}}$/
+        })
+        .addPrivateMethods(/** @lends shoeshine.Template */{
+            /**
+             * @param {string} tag
+             * @returns {string}
+             * @private
+             */
+            _extractClassListFromTag: function (tag) {
+                var classNames = tag.split(this.RE_CLASS_LIST_FROM_TAG);
+                return classNames && classNames[1];
+            },
+
+            /**
+             * @param {string} classList
+             * @returns {string[]}
+             * @private
+             */
+            _extractClassesFromClassList: function (classList) {
+                return classList.match(this.RE_CLASS_FROM_CLASS_LIST);
+            },
+
+            /**
+             * @param {string} placeholder
+             * @returns {string}
+             * @private
+             */
+            _extractPlaceholderNameFromPlaceholder: function (placeholder) {
+                var placeholderNames = placeholder.match(this.RE_PLACEHOLDER_NAME_FROM_PLACEHOLDER);
+                return placeholderNames && placeholderNames[1];
+            },
+
+            /**
+             * @param {string} templateFragment
+             * @returns {string|string[]}
+             * @private
+             */
+            _processTemplateFragment: function (templateFragment) {
+                var classList = this._extractClassListFromTag(templateFragment);
+                return classList && this._extractClassesFromClassList(classList) ||
+                       this._extractPlaceholderNameFromPlaceholder(templateFragment);
+            }
         })
         .addMethods(/** @lends shoeshine.Template# */{
             /**
-             * @param {string} text
+             * @param {string} templateString
              * @ignore
              */
-            init: function (text) {
+            init: function (templateString) {
                 /**
-                 * Template string.
+                 * Original template string.
                  * @type {string}
                  */
-                this.templateString = text;
+                this.templateString = templateString;
+
+                /**
+                 * Blown up string where the placeholders need to be substituted and joined to get the final text.
+                 * @type {sntls.Collection}
+                 */
+                this.preprocessedTemplate = this.templateString.split(this.RE_TEMPLATE_PREPROCESSOR)
+                    .toCollection();
+
+                /**
+                 * Defines lookup between placeholder names and positions in the preprocessed template.
+                 * @type {sntls.StringDictionary}
+                 */
+                this.placeholderLookup = this.preprocessedTemplate
+                    .mapValues(this._processTemplateFragment, this)
+                    .toStringDictionary()
+                    .reverse()
+                    .toCollection()
+                    .passEachItemTo(parseInt, this, 0, 10);
             },
 
             /**
@@ -46,7 +144,9 @@ troop.postpone(shoeshine, 'Template', function () {
              * @returns {string}
              */
             fillPlaceholder: function (placeholderName, fillValue) {
-                return this.templateString.replace('{{' + placeholderName + '}}', fillValue);
+                var fillValues = {};
+                fillValues[placeholderName] = fillValue;
+                return this.fillPlaceholders(fillValues);
             },
 
             /**
@@ -55,15 +155,27 @@ troop.postpone(shoeshine, 'Template', function () {
              * @returns {string}
              */
             fillPlaceholders: function (fillValues) {
-                dessert.isPlainObject(fillValues, "Invalid placeholder fill values");
+                var preprocessedTemplate = this.preprocessedTemplate.items,
+                    placeholderLookup = this.placeholderLookup.items,
+                    result = preprocessedTemplate.concat(),
+                    placeholderNames = Object.keys(fillValues),
+                    i, placeholderName, targetIndex, placeholder;
 
-                return this.templateString.replace(this.RE_TEMPLATE_PLACEHOLDER, function (hit, placeholderName) {
-                    return fillValues.hasOwnProperty(placeholderName) ?
-                        // filling in provided string (or object w/ .toString())
-                        fillValues[placeholderName] :
-                        // re-inserting placeholder
-                        placeholderName.toPlaceholder();
-                });
+                for (i = 0; i < placeholderNames.length; i++) {
+                    placeholderName = placeholderNames[i];
+                    targetIndex = placeholderLookup[placeholderName];
+                    placeholder = preprocessedTemplate[targetIndex];
+
+                    if (placeholder[0] === '{') {
+                        // placeholder replacement
+                        result[targetIndex] = fillValues[placeholderName];
+                    } else {
+                        // container addition
+                        result[targetIndex] += fillValues[placeholderName];
+                    }
+                }
+
+                return result.join('');
             },
 
             /**
