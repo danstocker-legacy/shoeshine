@@ -162,16 +162,21 @@ troop.postpone(shoeshine, 'Template', function () {
                     i, placeholderName, targetIndex, placeholder;
 
                 for (i = 0; i < placeholderNames.length; i++) {
+                    // identifying placeholder in template
                     placeholderName = placeholderNames[i];
                     targetIndex = placeholderLookup[placeholderName];
-                    placeholder = preprocessedTemplate[targetIndex];
 
-                    if (placeholder[0] === '{') {
-                        // placeholder replacement
-                        result[targetIndex] = fillValues[placeholderName];
-                    } else {
-                        // container addition
-                        result[targetIndex] += fillValues[placeholderName];
+                    if (targetIndex >= 0) {
+                        // placeholder is found in template
+                        placeholder = preprocessedTemplate[targetIndex];
+
+                        if (placeholder[0] === '{') {
+                            // placeholder replacement
+                            result[targetIndex] = fillValues[placeholderName];
+                        } else {
+                            // container addition
+                            result[targetIndex] += fillValues[placeholderName];
+                        }
                     }
                 }
 

@@ -121,6 +121,19 @@
             "should inject content into container as well as replace placeholder");
     });
 
+    test("Filling empty template", function () {
+        var template = ''.toTemplate();
+
+        equal(
+            template.fillPlaceholders({
+                foo: "Hello",
+                bar: "World"
+            }),
+            "",
+            "should return empty string");
+    });
+
+
     test("Clearing placeholders", function () {
         var template = "{{foo}}baz{{bar}}".toTemplate();
         equal(template.clearPlaceholders(), 'baz', "should remove all placeholders");
