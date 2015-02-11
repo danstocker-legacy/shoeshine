@@ -614,6 +614,42 @@
         shoeshine.Renderable.removeMocks();
     });
 
+    test("Default content markup template generation", function () {
+        expect(2);
+
+        var widget = shoeshine.Widget.create(),
+            child = shoeshine.Widget.create(),
+            template = ''.toMarkupTemplate();
+
+        widget.addMocks({
+            _getChildrenGroupedByContainer: function () {
+                return sntls.Collection.create({
+                    foo: child
+                });
+            }
+        });
+
+        shoeshine.Renderable.addMocks({
+            contentMarkupAsTemplate: function () {
+                return template;
+            }
+        });
+
+        shoeshine.MarkupTemplate.addMocks({
+            appendContainers: function (contents) {
+                deepEqual(contents, {
+                    foo: child
+                }, "should append content to template");
+                return this;
+            }
+        });
+
+        strictEqual(widget.contentMarkupAsTemplate(), template, "should return cloned template instance");
+
+        shoeshine.Renderable.removeMocks();
+        shoeshine.MarkupTemplate.removeMocks();
+    });
+
     test("Adding to hierarchy", function () {
         expect(4);
 

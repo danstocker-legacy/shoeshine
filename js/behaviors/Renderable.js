@@ -368,7 +368,9 @@ troop.postpone(shoeshine, 'Renderable', function () {
              * @returns {string}
              */
             contentMarkup: function () {
-                return '';
+                return this.contentTemplate ?
+                    this.contentMarkupAsTemplate().toString():
+                    '';
             },
 
             /**
