@@ -109,6 +109,43 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
 
                     this.renderInto(parentElement);
                 }
+            },
+
+            /**
+             * @returns {string}
+             * @private
+             */
+            _getTemplateBasedMarkup: function () {
+                var that = this,
+
+                // association of containers and content
+                    containerContentPairs = this.children
+                        .collectProperty('containerCssClass')
+                        .toStringDictionary()
+                        .reverse()
+                        .toCollection()
+                        .mapValues(function (childNames) {
+                            return childNames instanceof Array ?
+                                that.getChildren.apply(that, childNames) :
+                                that.getChild(childNames);
+                        }),
+
+                // template filled
+                    templateBasedContent = this.contentTemplate
+                        .fillContainers(containerContentPairs.items),
+
+                // additional content that is not associated with any container
+                    rootContent = containerContentPairs.getItem('undefined');
+
+                return [templateBasedContent, rootContent].join('');
+            },
+
+            /**
+             * @returns {string}
+             * @private
+             */
+            _getChildrenMarkup: function () {
+                return this.children.toString();
             }
         })
         .addMethods(/** @lends shoeshine.Widget# */{
@@ -442,7 +479,9 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
              * @ignore
              */
             contentMarkup: function () {
-                return this.children.toString();
+                return this.contentTemplate ?
+                    this._getTemplateBasedMarkup() :
+                    this._getChildrenMarkup();
             },
 
             /**
