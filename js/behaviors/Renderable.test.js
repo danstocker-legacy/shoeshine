@@ -25,8 +25,6 @@
         equal(instance.tagName, 'div', "should set tag name to 'div'");
         ok(instance.htmlAttributes.isA(shoeshine.HtmlAttributes), "should add HTML attribute collection");
         strictEqual(instance.htmlAttributes, htmlAttributes, "should set HTML attribute");
-        ok(instance.placeholders.isA(sntls.Collection), "should add placeholders property as Collection");
-        equal(instance.placeholders.getKeyCount(), 0, "should initialize placeholders collection as empty");
     });
 
     test("Tag name setter", function () {
@@ -226,14 +224,6 @@
         });
 
         strictEqual(instance.removeAttribute('foo'), instance, "should be chainable");
-    });
-
-    test("Placeholder setter", function () {
-        var instance = Renderable.create();
-        strictEqual(instance.setPlaceholder('foo', 'bar'), instance, "should be chainable");
-        deepEqual(instance.placeholders.items, {
-            foo: 'bar'
-        }, "should set placeholder in placeholders collection");
     });
 
     test("Element creation", function () {
@@ -483,32 +473,5 @@
             instance.toString(),
             '<span ATTRIBUTES>FOO</span>',
             "should return markup with tag, attributes, and custom markup");
-    });
-
-    test("Serialization with placeholders", function () {
-        expect(3);
-
-        var instance = Renderable.create()
-            .setTagName('span')
-            .setPlaceholder('placeholder', 'BAR');
-
-        instance.addMocks({
-            contentMarkup: function () {
-                ok(true, "should fetch contentMarkup");
-                return 'FOO{{placeholder}}';
-            }
-        });
-
-        instance.htmlAttributes.addMocks({
-            toString: function () {
-                ok(true, "should serialize attribute list");
-                return 'ATTRIBUTES';
-            }
-        });
-
-        equal(
-            instance.toString(),
-            '<span ATTRIBUTES>FOOBAR</span>',
-            "should return markup with tag, attributes, and custom markup, placeholders filled");
     });
 }());

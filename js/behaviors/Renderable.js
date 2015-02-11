@@ -12,6 +12,13 @@ troop.postpone(shoeshine, 'Renderable', function () {
      * @extends troop.Base
      */
     shoeshine.Renderable = self
+        .addPublic(/** @lends shoeshine.Renderable */{
+            /**
+             * @type {shoeshine.MarkupTemplate}
+             * @constant
+             */
+            contentTemplate: undefined
+        })
         .addPrivateMethods(/** @lends shoeshine.Renderable# */{
             /**
              * Proxy for document.createElement.
@@ -132,11 +139,6 @@ troop.postpone(shoeshine, 'Renderable', function () {
                  * @type {shoeshine.HtmlAttributes}
                  */
                 this.htmlAttributes = htmlAttributes || shoeshine.HtmlAttributes.create();
-
-                /**
-                 * @type {sntls.Collection}
-                 */
-                this.placeholders = sntls.Collection.create();
             },
 
             /**
@@ -254,19 +256,9 @@ troop.postpone(shoeshine, 'Renderable', function () {
             },
 
             /**
-             * Sets a placeholder to be substituted on serialization (.toString()).
-             * @param {string} placeholderName Must match a placeholder implemented by contentMarkup().
-             * @param {*} value Ends up serialized in place of placeholder.
-             * @returns {shoeshine.Renderable}
-             */
-            setPlaceholder: function (placeholderName, value) {
-                this.placeholders.setItem(placeholderName, value);
-                return this;
-            },
-
-            /**
              * Creates a new DOM element based on the current state of the instance.
              * Has no effect if the instance already has an element in the DOM associated with it.
+             * TODO: Remove template conversion & placeholder clearing.
              * @returns {HTMLElement}
              */
             createElement: function () {
@@ -344,6 +336,7 @@ troop.postpone(shoeshine, 'Renderable', function () {
              * Re-renders the contents of the instance, leaving its main DOM element unchanged.
              * Has no effect when instance has never been rendered.
              * External references to the instance's internal DOM must be invalidated afterwards.
+             * TODO: Remove template conversion & placeholder clearing.
              * @returns {shoeshine.Renderable}
              */
             reRenderContents: function () {
@@ -373,19 +366,16 @@ troop.postpone(shoeshine, 'Renderable', function () {
 
             /**
              * Generates full markup for the current instance.
+             * TODO: Remove template conversion & placeholder clearing.
              * @returns {string}
              */
             toString: function () {
-                var tagName = this.tagName,
-                    placeholders = this.placeholders,
-                    contentTemplate = this.contentMarkup()
-                        .toTemplate();
-
+                var tagName = this.tagName;
                 return [
                     '<' + tagName + ' ' + this.htmlAttributes + '>',
-                    placeholders.getKeyCount() ?
-                        contentTemplate.fillPlaceholders(placeholders.items) :
-                        contentTemplate.clearPlaceholders(),
+                    this.contentMarkup()
+                        .toTemplate()
+                        .clearPlaceholders(),
                     '</' + tagName + '>'
                 ].join('');
             }
