@@ -15,7 +15,6 @@ troop.postpone(shoeshine, 'Renderable', function () {
         .addPublic(/** @lends shoeshine.Renderable */{
             /**
              * @type {shoeshine.MarkupTemplate}
-             * @constant
              */
             contentTemplate: undefined
         })
