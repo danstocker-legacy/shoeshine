@@ -19,7 +19,7 @@
             template = shoeshine.MarkupTemplate.create(markup);
 
 //        console.log(JSON.stringify(template.preprocessedTemplate.items, null, 2));
-//        console.log(JSON.stringify(template.placeholderLookup.items, null, 2));
+//        console.log(JSON.stringify(template.containerLookup.items, null, 2));
 
         deepEqual(template.preprocessedTemplate.items, [
             "<foo class=\"hello \">",
@@ -28,25 +28,25 @@
             "</foo> "
         ], "should set preprocessed template contents");
 
-        deepEqual(template.placeholderLookup.items, {
+        deepEqual(template.containerLookup.items, {
             "hello"    : 0,
             "hi"       : 1,
             "world"    : 1,
             "undefined": 2
-        }, "should set placeholderLookup contents");
+        }, "should set containerLookup contents");
     });
 
     test("Instantiation with empty template", function () {
         var template = shoeshine.MarkupTemplate.create('');
 
 //        console.log(JSON.stringify(template.preprocessedTemplate.items, null, 2));
-//        console.log(JSON.stringify(template.placeholderLookup.items, null, 2));
+//        console.log(JSON.stringify(template.containerLookup.items, null, 2));
 
         deepEqual(template.preprocessedTemplate.items, [''], "should set preprocessed template contents");
 
-        deepEqual(template.placeholderLookup.items, {
+        deepEqual(template.containerLookup.items, {
             undefined: 0
-        }, "should set placeholderLookup contents");
+        }, "should set containerLookup contents");
     });
 
     test("Conversion from string", function () {
@@ -70,12 +70,12 @@
             "</foo> "
         ], "should set preprocessed template contents");
 
-        deepEqual(template.placeholderLookup.items, {
+        deepEqual(template.containerLookup.items, {
             "hello"    : 0,
             "hi"       : 1,
             "world"    : 1,
             "undefined": 2
-        }, "should set placeholderLookup contents");
+        }, "should set containerLookup contents");
     });
 
     test("Conversion from string to placeholder", function () {
@@ -165,12 +165,12 @@
         ok(clone.instanceOf(shoeshine.MarkupTemplate), "should return MarkupTemplate instance");
         notStrictEqual(clone.preprocessedTemplate.items, template.preprocessedTemplate.items,
             "should create new preprocessedTemplate buffer");
-        notStrictEqual(clone.placeholderLookup.items, template.placeholderLookup.items,
-            "should create new placeholderLookup buffer");
+        notStrictEqual(clone.containerLookup.items, template.containerLookup.items,
+            "should create new containerLookup buffer");
         deepEqual(clone.preprocessedTemplate.items, template.preprocessedTemplate.items,
             "should copy preprocessedTemplate contents");
-        deepEqual(clone.placeholderLookup.items, template.placeholderLookup.items,
-            "should copy placeholderLookup contents");
+        deepEqual(clone.containerLookup.items, template.containerLookup.items,
+            "should copy containerLookup contents");
     });
 
     test("Serialization", function () {

@@ -356,6 +356,14 @@ troop.postpone(shoeshine, 'Renderable', function () {
             },
 
             /**
+             * Retrieves the widget's markup as a MarkupTemplate instance.
+             * @returns {shoeshine.MarkupTemplate}
+             */
+            contentMarkupAsTemplate: function () {
+                return this.contentTemplate.clone();
+            },
+
+            /**
              * Override method defining the contents of the Renderable instance.
              * @returns {string}
              */

@@ -112,40 +112,23 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
             },
 
             /**
-             * @returns {string}
+             * Retrieves current child widgets grouped by container CSS class name.
+             * @returns {sntls.Collection}
              * @private
              */
-            _getTemplateBasedMarkup: function () {
-                var that = this,
+            _getChildrenGroupedByContainer: function () {
+                var that = this;
 
-                // association of containers and content
-                    containerContentPairs = this.children
-                        .collectProperty('containerCssClass')
-                        .toStringDictionary()
-                        .reverse()
-                        .toCollection()
-                        .mapValues(function (childNames) {
-                            return childNames instanceof Array ?
-                                that.getChildren.apply(that, childNames) :
-                                that.getChild(childNames);
-                        }),
-
-                // template filled
-                    templateBasedContent = this.contentTemplate
-                        .fillContainers(containerContentPairs.items),
-
-                // additional content that is not associated with any container
-                    rootContent = containerContentPairs.getItem('undefined');
-
-                return [templateBasedContent, rootContent].join('');
-            },
-
-            /**
-             * @returns {string}
-             * @private
-             */
-            _getChildrenMarkup: function () {
-                return this.children.toString();
+                return this.children
+                    .collectProperty('containerCssClass')
+                    .toStringDictionary()
+                    .reverse()
+                    .toCollection()
+                    .mapValues(function (childNames) {
+                        return childNames instanceof Array ?
+                            that.getChildren.apply(that, childNames) :
+                            that.getChild(childNames);
+                    });
             }
         })
         .addMethods(/** @lends shoeshine.Widget# */{
@@ -473,15 +456,26 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
             },
 
             /**
+             * Retrieves content markup as a filled-in MarkupTemplate.
+             * Override this method to add more content to the template.
+             * @returns {shoeshine.MarkupTemplate}
+             * @ignore
+             */
+            contentMarkupAsTemplate: function () {
+                return shoeshine.Renderable.contentMarkupAsTemplate.call(this)
+                    .appendContainers(this._getChildrenGroupedByContainer());
+            },
+
+            /**
              * Default content markup definition for widgets.
-             * Renders children as DOM siblings in order of their child names.
+             * Renders children as DOM siblings inside their container in order of their child names.
              * @returns {string}
              * @ignore
              */
             contentMarkup: function () {
                 return this.contentTemplate ?
-                    this._getTemplateBasedMarkup() :
-                    this._getChildrenMarkup();
+                    this.contentMarkupAsTemplate().toString() :
+                    this.children.toString();
             },
 
             /**

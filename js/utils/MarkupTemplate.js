@@ -91,10 +91,10 @@ troop.postpone(shoeshine, 'MarkupTemplate', function () {
                     .toCollection();
 
                 /**
-                 * Defines lookup between placeholder names and positions in the preprocessed template.
+                 * Defines lookup between container names and positions in the preprocessed template.
                  * @type {sntls.StringDictionary}
                  */
-                this.placeholderLookup = this.preprocessedTemplate
+                this.containerLookup = this.preprocessedTemplate
                     .mapValues(this._processTemplateFragment, this)
                     .toStringDictionary()
                     .reverse()
@@ -110,7 +110,7 @@ troop.postpone(shoeshine, 'MarkupTemplate', function () {
              */
             appendContainers: function (contents) {
                 var preprocessedTemplate = this.preprocessedTemplate.items,
-                    containerLookup = this.placeholderLookup.items,
+                    containerLookup = this.containerLookup.items,
                     containerNames = Object.keys(contents),
                     i, containerName, targetIndex;
 
@@ -146,7 +146,7 @@ troop.postpone(shoeshine, 'MarkupTemplate', function () {
             clone: function () {
                 var result = this.getBase().create('');
                 result.preprocessedTemplate = this.preprocessedTemplate.clone();
-                result.placeholderLookup = this.placeholderLookup.clone();
+                result.containerLookup = this.containerLookup.clone();
                 return result;
             },
 
