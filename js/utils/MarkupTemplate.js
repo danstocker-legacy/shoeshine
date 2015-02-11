@@ -22,9 +22,6 @@ troop.postpone(shoeshine, 'MarkupTemplate', function () {
      * @extends troop.Base
      */
     shoeshine.MarkupTemplate = self
-        .setInstanceMapper(function (text) {
-            return text;
-        })
         .addConstants(/** @lends shoeshine.MarkupTemplate */{
             /**
              * Splits along template placeholders and tags.
@@ -32,7 +29,7 @@ troop.postpone(shoeshine, 'MarkupTemplate', function () {
              * @type {RegExp}
              * @constant
              */
-            RE_MARKUP_SPLITTER: /(\s*(?=<))/,
+            RE_MARKUP_SPLITTER: /(?=<)/,
 
             /**
              * Splits a tag to extract class list.
@@ -106,14 +103,14 @@ troop.postpone(shoeshine, 'MarkupTemplate', function () {
             },
 
             /**
-             * Fills containers in the template.
+             * Appends containers with specified content.
+             * Do not call this on the original template. Clone first.
              * @param {object} contents Pairs of container CSS classes & associated content.
-             * @returns {string}
+             * @returns {shoeshine.MarkupTemplate}
              */
-            fillContainers: function (contents) {
+            appendContainers: function (contents) {
                 var preprocessedTemplate = this.preprocessedTemplate.items,
                     containerLookup = this.placeholderLookup.items,
-                    result = preprocessedTemplate.concat(),
                     containerNames = Object.keys(contents),
                     i, containerName, targetIndex;
 
@@ -124,11 +121,41 @@ troop.postpone(shoeshine, 'MarkupTemplate', function () {
 
                     if (targetIndex >= 0) {
                         // placeholder is found in template
-                        result[targetIndex] += contents[containerName];
+                        preprocessedTemplate[targetIndex] += contents[containerName];
                     }
                 }
 
-                return result.join('');
+                return this;
+            },
+
+            /**
+             * Fills containers in the template.
+             * @param {object} contents Pairs of container CSS classes & associated content.
+             * @returns {string}
+             */
+            fillContainers: function (contents) {
+                return this.clone()
+                    .appendContainers(contents)
+                    .toString();
+            },
+
+            /**
+             * Clones markup template.
+             * @returns {shoeshine.MarkupTemplate}
+             */
+            clone: function () {
+                var result = this.getBase().create('');
+                result.preprocessedTemplate = this.preprocessedTemplate.clone();
+                result.placeholderLookup = this.placeholderLookup.clone();
+                return result;
+            },
+
+            /**
+             * Serializes markup template.
+             * @returns {string}
+             */
+            toString: function () {
+                return this.preprocessedTemplate.items.join('');
             }
         });
 });

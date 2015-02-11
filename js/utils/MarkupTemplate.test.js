@@ -3,15 +3,7 @@
 (function () {
     "use strict";
 
-    module("MarkupTemplate", {
-        setup: function () {
-            shoeshine.MarkupTemplate.clearInstanceRegistry();
-        },
-
-        teardown: function () {
-            shoeshine.MarkupTemplate.clearInstanceRegistry();
-        }
-    });
+    module("MarkupTemplate");
 
     test("Instantiation", function () {
         var markup = [
@@ -31,22 +23,17 @@
 
         deepEqual(template.preprocessedTemplate.items, [
             "<foo class=\"hello \">",
-            "",
-            "<bar class=\"   hi world    \">     hello   {{xxx}}",
-            " ",
-            "</bar>",
-            " ",
+            "<bar class=\"   hi world    \">     hello   {{xxx}} ",
+            "</bar> ",
             "</foo> "
         ], "should set preprocessed template contents");
 
         deepEqual(template.placeholderLookup.items, {
             "hello"    : 0,
-            "undefined": 1,
-            "hi"       : 2,
-            "world"    : 2
+            "hi"       : 1,
+            "world"    : 1,
+            "undefined": 2
         }, "should set placeholderLookup contents");
-
-        strictEqual(shoeshine.MarkupTemplate.create(markup), template, "should be memoized");
     });
 
     test("Instantiation with empty template", function () {
@@ -65,37 +52,59 @@
     test("Conversion from string", function () {
         var template = [
             //@formatter:off
-                '<foo class="hello ">',
-                    '<bar class="   hi world    ">     ',
-                        'hello',
-                        '   {{xxx}} ',
-                    '</bar> ',
-                '</foo> '
-                //@formatter:on
+            '<foo class="hello ">',
+                '<bar class="   hi world    ">     ',
+                    'hello',
+                    '   {{xxx}} ',
+                '</bar> ',
+            '</foo> '
+            //@formatter:on
         ].join('').toMarkupTemplate();
 
         ok(template.isA(shoeshine.MarkupTemplate), "should return a MarkupTemplate instance");
 
         deepEqual(template.preprocessedTemplate.items, [
             "<foo class=\"hello \">",
-            "",
-            "<bar class=\"   hi world    \">     hello   {{xxx}}",
-            " ",
-            "</bar>",
-            " ",
+            "<bar class=\"   hi world    \">     hello   {{xxx}} ",
+            "</bar> ",
             "</foo> "
         ], "should set preprocessed template contents");
 
         deepEqual(template.placeholderLookup.items, {
             "hello"    : 0,
-            "undefined": 1,
-            "hi"       : 2,
-            "world"    : 2
+            "hi"       : 1,
+            "world"    : 1,
+            "undefined": 2
         }, "should set placeholderLookup contents");
     });
 
     test("Conversion from string to placeholder", function () {
         equal('foo'.toPlaceholder(), '{{foo}}', "should envelope placeholder in handlebars");
+    });
+
+    test("Appending containers", function () {
+        var markup = [
+                //@formatter:off
+                '<foo class="hello">',
+                    '<bar class="hi world">',
+                        'hello',
+                    '</bar>',
+                '</foo>'
+                //@formatter:on
+            ].join(''),
+            template = markup.toMarkupTemplate();
+
+        strictEqual(template.appendContainers({
+            hi   : "<baz />",
+            world: '<span>Hello!</span>'
+        }), template, "should be chainable");
+
+        deepEqual(template.preprocessedTemplate.items, [
+            "<foo class=\"hello\">",
+            "<bar class=\"hi world\">hello<baz /><span>Hello!</span>",
+            "</bar>",
+            "</foo>"
+        ], "should alter preprocessed buffer");
     });
 
     test("Filling containers", function () {
@@ -115,8 +124,18 @@
                 hi   : "<baz />",
                 world: '<span>Hello!</span>'
             }),
-            '<foo class="hello"><bar class="hi world">hello<baz /><span>Hello!</span></bar></foo>',
-            "should inject content into container as well as replace placeholder");
+            "<foo class=\"hello\">" +
+            "<bar class=\"hi world\">hello<baz /><span>Hello!</span>" +
+            "</bar>" +
+            "</foo>",
+            "should return filled & serialized template");
+
+        deepEqual(template.preprocessedTemplate.items, [
+            "<foo class=\"hello\">",
+            "<bar class=\"hi world\">hello",
+            "</bar>",
+            "</foo>"
+        ], "should leave template unaffected");
     });
 
     test("Filling empty template", function () {
@@ -129,5 +148,44 @@
             }),
             "",
             "should return empty string");
+    });
+
+    test("Cloning", function () {
+        var template = [
+                //@formatter:off
+                '<foo class="hello">',
+                    '<bar class="hi world">',
+                        'hello',
+                    '</bar>',
+                '</foo>'
+                //@formatter:on
+            ].join('').toMarkupTemplate(),
+            clone = template.clone();
+
+        ok(clone.instanceOf(shoeshine.MarkupTemplate), "should return MarkupTemplate instance");
+        notStrictEqual(clone.preprocessedTemplate.items, template.preprocessedTemplate.items,
+            "should create new preprocessedTemplate buffer");
+        notStrictEqual(clone.placeholderLookup.items, template.placeholderLookup.items,
+            "should create new placeholderLookup buffer");
+        deepEqual(clone.preprocessedTemplate.items, template.preprocessedTemplate.items,
+            "should copy preprocessedTemplate contents");
+        deepEqual(clone.placeholderLookup.items, template.placeholderLookup.items,
+            "should copy placeholderLookup contents");
+    });
+
+    test("Serialization", function () {
+        var markup = [
+                //@formatter:off
+                '<foo class="hello ">',
+                    '<bar class="   hi world    ">     ',
+                        'hello',
+                        '   {{xxx}} ',
+                    '</bar> ',
+                '</foo> '
+                //@formatter:on
+            ].join(''),
+            template = markup.toMarkupTemplate();
+
+        equal(template.toString(), markup, "should revert template to its string representation");
     });
 }());
