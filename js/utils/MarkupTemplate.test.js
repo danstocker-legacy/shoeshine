@@ -26,18 +26,13 @@
             ].join(''),
             template = shoeshine.MarkupTemplate.create(markup);
 
-//        console.log(template.templateString);
 //        console.log(JSON.stringify(template.preprocessedTemplate.items, null, 2));
 //        console.log(JSON.stringify(template.placeholderLookup.items, null, 2));
-
-        equal(template.templateString, markup, "should set template string");
 
         deepEqual(template.preprocessedTemplate.items, [
             "<foo class=\"hello \">",
             "",
-            "<bar class=\"   hi world    \">     hello   ",
-            "{{xxx}}",
-            "",
+            "<bar class=\"   hi world    \">     hello   {{xxx}}",
             " ",
             "</bar>",
             " ",
@@ -45,57 +40,62 @@
         ], "should set preprocessed template contents");
 
         deepEqual(template.placeholderLookup.items, {
-            "hello": 0,
-            "null" : 1,
-            "hi"   : 2,
-            "world": 2,
-            "xxx"  : 3
+            "hello"    : 0,
+            "undefined": 1,
+            "hi"       : 2,
+            "world"    : 2
         }, "should set placeholderLookup contents");
 
         strictEqual(shoeshine.MarkupTemplate.create(markup), template, "should be memoized");
     });
 
+    test("Instantiation with empty template", function () {
+        var template = shoeshine.MarkupTemplate.create('');
+
+//        console.log(JSON.stringify(template.preprocessedTemplate.items, null, 2));
+//        console.log(JSON.stringify(template.placeholderLookup.items, null, 2));
+
+        deepEqual(template.preprocessedTemplate.items, [''], "should set preprocessed template contents");
+
+        deepEqual(template.placeholderLookup.items, {
+            undefined: 0
+        }, "should set placeholderLookup contents");
+    });
+
     test("Conversion from string", function () {
-        var template = 'foo bar'.toMarkupTemplate();
+        var template = [
+            //@formatter:off
+                '<foo class="hello ">',
+                    '<bar class="   hi world    ">     ',
+                        'hello',
+                        '   {{xxx}} ',
+                    '</bar> ',
+                '</foo> '
+                //@formatter:on
+        ].join('').toMarkupTemplate();
 
         ok(template.isA(shoeshine.MarkupTemplate), "should return a MarkupTemplate instance");
-        equal(template.templateString, "foo bar", "should set template string");
+
+        deepEqual(template.preprocessedTemplate.items, [
+            "<foo class=\"hello \">",
+            "",
+            "<bar class=\"   hi world    \">     hello   {{xxx}}",
+            " ",
+            "</bar>",
+            " ",
+            "</foo> "
+        ], "should set preprocessed template contents");
+
+        deepEqual(template.placeholderLookup.items, {
+            "hello"    : 0,
+            "undefined": 1,
+            "hi"       : 2,
+            "world"    : 2
+        }, "should set placeholderLookup contents");
     });
 
     test("Conversion from string to placeholder", function () {
         equal('foo'.toPlaceholder(), '{{foo}}', "should envelope placeholder in handlebars");
-    });
-
-    test("Filling single placeholder", function () {
-        var template = "{{foo}} {{bar}}".toMarkupTemplate();
-        equal(template.fillPlaceholder('foo', "Hello"), "Hello {{bar}}", "should fill in specified placeholder only");
-    });
-
-    test("Filling multiple placeholders", function () {
-        var template = "{{foo}} {{bar}}".toMarkupTemplate();
-
-        equal(
-            template.fillPlaceholders({
-                foo: "Hello",
-                bar: "World"
-            }),
-            "Hello World",
-            "should fill in all provided placeholders");
-
-        equal(
-            template.fillPlaceholders({
-                foo: "Hello"
-            }),
-            "Hello {{bar}}",
-            "should preserve placeholders not specified");
-
-        equal(
-            template.fillPlaceholders({
-                foo: "Hello",
-                bar: {}
-            }),
-            "Hello [object Object]",
-            "should stringify object fill values");
     });
 
     test("Filling containers", function () {
@@ -104,7 +104,6 @@
                 '<foo class="hello">',
                     '<bar class="hi world">',
                         'hello',
-                        '{{xxx}}',
                     '</bar>',
                 '</foo>'
                 //@formatter:on
@@ -112,12 +111,11 @@
             template = markup.toMarkupTemplate();
 
         equal(
-            template.fillPlaceholders({
+            template.fillContainers({
                 hi   : "<baz />",
-                world: '<span>Hello!</span>',
-                xxx  : "World"
+                world: '<span>Hello!</span>'
             }),
-            '<foo class="hello"><bar class="hi world">hello<baz /><span>Hello!</span>World</bar></foo>',
+            '<foo class="hello"><bar class="hi world">hello<baz /><span>Hello!</span></bar></foo>',
             "should inject content into container as well as replace placeholder");
     });
 
@@ -125,17 +123,11 @@
         var template = ''.toMarkupTemplate();
 
         equal(
-            template.fillPlaceholders({
+            template.fillContainers({
                 foo: "Hello",
                 bar: "World"
             }),
             "",
             "should return empty string");
-    });
-
-
-    test("Clearing placeholders", function () {
-        var template = "{{foo}}baz{{bar}}".toMarkupTemplate();
-        equal(template.clearPlaceholders(), 'baz', "should remove all placeholders");
     });
 }());

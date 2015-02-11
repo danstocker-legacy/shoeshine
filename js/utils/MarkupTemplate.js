@@ -2,7 +2,7 @@
 troop.postpone(shoeshine, 'MarkupTemplate', function () {
     "use strict";
 
-    var base = shoeshine.Template,
+    var base = troop.Base,
         self = base.extend();
 
     /**
@@ -16,10 +16,10 @@ troop.postpone(shoeshine, 'MarkupTemplate', function () {
      */
 
     /**
-     * The MarkupTemplate class implements basic string templating. Converting any string containing placeholders
-     * to a MarkupTemplate instance allows those placeholders to be replaced via a simple API.
+     * Template class that implements a template markup, where containers are identified by their CSS classes.
+     * The template is filled in by specifying content for each container.
      * @class
-     * @extends shoeshine.Template
+     * @extends troop.Base
      */
     shoeshine.MarkupTemplate = self
         .setInstanceMapper(function (text) {
@@ -32,7 +32,7 @@ troop.postpone(shoeshine, 'MarkupTemplate', function () {
              * @type {RegExp}
              * @constant
              */
-            RE_TEMPLATE_PREPROCESSOR: /(\s*(?=<)|{{[\w-]+}})/,
+            RE_MARKUP_SPLITTER: /(\s*(?=<))/,
 
             /**
              * Splits a tag to extract class list.
@@ -48,15 +48,7 @@ troop.postpone(shoeshine, 'MarkupTemplate', function () {
              * @type {RegExp}
              * @constant
              */
-            RE_CLASS_FROM_CLASS_LIST: /[\w-]+/g,
-
-            /**
-             * Matches a placeholder.
-             * Extracted string will be found in result[1].
-             * @type {RegExp}
-             * @constant
-             */
-            RE_PLACEHOLDER_NAME_FROM_PLACEHOLDER: /^{{([\w-]+)}}$/
+            RE_CLASS_FROM_CLASS_LIST: /[\w-]+/g
         })
         .addPrivateMethods(/** @lends shoeshine.MarkupTemplate */{
             /**
@@ -79,24 +71,13 @@ troop.postpone(shoeshine, 'MarkupTemplate', function () {
             },
 
             /**
-             * @param {string} placeholder
-             * @returns {string}
-             * @private
-             */
-            _extractPlaceholderNameFromPlaceholder: function (placeholder) {
-                var placeholderNames = placeholder.match(this.RE_PLACEHOLDER_NAME_FROM_PLACEHOLDER);
-                return placeholderNames && placeholderNames[1];
-            },
-
-            /**
              * @param {string} templateFragment
              * @returns {string|string[]}
              * @private
              */
             _processTemplateFragment: function (templateFragment) {
                 var classList = this._extractClassListFromTag(templateFragment);
-                return classList && this._extractClassesFromClassList(classList) ||
-                       this._extractPlaceholderNameFromPlaceholder(templateFragment);
+                return classList && this._extractClassesFromClassList(classList);
             }
         })
         .addMethods(/** @lends shoeshine.MarkupTemplate# */{
@@ -105,13 +86,11 @@ troop.postpone(shoeshine, 'MarkupTemplate', function () {
              * @ignore
              */
             init: function (templateString) {
-                base.init.call(this, templateString);
-
                 /**
                  * Blown up string where the placeholders need to be substituted and joined to get the final text.
                  * @type {sntls.Collection}
                  */
-                this.preprocessedTemplate = this.templateString.split(this.RE_TEMPLATE_PREPROCESSOR)
+                this.preprocessedTemplate = templateString.split(this.RE_MARKUP_SPLITTER)
                     .toCollection();
 
                 /**
@@ -127,33 +106,25 @@ troop.postpone(shoeshine, 'MarkupTemplate', function () {
             },
 
             /**
-             * Fills multiple placeholders and returns the completed string.
-             * @param {object} fillValues Pairs of placeholder names & fill values.
+             * Fills containers in the template.
+             * @param {object} contents Pairs of container CSS classes & associated content.
              * @returns {string}
              */
-            fillPlaceholders: function (fillValues) {
+            fillContainers: function (contents) {
                 var preprocessedTemplate = this.preprocessedTemplate.items,
-                    placeholderLookup = this.placeholderLookup.items,
+                    containerLookup = this.placeholderLookup.items,
                     result = preprocessedTemplate.concat(),
-                    placeholderNames = Object.keys(fillValues),
-                    i, placeholderName, targetIndex, placeholder;
+                    containerNames = Object.keys(contents),
+                    i, containerName, targetIndex;
 
-                for (i = 0; i < placeholderNames.length; i++) {
+                for (i = 0; i < containerNames.length; i++) {
                     // identifying placeholder in template
-                    placeholderName = placeholderNames[i];
-                    targetIndex = placeholderLookup[placeholderName];
+                    containerName = containerNames[i];
+                    targetIndex = containerLookup[containerName];
 
                     if (targetIndex >= 0) {
                         // placeholder is found in template
-                        placeholder = preprocessedTemplate[targetIndex];
-
-                        if (placeholder[0] === '{') {
-                            // placeholder replacement
-                            result[targetIndex] = fillValues[placeholderName];
-                        } else {
-                            // container addition
-                            result[targetIndex] += fillValues[placeholderName];
-                        }
+                        result[targetIndex] += contents[containerName];
                     }
                 }
 
