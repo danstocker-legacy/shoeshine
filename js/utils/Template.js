@@ -18,6 +18,7 @@ troop.postpone(shoeshine, 'Template', function () {
     /**
      * The Template class implements basic string templating. Converting any string containing placeholders
      * to a Template instance allows those placeholders to be replaced via a simple API.
+     * TODO: Rename to HandlebarsTemplate.
      * @class
      * @extends troop.Base
      */
