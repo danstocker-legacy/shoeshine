@@ -1,31 +1,31 @@
 /*global dessert, troop, sntls, shoeshine */
-troop.postpone(shoeshine, 'Template', function () {
+troop.postpone(shoeshine, 'MarkupTemplate', function () {
     "use strict";
 
     var base = troop.Base,
         self = base.extend();
 
     /**
-     * Creates a Template instance.
-     * Template instances may also be created via conversion from string.
-     * @name shoeshine.Template.create
+     * Creates a MarkupTemplate instance.
+     * MarkupTemplate instances may also be created via conversion from string.
+     * @name shoeshine.MarkupTemplate.create
      * @function
-     * @param {string} text Template string.
-     * @returns {shoeshine.Template}
-     * @see String#toTemplate
+     * @param {string} text MarkupTemplate string.
+     * @returns {shoeshine.MarkupTemplate}
+     * @see String#toMarkupTemplate
      */
 
     /**
-     * The Template class implements basic string templating. Converting any string containing placeholders
-     * to a Template instance allows those placeholders to be replaced via a simple API.
+     * The MarkupTemplate class implements basic string templating. Converting any string containing placeholders
+     * to a MarkupTemplate instance allows those placeholders to be replaced via a simple API.
      * @class
      * @extends troop.Base
      */
-    shoeshine.Template = self
+    shoeshine.MarkupTemplate = self
         .setInstanceMapper(function (text) {
             return text;
         })
-        .addConstants(/** @lends shoeshine.Template */{
+        .addConstants(/** @lends shoeshine.MarkupTemplate */{
             /**
              * Used for replacing placeholders in the template.
              * @type {RegExp}
@@ -65,7 +65,7 @@ troop.postpone(shoeshine, 'Template', function () {
              */
             RE_PLACEHOLDER_NAME_FROM_PLACEHOLDER: /^{{([\w-]+)}}$/
         })
-        .addPrivateMethods(/** @lends shoeshine.Template */{
+        .addPrivateMethods(/** @lends shoeshine.MarkupTemplate */{
             /**
              * @param {string} tag
              * @returns {string}
@@ -106,7 +106,7 @@ troop.postpone(shoeshine, 'Template', function () {
                        this._extractPlaceholderNameFromPlaceholder(templateFragment);
             }
         })
-        .addMethods(/** @lends shoeshine.Template# */{
+        .addMethods(/** @lends shoeshine.MarkupTemplate# */{
             /**
              * @param {string} templateString
              * @ignore
@@ -200,11 +200,11 @@ troop.postpone(shoeshine, 'Template', function () {
         String.prototype,
         /** @lends String# */{
             /**
-             * Converts `String` to `Template` instance.
-             * @returns {shoeshine.Template}
+             * Converts `String` to `MarkupTemplate` instance.
+             * @returns {shoeshine.MarkupTemplate}
              */
-            toTemplate: function () {
-                return shoeshine.Template.create(this);
+            toMarkupTemplate: function () {
+                return shoeshine.MarkupTemplate.create(this);
             },
 
             /**

@@ -6,7 +6,7 @@ module.exports = function (grunt) {
         files: [
             'js/namespace.js',
             'js/utils/WidgetUtils.js',
-            'js/utils/Template.js',
+            'js/utils/MarkupTemplate.js',
             'js/utils/CssClasses.js',
             'js/utils/InlineStyles.js',
             'js/utils/HtmlAttributes.js',

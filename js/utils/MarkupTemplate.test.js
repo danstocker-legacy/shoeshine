@@ -3,13 +3,13 @@
 (function () {
     "use strict";
 
-    module("Template", {
+    module("MarkupTemplate", {
         setup: function () {
-            shoeshine.Template.clearInstanceRegistry();
+            shoeshine.MarkupTemplate.clearInstanceRegistry();
         },
 
         teardown: function () {
-            shoeshine.Template.clearInstanceRegistry();
+            shoeshine.MarkupTemplate.clearInstanceRegistry();
         }
     });
 
@@ -24,7 +24,7 @@
                 '</foo> '
                 //@formatter:on
             ].join(''),
-            template = shoeshine.Template.create(markup);
+            template = shoeshine.MarkupTemplate.create(markup);
 
 //        console.log(template.templateString);
 //        console.log(JSON.stringify(template.preprocessedTemplate.items, null, 2));
@@ -52,13 +52,13 @@
             "xxx"  : 3
         }, "should set placeholderLookup contents");
 
-        strictEqual(shoeshine.Template.create(markup), template, "should be memoized");
+        strictEqual(shoeshine.MarkupTemplate.create(markup), template, "should be memoized");
     });
 
     test("Conversion from string", function () {
-        var template = 'foo bar'.toTemplate();
+        var template = 'foo bar'.toMarkupTemplate();
 
-        ok(template.isA(shoeshine.Template), "should return a Template instance");
+        ok(template.isA(shoeshine.MarkupTemplate), "should return a MarkupTemplate instance");
         equal(template.templateString, "foo bar", "should set template string");
     });
 
@@ -67,12 +67,12 @@
     });
 
     test("Filling single placeholder", function () {
-        var template = "{{foo}} {{bar}}".toTemplate();
+        var template = "{{foo}} {{bar}}".toMarkupTemplate();
         equal(template.fillPlaceholder('foo', "Hello"), "Hello {{bar}}", "should fill in specified placeholder only");
     });
 
     test("Filling multiple placeholders", function () {
-        var template = "{{foo}} {{bar}}".toTemplate();
+        var template = "{{foo}} {{bar}}".toMarkupTemplate();
 
         equal(
             template.fillPlaceholders({
@@ -109,7 +109,7 @@
                 '</foo>'
                 //@formatter:on
             ].join(''),
-            template = markup.toTemplate();
+            template = markup.toMarkupTemplate();
 
         equal(
             template.fillPlaceholders({
@@ -122,7 +122,7 @@
     });
 
     test("Filling empty template", function () {
-        var template = ''.toTemplate();
+        var template = ''.toMarkupTemplate();
 
         equal(
             template.fillPlaceholders({
@@ -135,7 +135,7 @@
 
 
     test("Clearing placeholders", function () {
-        var template = "{{foo}}baz{{bar}}".toTemplate();
+        var template = "{{foo}}baz{{bar}}".toMarkupTemplate();
         equal(template.clearPlaceholders(), 'baz', "should remove all placeholders");
     });
 }());
