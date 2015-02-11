@@ -2,7 +2,7 @@
 troop.postpone(shoeshine, 'MarkupTemplate', function () {
     "use strict";
 
-    var base = troop.Base,
+    var base = shoeshine.Template,
         self = base.extend();
 
     /**
@@ -19,20 +19,13 @@ troop.postpone(shoeshine, 'MarkupTemplate', function () {
      * The MarkupTemplate class implements basic string templating. Converting any string containing placeholders
      * to a MarkupTemplate instance allows those placeholders to be replaced via a simple API.
      * @class
-     * @extends troop.Base
+     * @extends shoeshine.Template
      */
     shoeshine.MarkupTemplate = self
         .setInstanceMapper(function (text) {
             return text;
         })
         .addConstants(/** @lends shoeshine.MarkupTemplate */{
-            /**
-             * Used for replacing placeholders in the template.
-             * @type {RegExp}
-             * @constant
-             */
-            RE_TEMPLATE_PLACEHOLDER: /{{[\w-]+}}/g,
-
             /**
              * Splits along template placeholders and tags.
              * Leaves an empty slot after each tag and placeholder in the resulting array.
@@ -112,11 +105,7 @@ troop.postpone(shoeshine, 'MarkupTemplate', function () {
              * @ignore
              */
             init: function (templateString) {
-                /**
-                 * Original template string.
-                 * @type {string}
-                 */
-                this.templateString = templateString;
+                base.init.call(this, templateString);
 
                 /**
                  * Blown up string where the placeholders need to be substituted and joined to get the final text.
@@ -135,18 +124,6 @@ troop.postpone(shoeshine, 'MarkupTemplate', function () {
                     .reverse()
                     .toCollection()
                     .passEachItemTo(parseInt, this, 0, 10);
-            },
-
-            /**
-             * Fills single placeholder in the template and returns the completed string.
-             * @param {string} placeholderName
-             * @param {string} fillValue
-             * @returns {string}
-             */
-            fillPlaceholder: function (placeholderName, fillValue) {
-                var fillValues = {};
-                fillValues[placeholderName] = fillValue;
-                return this.fillPlaceholders(fillValues);
             },
 
             /**
@@ -181,14 +158,6 @@ troop.postpone(shoeshine, 'MarkupTemplate', function () {
                 }
 
                 return result.join('');
-            },
-
-            /**
-             * Clears placeholders by filling in all placeholders in the template with empty strings.
-             * @returns {string}
-             */
-            clearPlaceholders: function () {
-                return this.templateString.replace(this.RE_TEMPLATE_PLACEHOLDER, '');
             }
         });
 });
@@ -205,14 +174,6 @@ troop.postpone(shoeshine, 'MarkupTemplate', function () {
              */
             toMarkupTemplate: function () {
                 return shoeshine.MarkupTemplate.create(this);
-            },
-
-            /**
-             * Converts string to placeholder string by wrapping it in double handlebars.
-             * @returns {string}
-             */
-            toPlaceholder: function () {
-                return '{{' + this + '}}';
             }
         },
         false, false, false
