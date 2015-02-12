@@ -105,6 +105,7 @@ troop.postpone(shoeshine, 'MarkupTemplate', function () {
             /**
              * Appends containers with specified content.
              * Do not call this on the original template. Clone first.
+             * TODO: Rename to .appendContent
              * @param {object} contents Pairs of container CSS classes & associated content.
              * @returns {shoeshine.MarkupTemplate}
              */
@@ -130,6 +131,7 @@ troop.postpone(shoeshine, 'MarkupTemplate', function () {
 
             /**
              * Fills containers in the template.
+             * TODO: Rename to .setContent
              * @param {object} contents Pairs of container CSS classes & associated content.
              * @returns {string}
              */
