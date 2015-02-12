@@ -16,7 +16,7 @@ troop.postpone(shoeshine, 'MarkupTemplate', function () {
      */
 
     /**
-     * Template class that implements a template markup, where containers are identified by their CSS classes.
+     * Implements a template markup, where containers are identified by their CSS classes.
      * The template is filled in by specifying content for each container.
      * @class
      * @extends troop.Base
@@ -103,13 +103,12 @@ troop.postpone(shoeshine, 'MarkupTemplate', function () {
             },
 
             /**
-             * Appends containers with specified content.
+             * Appends template with specified content.
              * Do not call this on the original template. Clone first.
-             * TODO: Rename to .appendContent
              * @param {object} contents Pairs of container CSS classes & associated content.
              * @returns {shoeshine.MarkupTemplate}
              */
-            appendContainers: function (contents) {
+            appendContent: function (contents) {
                 var preprocessedTemplate = this.preprocessedTemplate.items,
                     containerLookup = this.containerLookup.items,
                     containerNames = Object.keys(contents),
@@ -130,14 +129,13 @@ troop.postpone(shoeshine, 'MarkupTemplate', function () {
             },
 
             /**
-             * Fills containers in the template.
-             * TODO: Rename to .setContent
+             * Sets template content and returns the resulting markup.
              * @param {object} contents Pairs of container CSS classes & associated content.
              * @returns {string}
              */
-            fillContainers: function (contents) {
+            setContent: function (contents) {
                 return this.clone()
-                    .appendContainers(contents)
+                    .appendContent(contents)
                     .toString();
             },
 

@@ -463,7 +463,7 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
              */
             contentMarkupAsTemplate: function () {
                 return shoeshine.Renderable.contentMarkupAsTemplate.call(this)
-                    .appendContainers(this._getChildrenGroupedByContainer().items);
+                    .appendContent(this._getChildrenGroupedByContainer().items);
             },
 
             /**

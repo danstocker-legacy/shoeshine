@@ -636,7 +636,7 @@
         });
 
         shoeshine.MarkupTemplate.addMocks({
-            appendContainers: function (contents) {
+            appendContent: function (contents) {
                 deepEqual(contents, {
                     foo: child
                 }, "should append content to template");
