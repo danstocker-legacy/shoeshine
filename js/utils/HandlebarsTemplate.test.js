@@ -3,7 +3,7 @@
 (function () {
     "use strict";
 
-    module("Template");
+    module("HandlebarsTemplate");
 
     test("Instantiation", function () {
         var markup = [
@@ -16,15 +16,15 @@
                 '</foo> '
                 //@formatter:on
             ].join(''),
-            template = shoeshine.Template.create(markup);
+            template = shoeshine.HandlebarsTemplate.create(markup);
 
         equal(template.templateString, markup, "should set template string");
     });
 
     test("Conversion from string", function () {
-        var template = 'foo bar'.toTemplate();
+        var template = 'foo bar'.toHandlebarsTemplate();
 
-        ok(template.isA(shoeshine.Template), "should return a Template instance");
+        ok(template.isA(shoeshine.HandlebarsTemplate), "should return a HandlebarsTemplate instance");
         equal(template.templateString, "foo bar", "should set template string");
     });
 
@@ -33,12 +33,12 @@
     });
 
     test("Filling single placeholder", function () {
-        var template = "{{foo}} {{bar}}".toTemplate();
+        var template = "{{foo}} {{bar}}".toHandlebarsTemplate();
         equal(template.fillPlaceholder('foo', "Hello"), "Hello {{bar}}", "should fill in specified placeholder only");
     });
 
     test("Filling multiple placeholders", function () {
-        var template = "{{foo}} {{bar}}".toTemplate();
+        var template = "{{foo}} {{bar}}".toHandlebarsTemplate();
 
         equal(
             template.fillPlaceholders({
@@ -65,7 +65,7 @@
     });
 
     test("Filling empty template", function () {
-        var template = ''.toTemplate();
+        var template = ''.toHandlebarsTemplate();
 
         equal(
             template.fillPlaceholders({
@@ -77,7 +77,7 @@
     });
 
     test("Clearing placeholders", function () {
-        var template = "{{foo}}baz{{bar}}".toTemplate();
+        var template = "{{foo}}baz{{bar}}".toHandlebarsTemplate();
         equal(template.clearPlaceholders(), 'baz', "should remove all placeholders");
     });
 }());

@@ -1,29 +1,28 @@
 /*global dessert, troop, sntls, shoeshine */
-troop.postpone(shoeshine, 'Template', function () {
+troop.postpone(shoeshine, 'HandlebarsTemplate', function () {
     "use strict";
 
     var base = troop.Base,
         self = base.extend();
 
     /**
-     * Creates a Template instance.
-     * Template instances may also be created via conversion from string.
-     * @name shoeshine.Template.create
+     * Creates a HandlebarsTemplate instance.
+     * HandlebarsTemplate instances may also be created via conversion from string.
+     * @name shoeshine.HandlebarsTemplate.create
      * @function
-     * @param {string} text Template string.
-     * @returns {shoeshine.Template}
-     * @see String#toTemplate
+     * @param {string} text HandlebarsTemplate string.
+     * @returns {shoeshine.HandlebarsTemplate}
+     * @see String#toHandlebarsTemplate
      */
 
     /**
-     * The Template class implements basic string templating. Converting any string containing placeholders
-     * to a Template instance allows those placeholders to be replaced via a simple API.
-     * TODO: Rename to HandlebarsTemplate.
+     * Implements basic, placeholder-based templating. Converting any string containing placeholders
+     * to a HandlebarsTemplate instance allows those placeholders to be replaced via a simple API.
      * @class
      * @extends troop.Base
      */
-    shoeshine.Template = self
-        .addConstants(/** @lends shoeshine.Template */{
+    shoeshine.HandlebarsTemplate = self
+        .addConstants(/** @lends shoeshine.HandlebarsTemplate */{
             /**
              * Used for replacing placeholders in the template.
              * @type {RegExp}
@@ -31,7 +30,7 @@ troop.postpone(shoeshine, 'Template', function () {
              */
             RE_TEMPLATE_PLACEHOLDER: /{{([\w-]+)}}/g
         })
-        .addMethods(/** @lends shoeshine.Template# */{
+        .addMethods(/** @lends shoeshine.HandlebarsTemplate# */{
             /**
              * @param {string} templateString
              * @ignore
@@ -88,11 +87,11 @@ troop.postpone(shoeshine, 'Template', function () {
         String.prototype,
         /** @lends String# */{
             /**
-             * Converts `String` to `Template` instance.
-             * @returns {shoeshine.Template}
+             * Converts `String` to `HandlebarsTemplate` instance.
+             * @returns {shoeshine.HandlebarsTemplate}
              */
-            toTemplate: function () {
-                return shoeshine.Template.create(this);
+            toHandlebarsTemplate: function () {
+                return shoeshine.HandlebarsTemplate.create(this);
             },
 
             /**

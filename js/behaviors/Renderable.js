@@ -264,7 +264,7 @@ troop.postpone(shoeshine, 'Renderable', function () {
                 var element = this._createElementProxy(this.tagName),
                     attributeSetterProxy = this._attributeSetterProxy,
                     innerHtml = this.contentMarkup()
-                        .toTemplate()
+                        .toHandlebarsTemplate()
                         .clearPlaceholders();
 
                 // adding attributes to element
@@ -345,7 +345,7 @@ troop.postpone(shoeshine, 'Renderable', function () {
                 if (element) {
                     // generating current markup
                     innerHtml = this.contentMarkup()
-                        .toTemplate()
+                        .toHandlebarsTemplate()
                         .clearPlaceholders();
 
                     // adding contents to element
@@ -383,7 +383,7 @@ troop.postpone(shoeshine, 'Renderable', function () {
                 return [
                     '<' + tagName + ' ' + this.htmlAttributes + '>',
                     this.contentMarkup()
-                        .toTemplate()
+                        .toHandlebarsTemplate()
                         .clearPlaceholders(),
                     '</' + tagName + '>'
                 ].join('');
