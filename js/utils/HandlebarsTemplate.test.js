@@ -32,16 +32,11 @@
         equal('foo'.toPlaceholder(), '{{foo}}', "should envelope placeholder in handlebars");
     });
 
-    test("Filling single placeholder", function () {
-        var template = "{{foo}} {{bar}}".toHandlebarsTemplate();
-        equal(template.fillPlaceholder('foo', "Hello"), "Hello {{bar}}", "should fill in specified placeholder only");
-    });
-
     test("Filling multiple placeholders", function () {
         var template = "{{foo}} {{bar}}".toHandlebarsTemplate();
 
         equal(
-            template.fillPlaceholders({
+            template.setContent({
                 foo: "Hello",
                 bar: "World"
             }),
@@ -49,14 +44,14 @@
             "should fill in all provided placeholders");
 
         equal(
-            template.fillPlaceholders({
+            template.setContent({
                 foo: "Hello"
             }),
             "Hello {{bar}}",
             "should preserve placeholders not specified");
 
         equal(
-            template.fillPlaceholders({
+            template.setContent({
                 foo: "Hello",
                 bar: {}
             }),
@@ -68,7 +63,7 @@
         var template = ''.toHandlebarsTemplate();
 
         equal(
-            template.fillPlaceholders({
+            template.setContent({
                 foo: "Hello",
                 bar: "World"
             }),

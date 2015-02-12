@@ -44,27 +44,15 @@ troop.postpone(shoeshine, 'HandlebarsTemplate', function () {
             },
 
             /**
-             * Fills single placeholder in the template and returns the completed string.
-             * @param {string} placeholderName
-             * @param {string} fillValue
+             * Fills multiple placeholders and returns the resulting string.
+             * @param {object} placeholderValuePairs Pairs of placeholder names & content values.
              * @returns {string}
              */
-            fillPlaceholder: function (placeholderName, fillValue) {
-                var fillValues = {};
-                fillValues[placeholderName] = fillValue;
-                return this.fillPlaceholders(fillValues);
-            },
-
-            /**
-             * Fills multiple placeholders and returns the completed string.
-             * @param {object} fillValues Pairs of placeholder names & fill values.
-             * @returns {string}
-             */
-            fillPlaceholders: function (fillValues) {
+            setContent: function (placeholderValuePairs) {
                 return this.templateString.replace(this.RE_TEMPLATE_PLACEHOLDER, function (hit, placeholderName) {
-                    return fillValues.hasOwnProperty(placeholderName) ?
+                    return placeholderValuePairs.hasOwnProperty(placeholderName) ?
                         // filling in provided string (or object w/ .toString())
-                        fillValues[placeholderName] :
+                        placeholderValuePairs[placeholderName] :
                         // re-inserting placeholder
                         placeholderName.toPlaceholder();
                 });
