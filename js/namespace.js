@@ -14,7 +14,7 @@ var dessert = dessert || require('dessert');
 
 /**
  * @namespace
- * @see https://github.com/production-minds/troop
+ * @see https://github.com/danstocker/troop
  */
 var troop = troop || require('troop');
 
