@@ -49,7 +49,9 @@
 
 <p><a href="http://danstocker.github.io/shoeshine">Reference</a></p>
 
-<p>Shoeshine serves as the basis of building a modular, and event-driven view-controller layer for a front end application that is based on <a href="https://github.com/production-minds/troop">troop</a> for OOP, <a href="https://github.com/danstocker/sntls">sntls</a> for data structures, and <a href="https://github.com/danstocker/evan">evan</a> for universal events.</p>
+<p><a href="https://www.npmjs.com/package/shoeshine">Npm package</a></p>
+
+<p>Shoeshine serves as the basis of building a modular, and event-driven view-controller layer for front end applications based on <a href="https://github.com/danstocker/troop">troop</a> for OOP, <a href="https://github.com/danstocker/sntls">sntls</a> for data structures, and <a href="https://github.com/danstocker/evan">evan</a> for universal events.</p>
 
 <p>For a set of common widgets (labels, buttons, dropdowns, forms) based on shoeshine, look into <a href="https://github.com/danstocker/candystore">candystore</a>.</p>
 
@@ -60,28 +62,31 @@
 <p>In order to implement your own widget classes, subclass <code>shoeshine.Widget</code>. Make sure to supply a class name to <code>.extend()</code>, as <code>Widget</code> overrides <code>troop.Base.extend()</code> to make it more widget-specific. The class name will end up on the new widget class as static property (<code>.className</code>), as well as a CSS class name on the markup generated for its instances.</p>
 
 <pre><code>var MyWidget = shoeshine.Widget.extend(&#39;MyWidget&#39;)
+    .addPublic({
+        contentTemplate: &#39;&lt;div class=&quot;child-container&quot;&gt;&lt;/div&gt;&#39;.toMarkupTemplate()
+    })
     .addMethods({
         init: function () {
-            // initialize instance
+            // initialize instance properties, add non-volatile child widgets
+            // eg. this one will end up in the specified container in the markup
+            OtherWidget.create()
+                .setContainerCssClass(&#39;child-container&#39;)
+                .addToParent(this);
         },
 
         afterAdd: function () {
             base.afterAdd.call(this);
-            // widget added to widget hierarchy
+            // (re-)initialize state, subscribe to events
         },
 
         afterRemove: function () {
             base.afterRemove.call(this);
-            // widget removed from widget hierarchy
+            // clean up state, unsubscribe from events
         },
 
         afterRender: function () {
             base.afterRender.call(this);
-            // widget rendered, its DOM is ready for use
-        },
-
-        contentMarkup: function () {
-            return &#39;This is the inner markup if the widget&#39;;
+            // start animations, subscribe to DOM events
         }
     });</code></pre>
 
@@ -91,7 +96,11 @@
 
 <p>or,</p>
 
-<pre><code>MyWidget.create().addToParent(parentWidget);</code></pre></article>
+<pre><code>MyWidget.create().addToParent(parentWidget);</code></pre>
+
+<h2>Sample code</h2>
+
+<p>To see shoeshine in action, check out <a href="https://github.com/danstocker/hills">Hills</a>.</p></article>
     </section>
 
 
@@ -102,13 +111,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Array.html">Array</a></li><li><a href="dessert.html">dessert</a></li><li><a href="Number.html">Number</a></li><li><a href="shoeshine.CssClasses.html">CssClasses</a></li><li><a href="shoeshine.HtmlAttributes.html">HtmlAttributes</a></li><li><a href="shoeshine.InlineStyles.html">InlineStyles</a></li><li><a href="shoeshine.JqueryWidget.html">JqueryWidget</a></li><li><a href="shoeshine.Progenitor.html">Progenitor</a></li><li><a href="shoeshine.Renderable.html">Renderable</a></li><li><a href="shoeshine.Template.html">Template</a></li><li><a href="shoeshine.Widget.html">Widget</a></li><li><a href="shoeshine.WidgetCollection.html">WidgetCollection</a></li><li><a href="shoeshine.WidgetEvent.html">WidgetEvent</a></li><li><a href="shoeshine.WidgetUtils.html">WidgetUtils</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="String.html">String</a></li></ul><h3>Namespaces</h3><ul><li><a href="evan.html">evan</a></li><li><a href="shoeshine.html">shoeshine</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul><h3>Global</h3><ul><li><a href="global.html#document">document</a></li><li><a href="global.html#Element">Element</a></li><li><a href="global.html#Event">Event</a></li><li><a href="global.html#jQuery">jQuery</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Array.html">Array</a></li><li><a href="dessert.html">dessert</a></li><li><a href="Number.html">Number</a></li><li><a href="shoeshine.CssClasses.html">CssClasses</a></li><li><a href="shoeshine.HandlebarsTemplate.html">HandlebarsTemplate</a></li><li><a href="shoeshine.HtmlAttributes.html">HtmlAttributes</a></li><li><a href="shoeshine.InlineStyles.html">InlineStyles</a></li><li><a href="shoeshine.JqueryWidget.html">JqueryWidget</a></li><li><a href="shoeshine.MarkupTemplate.html">MarkupTemplate</a></li><li><a href="shoeshine.Progenitor.html">Progenitor</a></li><li><a href="shoeshine.Renderable.html">Renderable</a></li><li><a href="shoeshine.Widget.html">Widget</a></li><li><a href="shoeshine.WidgetCollection.html">WidgetCollection</a></li><li><a href="shoeshine.WidgetEvent.html">WidgetEvent</a></li><li><a href="shoeshine.WidgetUtils.html">WidgetUtils</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="String.html">String</a></li></ul><h3>Namespaces</h3><ul><li><a href="evan.html">evan</a></li><li><a href="shoeshine.html">shoeshine</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul><h3>Global</h3><ul><li><a href="global.html#document">document</a></li><li><a href="global.html#Element">Element</a></li><li><a href="global.html#Event">Event</a></li><li><a href="global.html#jQuery">jQuery</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Fri Feb 06 2015 23:20:12 GMT-0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat Feb 14 2015 16:02:01 GMT-0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>

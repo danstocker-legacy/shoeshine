@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: utils/WidgetUtils.js</title>
+    <title>JSDoc: Source: utils/HandlebarsTemplate.js</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Source: utils/WidgetUtils.js</h1>
+    <h1 class="page-title">Source: utils/HandlebarsTemplate.js</h1>
     
     
 
@@ -26,76 +26,71 @@
     <section>
         <article>
             <pre class="prettyprint source"><code>/*global dessert, troop, sntls, shoeshine */
-troop.postpone(shoeshine, 'WidgetUtils', function () {
+troop.postpone(shoeshine, 'HandlebarsTemplate', function () {
     "use strict";
 
     var base = troop.Base,
-        self = base.extend(),
-        slice = Array.prototype.slice;
+        self = base.extend();
 
     /**
-     * The WidgetUtils class is a static class containing general purpose utilities used by widgets.
+     * Creates a HandlebarsTemplate instance.
+     * HandlebarsTemplate instances may also be created via conversion from string.
+     * @name shoeshine.HandlebarsTemplate.create
+     * @function
+     * @param {string} text HandlebarsTemplate string.
+     * @returns {shoeshine.HandlebarsTemplate}
+     * @see String#toHandlebarsTemplate
+     */
+
+    /**
+     * Implements basic, placeholder-based templating. Converting any string containing placeholders
+     * to a HandlebarsTemplate instance allows those placeholders to be replaced via a simple API.
      * @class
      * @extends troop.Base
      */
-    shoeshine.WidgetUtils = self
-        .addConstants(/** @lends shoeshine.WidgetUtils */{
+    shoeshine.HandlebarsTemplate = self
+        .addConstants(/** @lends shoeshine.HandlebarsTemplate */{
             /**
+             * Used for replacing placeholders in the template.
              * @type {RegExp}
              * @constant
              */
-            RE_ESCAPE_CHARS: /[&&lt;>"'\n]|{{|}}/g,
+            RE_TEMPLATE_PLACEHOLDER: /{{([\w-]+)}}/g
+        })
+        .addMethods(/** @lends shoeshine.HandlebarsTemplate# */{
+            /**
+             * @param {string} templateString
+             * @ignore
+             */
+            init: function (templateString) {
+                /**
+                 * Original template string.
+                 * @type {string}
+                 */
+                this.templateString = templateString;
+            },
 
             /**
-             * @type {object}
-             * @constant
-             */
-            ENTITY_MAP: {
-                '&' : '&amp;',
-                '&lt;' : '&lt;',
-                '>' : '&gt;',
-                '"' : '&quot;',
-                '\'': '&#39;',
-                '{{': '&#123;&#123;',
-                '}}': '&#125;&#125;'
-            }
-        })
-        .addMethods(/** @lends shoeshine.WidgetUtils */{
-            /**
-             * Replace callback function for escaping HTML entities.
-             * @param {string} hit
+             * Fills multiple placeholders and returns the resulting string.
+             * @param {object} placeholderValuePairs Pairs of placeholder names & content values.
              * @returns {string}
              */
-            replaceHtmlEntity: function (hit) {
-                return self.ENTITY_MAP[hit] || hit;
+            setContent: function (placeholderValuePairs) {
+                return this.templateString.replace(this.RE_TEMPLATE_PLACEHOLDER, function (hit, placeholderName) {
+                    return placeholderValuePairs.hasOwnProperty(placeholderName) ?
+                        // filling in provided string (or object w/ .toString())
+                        placeholderValuePairs[placeholderName] :
+                        // re-inserting placeholder
+                        placeholderName.toPlaceholder();
+                });
             },
 
             /**
-             * Escapes HTML entities, quotes, and placeholder markers in the specified text.
-             * @param {string} text
-             * @return {string} Escaped string.
+             * Clears placeholders by filling in all placeholders in the template with empty strings.
+             * @returns {string}
              */
-            htmlEscape: function (text) {
-                return text.replace(this.RE_ESCAPE_CHARS, this.replaceHtmlEntity);
-            },
-
-            /**
-             * Retrieves the closest parent node of the specified element that has the specified CSS class.
-             * @param {HTMLElement} element
-             * @param {string} className
-             * @returns {HTMLElement}
-             */
-            getParentNodeByClassName: function (element, className) {
-                var classList;
-                while (element && (element.classList || element.className)) {
-                    classList = element.classList && slice.call(element.classList) ||
-                                element.className.split(/\s+/);
-                    if (classList && classList.indexOf(className) > -1) {
-                        return element;
-                    }
-                    element = element.parentNode;
-                }
-                return undefined;
+            clearPlaceholders: function () {
+                return this.templateString.replace(this.RE_TEMPLATE_PLACEHOLDER, '');
             }
         });
 });
@@ -107,11 +102,19 @@ troop.postpone(shoeshine, 'WidgetUtils', function () {
         String.prototype,
         /** @lends String# */{
             /**
-             * Converts string to HTML escaped string.
+             * Converts `String` to `HandlebarsTemplate` instance.
+             * @returns {shoeshine.HandlebarsTemplate}
+             */
+            toHandlebarsTemplate: function () {
+                return shoeshine.HandlebarsTemplate.create(this);
+            },
+
+            /**
+             * Converts string to placeholder string by wrapping it in double handlebars.
              * @returns {string}
              */
-            toHtml: function () {
-                return shoeshine.WidgetUtils.htmlEscape(this);
+            toPlaceholder: function () {
+                return '{{' + this + '}}';
             }
         },
         false, false, false

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Template</title>
+    <title>JSDoc: Class: HandlebarsTemplate</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Class: Template</h1>
+    <h1 class="page-title">Class: HandlebarsTemplate</h1>
     
     
 
@@ -29,7 +29,7 @@
     <h2>
         <span class="ancestors"><a href="shoeshine.html">shoeshine</a>.</span>
     
-    Template
+    HandlebarsTemplate
     </h2>
     
 </header>  
@@ -40,8 +40,8 @@
     
     
     <div class="description">
-        The Template class implements basic string templating. Converting any string containing placeholders
-to a Template instance allows those placeholders to be replaced via a simple API.
+        Implements basic, placeholder-based templating. Converting any string containing placeholders
+to a HandlebarsTemplate instance allows those placeholders to be replaced via a simple API.
     </div>
     
 
@@ -74,7 +74,7 @@ to a Template instance allows those placeholders to be replaced via a simple API
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Template.js.html">utils/Template.js</a>, line 24
+        <a href="HandlebarsTemplate.js.html">utils/HandlebarsTemplate.js</a>, line 24
     </li></ul></dd>
     
     
@@ -120,62 +120,14 @@ to a Template instance allows those placeholders to be replaced via a simple API
         <dl>
             
 <dt>
-    <h4 class="name" id="RE_TEMPLATE_PLACEHOLDER"><span class="type-signature">&lt;static> </span>RE_TEMPLATE_PLACEHOLDER<span class="type-signature"> :RegExp</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Template.js.html">utils/Template.js</a>, line 27
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="templateString"><span class="type-signature"></span>templateString<span class="type-signature"> :string</span></h4>
+    <h4 class="name" id="RE_TEMPLATE_PLACEHOLDER"><span class="type-signature">&lt;static, constant> </span>RE_TEMPLATE_PLACEHOLDER<span class="type-signature"> :RegExp</span></h4>
     
     
 </dt>
 <dd>
     
     <div class="description">
-        Template string.
+        Used for replacing placeholders in the template.
     </div>
     
     
@@ -202,7 +154,59 @@ to a Template instance allows those placeholders to be replaced via a simple API
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Template.js.html">utils/Template.js</a>, line 39
+        <a href="HandlebarsTemplate.js.html">utils/HandlebarsTemplate.js</a>, line 31
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="templateString"><span class="type-signature"></span>templateString<span class="type-signature"> :string</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        Original template string.
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="HandlebarsTemplate.js.html">utils/HandlebarsTemplate.js</a>, line 43
     </li></ul></dd>
     
     
@@ -226,7 +230,7 @@ to a Template instance allows those placeholders to be replaced via a simple API
         <dl>
             
 <dt>
-    <h4 class="name" id="create"><span class="type-signature">&lt;static> </span>create<span class="signature">(text)</span><span class="type-signature"> &rarr; {<a href="shoeshine.Template.html">shoeshine.Template</a>}</span></h4>
+    <h4 class="name" id="create"><span class="type-signature">&lt;static> </span>create<span class="signature">(text)</span><span class="type-signature"> &rarr; {<a href="shoeshine.HandlebarsTemplate.html">shoeshine.HandlebarsTemplate</a>}</span></h4>
     
     
 </dt>
@@ -234,8 +238,8 @@ to a Template instance allows those placeholders to be replaced via a simple API
     
     
     <div class="description">
-        Creates a Template instance.
-Template instances may also be created via conversion from string.
+        Creates a HandlebarsTemplate instance.
+HandlebarsTemplate instances may also be created via conversion from string.
     </div>
     
 
@@ -285,7 +289,7 @@ Template instances may also be created via conversion from string.
             
             
             
-            <td class="description last">Template string.</td>
+            <td class="description last">HandlebarsTemplate string.</td>
         </tr>
 	
 	
@@ -316,7 +320,7 @@ Template instances may also be created via conversion from string.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Template.js.html">utils/Template.js</a>, line 8
+        <a href="HandlebarsTemplate.js.html">utils/HandlebarsTemplate.js</a>, line 8
     </li></ul></dd>
     
     
@@ -326,7 +330,7 @@ Template instances may also be created via conversion from string.
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
         <ul>
-            <li><a href="String.html#toTemplate">String#toTemplate</a></li>
+            <li><a href="String.html#toHandlebarsTemplate">String#toHandlebarsTemplate</a></li>
         </ul>
     </dd>
     
@@ -351,7 +355,7 @@ Template instances may also be created via conversion from string.
 	</dt>
 	<dd>
 		
-<span class="param-type"><a href="shoeshine.Template.html">shoeshine.Template</a></span>
+<span class="param-type"><a href="shoeshine.HandlebarsTemplate.html">shoeshine.HandlebarsTemplate</a></span>
 
 
 	</dd>
@@ -406,7 +410,7 @@ Template instances may also be created via conversion from string.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Template.js.html">utils/Template.js</a>, line 73
+        <a href="HandlebarsTemplate.js.html">utils/HandlebarsTemplate.js</a>, line 65
     </li></ul></dd>
     
     
@@ -448,7 +452,7 @@ Template instances may also be created via conversion from string.
         
             
 <dt>
-    <h4 class="name" id="fillPlaceholder"><span class="type-signature"></span>fillPlaceholder<span class="signature">(placeholderName, fillValue)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="setContent"><span class="type-signature"></span>setContent<span class="signature">(placeholderValuePairs)</span><span class="type-signature"> &rarr; {string}</span></h4>
     
     
 </dt>
@@ -456,7 +460,7 @@ Template instances may also be created via conversion from string.
     
     
     <div class="description">
-        Fills single placeholder in the template and returns the completed string.
+        Fills multiple placeholders and returns the resulting string.
     </div>
     
 
@@ -490,161 +494,7 @@ Template instances may also be created via conversion from string.
 	
         <tr>
             
-                <td class="name"><code>placeholderName</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>fillValue</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Template.js.html">utils/Template.js</a>, line 48
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">string</span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="fillPlaceholders"><span class="type-signature"></span>fillPlaceholders<span class="signature">(fillValues)</span><span class="type-signature"> &rarr; {string}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Fills multiple placeholders and returns the completed string.
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>fillValues</code></td>
+                <td class="name"><code>placeholderValuePairs</code></td>
             
             
             <td class="type">
@@ -660,7 +510,7 @@ Template instances may also be created via conversion from string.
             
             
             
-            <td class="description last">Pairs of placeholder names & fill values.</td>
+            <td class="description last">Pairs of placeholder names & content values.</td>
         </tr>
 	
 	
@@ -691,7 +541,7 @@ Template instances may also be created via conversion from string.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Template.js.html">utils/Template.js</a>, line 57
+        <a href="HandlebarsTemplate.js.html">utils/HandlebarsTemplate.js</a>, line 51
     </li></ul></dd>
     
     
@@ -746,13 +596,13 @@ Template instances may also be created via conversion from string.
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Array.html">Array</a></li><li><a href="dessert.html">dessert</a></li><li><a href="Number.html">Number</a></li><li><a href="shoeshine.CssClasses.html">CssClasses</a></li><li><a href="shoeshine.HtmlAttributes.html">HtmlAttributes</a></li><li><a href="shoeshine.InlineStyles.html">InlineStyles</a></li><li><a href="shoeshine.JqueryWidget.html">JqueryWidget</a></li><li><a href="shoeshine.Progenitor.html">Progenitor</a></li><li><a href="shoeshine.Renderable.html">Renderable</a></li><li><a href="shoeshine.Template.html">Template</a></li><li><a href="shoeshine.Widget.html">Widget</a></li><li><a href="shoeshine.WidgetCollection.html">WidgetCollection</a></li><li><a href="shoeshine.WidgetEvent.html">WidgetEvent</a></li><li><a href="shoeshine.WidgetUtils.html">WidgetUtils</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="String.html">String</a></li></ul><h3>Namespaces</h3><ul><li><a href="evan.html">evan</a></li><li><a href="shoeshine.html">shoeshine</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul><h3>Global</h3><ul><li><a href="global.html#document">document</a></li><li><a href="global.html#Element">Element</a></li><li><a href="global.html#Event">Event</a></li><li><a href="global.html#jQuery">jQuery</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Array.html">Array</a></li><li><a href="dessert.html">dessert</a></li><li><a href="Number.html">Number</a></li><li><a href="shoeshine.CssClasses.html">CssClasses</a></li><li><a href="shoeshine.HandlebarsTemplate.html">HandlebarsTemplate</a></li><li><a href="shoeshine.HtmlAttributes.html">HtmlAttributes</a></li><li><a href="shoeshine.InlineStyles.html">InlineStyles</a></li><li><a href="shoeshine.JqueryWidget.html">JqueryWidget</a></li><li><a href="shoeshine.MarkupTemplate.html">MarkupTemplate</a></li><li><a href="shoeshine.Progenitor.html">Progenitor</a></li><li><a href="shoeshine.Renderable.html">Renderable</a></li><li><a href="shoeshine.Widget.html">Widget</a></li><li><a href="shoeshine.WidgetCollection.html">WidgetCollection</a></li><li><a href="shoeshine.WidgetEvent.html">WidgetEvent</a></li><li><a href="shoeshine.WidgetUtils.html">WidgetUtils</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="String.html">String</a></li></ul><h3>Namespaces</h3><ul><li><a href="evan.html">evan</a></li><li><a href="shoeshine.html">shoeshine</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul><h3>Global</h3><ul><li><a href="global.html#document">document</a></li><li><a href="global.html#Element">Element</a></li><li><a href="global.html#Event">Event</a></li><li><a href="global.html#jQuery">jQuery</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Fri Feb 06 2015 23:20:13 GMT-0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat Feb 14 2015 16:02:02 GMT-0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>

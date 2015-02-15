@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: utils/MarkupTemplate.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: utils/MarkupTemplate.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/*global dessert, troop, sntls, shoeshine */
+troop.postpone(shoeshine, 'MarkupTemplate', function () {
+    "use strict";
+
+    var base = troop.Base,
+        self = base.extend();
+
+    /**
+     * Creates a MarkupTemplate instance.
+     * MarkupTemplate instances may also be created via conversion from string.
+     * @name shoeshine.MarkupTemplate.create
+     * @function
+     * @param {string} text MarkupTemplate string.
+     * @returns {shoeshine.MarkupTemplate}
+     * @see String#toMarkupTemplate
+     */
+
+    /**
+     * Implements a template markup, where containers are identified by their CSS classes.
+     * The template is filled in by specifying content for each container.
+     * @class
+     * @extends troop.Base
+     */
+    shoeshine.MarkupTemplate = self
+        .addConstants(/** @lends shoeshine.MarkupTemplate */{
+            /**
+             * Splits along template placeholders and tags.
+             * Leaves an empty slot after each tag and placeholder in the resulting array.
+             * @type {RegExp}
+             * @constant
+             */
+            RE_MARKUP_SPLITTER: /(?=&lt;)/,
+
+            /**
+             * Splits a tag to extract class list.
+             * Extracted class list will be found in result[1].
+             * @type {RegExp}
+             * @constant
+             */
+            RE_CLASS_LIST_FROM_TAG: /class\s*=\s*"\s*([\w-]+(?:\s+[\w-]+)*)\s*"/,
+
+            /**
+             * Matches a class list.
+             * Resulting array will contain extracted classes.
+             * @type {RegExp}
+             * @constant
+             */
+            RE_CLASS_FROM_CLASS_LIST: /[\w-]+/g
+        })
+        .addPrivateMethods(/** @lends shoeshine.MarkupTemplate */{
+            /**
+             * @param {string} tag
+             * @returns {string}
+             * @private
+             */
+            _extractClassListFromTag: function (tag) {
+                var classNames = tag.split(this.RE_CLASS_LIST_FROM_TAG);
+                return classNames && classNames[1];
+            },
+
+            /**
+             * @param {string} classList
+             * @returns {string[]}
+             * @private
+             */
+            _extractClassesFromClassList: function (classList) {
+                return classList.match(this.RE_CLASS_FROM_CLASS_LIST);
+            },
+
+            /**
+             * @param {string} templateFragment
+             * @returns {string|string[]}
+             * @private
+             */
+            _processTemplateFragment: function (templateFragment) {
+                var classList = this._extractClassListFromTag(templateFragment);
+                return classList && this._extractClassesFromClassList(classList);
+            }
+        })
+        .addMethods(/** @lends shoeshine.MarkupTemplate# */{
+            /**
+             * @param {string} templateString
+             * @ignore
+             */
+            init: function (templateString) {
+                /**
+                 * Blown up string where the placeholders need to be substituted and joined to get the final text.
+                 * @type {sntls.Collection}
+                 */
+                this.preprocessedTemplate = templateString.split(this.RE_MARKUP_SPLITTER)
+                    .toCollection();
+
+                /**
+                 * Defines lookup between container names and positions in the preprocessed template.
+                 * @type {sntls.StringDictionary}
+                 */
+                this.containerLookup = this.preprocessedTemplate
+                    .mapValues(this._processTemplateFragment, this)
+                    .toStringDictionary()
+                    .reverse()
+                    .toCollection()
+                    .passEachItemTo(parseInt, this, 0, 10);
+            },
+
+            /**
+             * Appends template with specified content.
+             * Do not call this on the original template. Clone first.
+             * @param {object} contents Pairs of container CSS classes & associated content.
+             * @returns {shoeshine.MarkupTemplate}
+             */
+            appendContent: function (contents) {
+                var preprocessedTemplate = this.preprocessedTemplate.items,
+                    containerLookup = this.containerLookup.items,
+                    containerNames = Object.keys(contents),
+                    i, containerName, targetIndex;
+
+                for (i = 0; i &lt; containerNames.length; i++) {
+                    // identifying placeholder in template
+                    containerName = containerNames[i];
+                    targetIndex = containerLookup[containerName];
+
+                    if (targetIndex >= 0) {
+                        // placeholder is found in template
+                        preprocessedTemplate[targetIndex] += contents[containerName];
+                    }
+                }
+
+                return this;
+            },
+
+            /**
+             * Sets template content and returns the resulting markup.
+             * @param {object} contents Pairs of container CSS classes & associated content.
+             * @returns {string}
+             */
+            setContent: function (contents) {
+                return this.clone()
+                    .appendContent(contents)
+                    .toString();
+            },
+
+            /**
+             * Clones markup template.
+             * @returns {shoeshine.MarkupTemplate}
+             */
+            clone: function () {
+                var result = this.getBase().create('');
+                result.preprocessedTemplate = this.preprocessedTemplate.clone();
+                result.containerLookup = this.containerLookup.clone();
+                return result;
+            },
+
+            /**
+             * Serializes markup template.
+             * @returns {string}
+             */
+            toString: function () {
+                return this.preprocessedTemplate.items.join('');
+            }
+        });
+});
+
+(function () {
+    "use strict";
+
+    troop.Properties.addProperties.call(
+        String.prototype,
+        /** @lends String# */{
+            /**
+             * Converts `String` to `MarkupTemplate` instance.
+             * @returns {shoeshine.MarkupTemplate}
+             */
+            toMarkupTemplate: function () {
+                return shoeshine.MarkupTemplate.create(this);
+            }
+        },
+        false, false, false
+    );
+}());
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Array.html">Array</a></li><li><a href="dessert.html">dessert</a></li><li><a href="Number.html">Number</a></li><li><a href="shoeshine.CssClasses.html">CssClasses</a></li><li><a href="shoeshine.HandlebarsTemplate.html">HandlebarsTemplate</a></li><li><a href="shoeshine.HtmlAttributes.html">HtmlAttributes</a></li><li><a href="shoeshine.InlineStyles.html">InlineStyles</a></li><li><a href="shoeshine.JqueryWidget.html">JqueryWidget</a></li><li><a href="shoeshine.MarkupTemplate.html">MarkupTemplate</a></li><li><a href="shoeshine.Progenitor.html">Progenitor</a></li><li><a href="shoeshine.Renderable.html">Renderable</a></li><li><a href="shoeshine.Widget.html">Widget</a></li><li><a href="shoeshine.WidgetCollection.html">WidgetCollection</a></li><li><a href="shoeshine.WidgetEvent.html">WidgetEvent</a></li><li><a href="shoeshine.WidgetUtils.html">WidgetUtils</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="String.html">String</a></li></ul><h3>Namespaces</h3><ul><li><a href="evan.html">evan</a></li><li><a href="shoeshine.html">shoeshine</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul><h3>Global</h3><ul><li><a href="global.html#document">document</a></li><li><a href="global.html#Element">Element</a></li><li><a href="global.html#Event">Event</a></li><li><a href="global.html#jQuery">jQuery</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat Feb 14 2015 16:02:01 GMT-0000 (GMT)
+</footer>
+
+<script> prettyPrint(); </script>
+</body>
+</html>
