@@ -682,7 +682,7 @@
     });
 
     test("Removing from hierarchy", function () {
-        expect(5);
+        expect(4);
 
         var widget = shoeshine.Widget.create(),
             lineage = [widget.instanceId].toPath();
@@ -694,11 +694,6 @@
         });
 
         widget.addMocks({
-            unsubscribeFrom: function () {
-                ok(true, "should unsubscribe from widget events");
-                return this;
-            },
-
             getLineage: function () {
                 ok(true, "should fetch widget's lineage");
                 return lineage.clone();

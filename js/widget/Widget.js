@@ -514,9 +514,6 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
             removeFromHierarchy: function () {
                 this.children.removeFromHierarchy();
 
-                // unsubscribing from all widget events
-                this.unsubscribeFrom();
-
                 // (re-)setting event path to new lineage
                 this.setEventPath(this.getLineage().prepend(this.DETACHED_EVENT_PATH_ROOT));
 
