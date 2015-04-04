@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, e$, shoeshine, Event */
+/*global dessert, troop, sntls, evan, e$, shoeshine, Event */
 /*global module, test, expect, ok, equal, strictEqual, notStrictEqual, deepEqual, notDeepEqual, raises */
 (function () {
     "use strict";
@@ -146,10 +146,11 @@
             childWidget.addToParent('foo');
         }, "should raise exception on invalid arguments");
 
-        parentWidget.addMocks({
-            triggerSync: function (eventName, payload) {
+        evan.Event.addMocks({
+            triggerSync: function (eventName) {
                 equal(eventName, this.EVENT_CHILD_ADD, "should trigger addition event");
-                strictEqual(payload.childWidget, childWidget, "should pass child widget in payload");
+                strictEqual(this.payload.getItem('childWidget'), childWidget,
+                    "should set child widget in payload");
             }
         });
 
@@ -178,6 +179,7 @@
 
         strictEqual(childWidget.addToParent(parentWidget), childWidget, "should be chainable");
 
+        evan.Event.removeMocks();
         shoeshine.Progenitor.removeMocks();
     });
 
@@ -208,7 +210,7 @@
         var childWidget = shoeshine.Widget.create(),
             parentWidget = shoeshine.Widget.create();
 
-        parentWidget.addMocks({
+        evan.Event.addMocks({
             triggerSync: function (eventName) {
                 equal(eventName, this.EVENT_CHILD_ADD, "should trigger addition event");
             }
@@ -228,6 +230,8 @@
         });
 
         childWidget.addToParent(parentWidget);
+
+        evan.Event.removeMocks();
     });
 
     test("Adding widget as root", function () {
@@ -312,10 +316,11 @@
             childWidget = shoeshine.Widget.create()
                 .addToParent(parentWidget);
 
-        parentWidget.addMocks({
-            triggerSync: function (eventName, payload) {
+        evan.Event.addMocks({
+            triggerSync: function (eventName) {
                 equal(eventName, this.EVENT_CHILD_REMOVE, "should trigger removal event");
-                strictEqual(payload.childWidget, childWidget, "should pass child name in payload");
+                strictEqual(this.payload.getItem('childWidget'), childWidget,
+                    "should set child widget in payload");
             }
         });
 
@@ -343,6 +348,7 @@
 
         strictEqual(childWidget.removeFromParent(), childWidget, "should be chainable");
 
+        evan.Event.removeMocks();
         shoeshine.Progenitor.removeMocks();
     });
 
@@ -739,21 +745,12 @@
         widget.afterRender();
     });
 
-    test("Triggering widget event", function () {
-        expect(4);
+    test("Spawning widget event", function () {
+        var widget = shoeshine.Widget.create(),
+            event;
 
-        var widget = shoeshine.Widget.create();
+        event = widget.spawnEvent('foo');
 
-        e$.Event.addMocks({
-            triggerSync: function (eventPath) {
-                ok(this.isA(shoeshine.WidgetEvent), "should spawn a WidgetEvent");
-                strictEqual(eventPath, widget.eventPath, "should trigger event on widget's event path");
-                equal(this.eventName, 'foo', "should trigger event by specified name");
-            }
-        });
-
-        strictEqual(widget.triggerSync('foo'), widget, "should be chainable");
-
-        e$.Event.removeMocks();
+        strictEqual(event.senderWidget, widget, "should set senderWidget on event");
     });
 }());

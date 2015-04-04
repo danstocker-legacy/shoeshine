@@ -268,9 +268,10 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
                     }
 
                     // triggering event about being added
-                    parentWidget.triggerSync(this.EVENT_CHILD_ADD, {
-                        childWidget: this
-                    });
+                    parentWidget
+                        .spawnEvent(this.EVENT_CHILD_ADD)
+                        .setPayloadItem('childWidget', this)
+                        .triggerSync();
 
                     if (document) {
                         this._renderIntoParent();
@@ -328,9 +329,10 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
 
                 if (parent) {
                     // triggering event about removal
-                    parent.triggerSync(this.EVENT_CHILD_REMOVE, {
-                        childWidget: this
-                    });
+                    parent
+                        .spawnEvent(this.EVENT_CHILD_REMOVE)
+                        .setPayloadItem('childWidget', this)
+                        .triggerSync();
                 }
 
                 return this;
@@ -549,16 +551,13 @@ troop.postpone(shoeshine, 'Widget', function (ns, className) {
             },
 
             /**
-             * Triggers widget event with the sender set to the current widget.
+             * Spawns a widget event that has the senderWidget property set.
              * @param {string} eventName
-             * @param {*} [payload]
-             * @returns {shoeshine.Widget}
+             * @returns {shoeshine.WidgetEvent}
              */
-            triggerSync: function (eventName, payload) {
-                this.spawnEvent(eventName)
-                    .setSenderWidget(this)
-                    .triggerSync(this.eventPath, payload);
-                return this;
+            spawnEvent: function (eventName) {
+                return evan.Evented.spawnEvent.call(this, eventName)
+                    .setSenderWidget(this);
             }
         });
 });
