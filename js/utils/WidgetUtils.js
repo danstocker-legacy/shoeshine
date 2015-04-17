@@ -33,6 +33,23 @@ troop.postpone(shoeshine, 'WidgetUtils', function () {
                 '}}': '&#125;&#125;'
             }
         })
+        .addPrivateMethods(/** @lends shoeshine.WidgetUtils */{
+            /**
+             * Get the class list from an element
+             * @param {HTMLElement} element
+             * @returns {string[]}
+             * @private
+             */
+            _getClassList: function  (element) {
+                var className = element.className || '';
+
+                if (typeof className === 'object' && 'baseVal' in className) {
+                    className = className.baseVal;
+                }
+
+                return className.split(/\s/);
+            }
+        })
         .addMethods(/** @lends shoeshine.WidgetUtils */{
             /**
              * Replace callback function for escaping HTML entities.
@@ -60,10 +77,8 @@ troop.postpone(shoeshine, 'WidgetUtils', function () {
              */
             getParentNodeByClassName: function (element, className) {
                 var classList;
-                while (element && (element.classList || element.className)) {
-                    classList = element.classList && slice.call(element.classList) ||
-                                element.className.split(/\s+/);
-                    if (classList && classList.indexOf(className) > -1) {
+                while (element) {
+                    if (this._getClassList(element).indexOf(className) > -1) {
                         return element;
                     }
                     element = element.parentNode;
