@@ -149,7 +149,7 @@
         evan.Event.addMocks({
             triggerSync: function (eventName) {
                 equal(eventName, this.EVENT_CHILD_ADD, "should trigger addition event");
-                strictEqual(this.payload.getItem('childWidget'), childWidget,
+                strictEqual(this.payload.childWidget, childWidget,
                     "should set child widget in payload");
             }
         });
@@ -319,7 +319,7 @@
         evan.Event.addMocks({
             triggerSync: function (eventName) {
                 equal(eventName, this.EVENT_CHILD_REMOVE, "should trigger removal event");
-                strictEqual(this.payload.getItem('childWidget'), childWidget,
+                strictEqual(this.payload.childWidget, childWidget,
                     "should set child widget in payload");
             }
         });
