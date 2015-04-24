@@ -26,7 +26,24 @@ troop.postpone(shoeshine, 'CssClasses', function () {
              * @returns {shoeshine.CssClasses}
              */
             addCssClass: function (cssClass) {
-                this.setItem(cssClass, cssClass);
+                var refCount = this.getItem(cssClass) || 0;
+                this.setItem(cssClass, refCount + 1);
+                return this;
+            },
+
+            /**
+             * Decreases reference count on the specified CSS class.
+             * Removes CSS class when reference count drops below 1.
+             * @param {string} cssClass
+             * @returns {shoeshine.CssClasses}
+             */
+            decreaseRefCount: function (cssClass) {
+                var refCount = this.getItem(cssClass) || 0;
+                if (refCount > 1) {
+                    this.setItem(cssClass, refCount - 1);
+                } else {
+                    this.deleteItem(cssClass);
+                }
                 return this;
             },
 
@@ -51,7 +68,8 @@ troop.postpone(shoeshine, 'CssClasses', function () {
              */
             toString: function () {
                 return this
-                    .getSortedValues()
+                    .getKeys()
+                    .sort()
                     .join(' ');
             }
         });
