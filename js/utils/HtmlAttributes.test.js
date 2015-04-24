@@ -87,6 +87,20 @@
         shoeshine.CssClasses.removeMocks();
     });
 
+    test("Decreasing reference count of CSS class", function () {
+        expect(2);
+
+        shoeshine.CssClasses.addMocks({
+            decreaseRefCount: function (cssClass) {
+                equal(cssClass, 'foo', "should decrease ref count on CSS class");
+            }
+        });
+
+        strictEqual(htmlAttributes.decreaseCssClassRefCount('foo'), htmlAttributes, "should be chainable");
+
+        shoeshine.CssClasses.removeMocks();
+    });
+
     test("Adding inline style", function () {
         expect(3);
 

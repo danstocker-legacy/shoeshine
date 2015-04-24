@@ -170,6 +170,24 @@ troop.postpone(shoeshine, 'Renderable', function () {
             },
 
             /**
+             * Decreases ref count of CSS class on the instance, modifying both buffer and DOM element.
+             * @param {string} cssClass
+             * @returns {shoeshine.Renderable}
+             */
+            decreaseCssClassRefCount: function (cssClass) {
+                var htmlAttributes = this.htmlAttributes,
+                    element = this.getElement();
+
+                htmlAttributes.decreaseCssClassRefCount(cssClass);
+
+                if (element) {
+                    this._setAttributeProxy(element, 'class', htmlAttributes.cssClasses.toString());
+                }
+
+                return this;
+            },
+
+            /**
              * Removes a CSS class from the instance, modifying both buffer and DOM element.
              * @param {string} cssClass
              * @returns {shoeshine.Renderable}

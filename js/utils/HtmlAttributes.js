@@ -94,6 +94,16 @@ troop.postpone(shoeshine, 'HtmlAttributes', function () {
             },
 
             /**
+             * Decreases ref count on specified CSS class.
+             * @param {string} cssClass
+             * @returns {shoeshine.HtmlAttributes}
+             */
+            decreaseCssClassRefCount: function (cssClass) {
+                this.cssClasses.decreaseRefCount(cssClass);
+                return this;
+            },
+
+            /**
              * Removes CSS class from the 'class' attribute.
              * @param {string} cssClass
              * @returns {shoeshine.HtmlAttributes}

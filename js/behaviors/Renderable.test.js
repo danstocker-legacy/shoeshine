@@ -70,6 +70,42 @@
         strictEqual(instance.addCssClass('foo'), instance, "should be chainable");
     });
 
+    test("CSS class reference decrease", function () {
+        expect(7);
+
+        var instance = Renderable.create(),
+            instanceElement = {};
+
+        instance.htmlAttributes.addMocks({
+            decreaseCssClassRefCount: function (cssClass) {
+                equal(cssClass, 'foo', "should decrease CSS class ref count on htmlAttributes");
+                return this;
+            }
+        });
+
+        instance.htmlAttributes.cssClasses.addMocks({
+            toString: function () {
+                ok(true, "should fetch serialized CSS class list");
+                return 'FOO';
+            }
+        });
+
+        instance.addMocks({
+            getElement: function () {
+                ok(true, "should fetch DOM element");
+                return instanceElement;
+            },
+
+            _setAttributeProxy: function (element, attributeName, attributeValue) {
+                strictEqual(element, instanceElement, "should pass instance element to attribute setter");
+                equal(attributeName, 'class', "should pass 'class' as attribute name");
+                equal(attributeValue, 'FOO', "should pass serialized CSS class list as attribute value");
+            }
+        });
+
+        strictEqual(instance.decreaseCssClassRefCount('foo'), instance, "should be chainable");
+    });
+
     test("CSS class removal", function () {
         expect(7);
 
