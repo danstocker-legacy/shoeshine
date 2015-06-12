@@ -99,7 +99,8 @@ troop.postpone(shoeshine, 'MarkupTemplate', function () {
                     .toStringDictionary()
                     .reverse()
                     .toCollection()
-                    .passEachItemTo(parseInt, this, 0, 10);
+                    .passEachItemTo(parseInt, this, 0, 10)
+                    .setItem('undefined', this.preprocessedTemplate.getKeyCount() - 1);
             },
 
             /**

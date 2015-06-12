@@ -32,7 +32,7 @@
             "hello"    : 0,
             "hi"       : 1,
             "world"    : 1,
-            "undefined": 2
+            "undefined": 3
         }, "should set containerLookup contents");
     });
 
@@ -74,7 +74,7 @@
             "hello"    : 0,
             "hi"       : 1,
             "world"    : 1,
-            "undefined": 2
+            "undefined": 3
         }, "should set containerLookup contents");
     });
 
